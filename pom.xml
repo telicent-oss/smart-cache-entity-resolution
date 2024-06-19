@@ -94,7 +94,7 @@
         <dependency.httpcore>4.4.16</dependency.httpcore>
         <dependency.httpclient>4.5.14</dependency.httpclient>
         <dependency.jetty>11.0.18</dependency.jetty>
-        <dependency.jwt-auth>0.13.0</dependency.jwt-auth>
+        <dependency.jwt-auth>0.15.0</dependency.jwt-auth>
         <dependency.logback>1.5.6</dependency.logback>
         <dependency.mockserver>5.15.0</dependency.mockserver>
         <dependency.opensearch-test>2.0.1</dependency.opensearch-test>
