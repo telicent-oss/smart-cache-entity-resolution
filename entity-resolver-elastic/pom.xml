@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.telicent.smart-caches.entity-resolution</groupId>
+        <artifactId>parent</artifactId>
+        <version>0.6.2-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <artifactId>entity-resolver-elastic</artifactId>
+    <name>Telicent Smart Caches - Entity Resolution - ElasticSearch</name>
+
+    <properties>
+        <license.header.path>${project.parent.basedir}</license.header.path>
+        <coverage.minimum>0.5</coverage.minimum>
+    </properties>
+
+    <dependencies>
+
+    <!--Internal-->
+        <dependency>
+            <groupId>io.telicent.smart-caches.entity-resolution</groupId>
+            <artifactId>entity-resolver-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.telicent.smart-caches.entity-resolution</groupId>
+            <artifactId>ies-entity-resolver-configuration</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.telicent.smart-caches.entity-resolution</groupId>
+            <artifactId>entity-collector</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+    <!--SC Core-->
+        <dependency>
+            <groupId>io.telicent.smart-caches</groupId>
+            <artifactId>projectors-core</artifactId>
+            <version>${dependency.smart-caches}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.telicent.smart-caches</groupId>
+            <artifactId>configurator</artifactId>
+            <version>${dependency.smart-caches}</version>
+        </dependency>
+
+    <!-- Jena -->
+        <dependency>
+            <groupId>org.apache.jena</groupId>
+            <artifactId>jena-base</artifactId>
+            <version>${dependency.jena}</version>
+        </dependency>
+
+    <!--External-->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${dependency.httpclient}</version>
+        </dependency>
+        <dependency>
+            <groupId>co.elastic.clients</groupId>
+            <artifactId>elasticsearch-java</artifactId>
+            <version>${dependency.elastic}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.eclipse.parsson</groupId>
+                    <artifactId>parsson</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpclient</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+<!--            <version>4.5.14</version>-->
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.parsson</groupId>
+            <artifactId>parsson</artifactId>
+            <version>${dependency.parsson}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${dependency.jackson}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${dependency.jackson}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${dependency.commons-lang}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${dependency.slf4j}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+        </dependency>
+
+    <!-- Test Dependencies -->
+    <!-- Internal -->
+        <dependency>
+            <groupId>io.telicent.smart-caches.entity-resolution</groupId>
+            <artifactId>test-clusters</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+    <!-- RDF / Jena -->
+        <dependency>
+            <groupId>io.telicent.jena</groupId>
+            <artifactId>rdf-abac-core</artifactId>
+            <version>${dependency.rdf-abac}</version>
+            <scope>test</scope>
+        </dependency>
+
+    <!-- External -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>jquery</artifactId>
+            <version>3.7.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${dependency.testng}</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.webjars</groupId>
+                    <artifactId>jquery</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${dependency.mockito}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wiremock</groupId>
+            <artifactId>wiremock</artifactId>
+            <version>${dependency.wiremock}</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${plugin.surefire}</version>
+                <configuration>
+                    <argLine>-XX:+EnableDynamicAgentLoading</argLine>
+                    <includes>
+                        <include>**/Test*.java</include>
+                        <include>**/DockerTest*.java</include>
+                    </includes>
+                    <systemPropertyVariables>
+                        <image.elasticsearch>${image.elasticsearch}</image.elasticsearch>
+                        <image.opensearch>${image.opensearch}</image.opensearch>
+                    </systemPropertyVariables>
+                    <reuseForks>true</reuseForks>
+                    <trimStackTrace>true</trimStackTrace>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>with-es-8x-tests</id>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <phase>test</phase>
+                        <configuration>
+                            <includes>
+                                <include>**/Test*.java</include>
+                                <include>**/DockerTest*.java</include>
+                            </includes>
+                            <excludes>
+                                <exclude>**/*Mock.java</exclude>
+                            </excludes>
+                            <systemPropertyVariables>
+                                <image.elasticsearch>8.12.2.1</image.elasticsearch>
+                                <image.opensearch>2.12.0</image.opensearch>
+                            </systemPropertyVariables>
+                            <forkCount>${test.maxForks}</forkCount>
+                            <reuseForks>true</reuseForks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>docker</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>${plugin.jacoco}</version>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>${plugin.surefire}</version>
+                        <configuration>
+                            <includes>
+                                <include>**/Test*.java</include>
+                                <include>**/DockerTest*.java</include>
+                            </includes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>

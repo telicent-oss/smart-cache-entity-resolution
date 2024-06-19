@@ -1,0 +1,22 @@
+# Non-Indexed fields
+io.telicent.smart.cache.search.elastic.schema.factories.NonIndexedMappingFactory
+
+# Specific textually indexed fields
+io.telicent.smart.cache.search.elastic.schema.factories.UriMappingFactory
+io.telicent.smart.cache.search.elastic.schema.factories.KeywordMappingFactory
+
+# More advanced field types primarily for geospatial indexing
+io.telicent.smart.cache.search.elastic.schema.factories.GeoPointMappingFactory
+io.telicent.smart.cache.search.elastic.schema.factories.DateMappingFactory
+io.telicent.smart.cache.search.elastic.schema.factories.FloatMappingFactory
+io.telicent.smart.cache.search.elastic.schema.factories.DoubleMappingFactory
+io.telicent.smart.cache.search.elastic.schema.factories.IntegerMappingFactory
+io.telicent.smart.cache.search.elastic.schema.factories.LongMappingFactory
+io.telicent.smart.cache.search.elastic.schema.factories.NumberMappingFactory
+io.telicent.smart.cache.search.elastic.schema.factories.BooleanMappingFactory
+
+# Used for canonicals to index as text regardless of what Elastic guessed
+io.telicent.smart.cache.search.elastic.schema.factories.AnyToTextMappingFactory
+
+# We list the Text Mapping last as this field type acts as a fallback for unrecognised field types
+io.telicent.smart.cache.search.elastic.schema.factories.TextMappingFactory

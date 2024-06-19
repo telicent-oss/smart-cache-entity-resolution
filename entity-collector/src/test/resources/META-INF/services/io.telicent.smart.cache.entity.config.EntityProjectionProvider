@@ -1,0 +1,3 @@
+io.telicent.smart.cache.entity.config.SimpleProjection
+# Intentionally broken entry for testing purposes just to trigger the catch block for code coverage purposes
+no.such.implementation.BadProvider

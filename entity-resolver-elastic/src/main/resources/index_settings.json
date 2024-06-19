@@ -1,0 +1,33 @@
+{
+	"analysis": {
+		"analyzer": {
+			"default": {
+				"type": "custom",
+				"tokenizer": "standard",
+				"filter": [
+					"lowercase",
+					"asciifolding",
+					"stemmer"
+				]
+			},
+			"default_search": {
+				"type": "custom",
+				"tokenizer": "standard",
+				"filter": [
+					"lowercase",
+					"asciifolding",
+					"stemmer",
+					"graph_synonyms"
+				]
+			}
+		},
+		"filter": {
+			"graph_synonyms": {
+				"username": "${elastic.username}",
+				"password": "${elastic.password}",
+				"type": "index_synonym_graph",
+				"index": "synonyms-plugin"
+			}
+		}
+	}
+}

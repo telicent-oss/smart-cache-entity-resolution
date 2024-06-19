@@ -1,0 +1,28 @@
+{"index":{"_id" : "1"}}
+{"name":"Mike Tyson","height":1.78,"weight":99.00,"reach":178,"fights":58,"wins":50,"kos":44,"losses":6,"draws":0,"no-contest":2}
+{"index":{"_id" : "2"}}
+{"name":"Evander Holyfield","height":1.89,"weight":81.50,"reach":197,"fights":57,"wins":44,"kos":29,"losses":10,"draws":2,"no-contest":1}
+{"index":{"_id" : "3"}}
+{"name":"Lennox Lewis","height":1.96,"weight":86.27,"reach":213,"fights":44,"wins":41,"kos":32,"losses":2,"draws":1,"no-contest":0}
+{"index":{"_id" : "4"}}
+{"name":"Ricky Hatton","height":1.68,"weight":64.00,"reach":165,"fights":48,"wins":45,"kos":32,"losses":3,"draws":0,"no-contest":0}
+{"index":{"_id" : "5"}}
+{"name":"Manny Pacquiao","height":1.66,"weight":66.00,"reach":170,"fights":72,"wins":62,"kos":39,"losses":8,"draws":2,"no-contest":0}
+{"index":{"_id" : "6"}}
+{"name":"Floyd Mayweather Jr","height":1.66,"weight":57.00,"reach":170,"fights":50,"wins":50,"kos":27,"losses":0,"draws":0,"no-contest":0}
+{"index":{"_id" : "7"}}
+{"name":"Anthony Joshua","height":1.98,"reach":208,"fights":29,"wins":26,"kos":23,"losses":3,"draws":0,"no-contest":0, "weight":111}
+{"index":{"_id" : "8"}}
+{"Name":"Muhammad Ali","fights":61,"wins":56,"losses":5,"draws":0,"kos":37,"height":195.98,"reach":198,"no-contest":0,"weight":107}
+{"index":{"_id" : "9"}}
+{"Name":"Sugar Ray Robinson","fights":200,"wins":173,"losses":19,"draws":8,"kos":108,"weight":72.5,"height":180.34,"reach":183,"no-contest":0}
+{"index":{"_id" : "10"}}
+{"Name":"Sugar Ray Leonard","fights":40,"wins":36,"losses":3,"draws":1,"kos":25,"weight":67.0,"height":178.00,"reach":188,"no-contest":0}
+{"index":{"_id" : "11"}}
+{"Name":"George Foreman","fights":81,"wins":76,"losses":5,"draws":0,"kos":68,"weight":117.9,"height":193.00,"reach":201,"no-contest":0}
+{"index":{"_id" : "12"}}
+{"Name":"Joe Frazier","fights":37,"wins":32,"losses":4,"draws":1,"kos":27,"weight":103.9,"height":182.00,"reach":187,"no-contest":0}
+{"index":{"_id" : "13"}}
+{"Name":"Tyson Fury","fights":34,"wins":33,"losses":0,"draws":1,"kos":24,"weight":124.0,"height":206.00,"reach":216,"no-contest":0}
+{"index":{"_id" : "14"}}
+{"Name":"Paul Gallagher","fights":0,"wins":0,"losses":0,"draws":0,"kos":0,"no-contest":0,"height":180.34,"weight":73.0,"reach":180}

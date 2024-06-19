@@ -1,0 +1,11 @@
+PREFIX rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX foaf:    <http://xmlns.com/foaf/0.1/>
+PREFIX authz:  <http://telicent.io/security#>
+PREFIX ies:     <http://ies.data.gov.uk/ontology/ies4#>
+@prefix data:    <http://data.gov.uk/testdata#> .
+
+[ authz:pattern 'data:Fred foaf:name "Frederick A. Test"' ; authz:label "public" ] .
+[ authz:pattern 'data:Fred foaf:name "Fred Test"' ; authz:label "public" ] .
+
+[ authz:pattern 'data:Fred foaf:age 34' ; authz:label "gdpr" ] .
+[ authz:pattern 'data:Fred ies:isIdentifiedBy data:fredNHSNum' ;  authz:label "gdpr" ] .

@@ -1,0 +1,31 @@
+{"name":"Kokdzhar River Hostel","village":"Pervoya Maya","country":"Kyrgyzstan","location":"40.6446, 73.7797"}
+{"name":"St Christophers Inn","village":"Greenwich","city": "London", "country":"United Kingdom","location":"51.47794, -0.01274"}
+{"name":"Incentra Village Guest House","village":"Greenwich","city": "New York","country":"United States","location":"40.73789, -74.00417"}
+{"name":"Internationl Student Center Youth Hostel","village":"Manhattan","city": "New York","country":"United States","location":"40.78703, -73.97001"}
+{"name":"YMCA", "country":"United Kingdom", "village":"Aberdeen", "city":"Aberdeen", "location":"57.14730, -2.10775"}
+{"name":"YMCA", "country":"United Kingdom", "village":"Bellshill", "city":"Motherwell", "location":"55.81869, -4.02179"}
+{"name":"YMCA", "country":"United Kingdom", "village":"Dundee", "city":"Dundee", "location":"56.46766, -2.87699"}
+{"name":"YMCA", "country":"United Kingdom", "village":"Carnoustie", "city":"Dundee", "location":"56.50118, -2.71134"}
+{"name":"YMCA", "country":"United Kingdom", "village":"Cumbernauld", "city":"Glasgow", "location":"55.95296, -3.97441"}
+{"name":"YMCA", "country":"United Kingdom", "village":"Cupar", "city":"Kirkaldy", "location":"56.31936, -3.01666"}
+{"name":"YMCA", "country":"United Kingdom", "village":"Denny ", "city":"Falkirk", "location":"56.02423, -3.91511"}
+{"name":"YMCA", "country":"United Kingdom", "village":"Dumfries", "city":"Dumfries", "location":"55.08337, -3.63569"}
+{"name":"YMCA", "country":"United Kingdom", "village":"Edinburgh", "city":"Edinburgh", "location":"55.97201, -3.17399"}
+{"name":"YMCA", "country":"United Kingdom", "village":"Gatehouse of Fleet", "city":"Dumfries", "location":"54.88298, -4.18338"}
+{"name":"YMCA", "country":"United Kingdom", "village":"Glenrothes", "city":"Kirkaldy", "location":"56.19734, -3.17208"}
+{"name":"YMCA", "country":"United Kingdom", "village":"Grantown-on-Spey", "city":"Perth", "location":"57.32818, -3.61090"}
+{"name":"YMCA", "country":"United Kingdom", "village":"Inverness", "city":"Inverness", "location":"57.47913, -4.22844"}
+{"name":"YMCA", "country":"United Kingdom", "village":"Kirkcaldy", "city":"Kirkcaldy", "location":"56.12410, -3.17159"}
+{"name":"YMCA", "country":"United Kingdom", "village":"Lanark", "city":"Motherwell", "location":"55.67387, -3.78112"}
+{"name":"YMCA", "country":"United Kingdom", "village":"Larkhall", "city":"Motherwell", "location":"55.73887, -3.97438"}
+{"name":"YMCA", "country":"United Kingdom", "village":"Montrose", "city":"Dundee", "location":"56.71369, -2.46812"}
+{"name":"YMCA", "country":"United Kingdom", "village":"Paisley", "city":"Glasgow", "location":"55.84455, -4.42451"}
+{"name":"YMCA", "country":"United Kingdom", "village":"Penicuik", "city":"Edinburgh", "location":"55.83717, -3.22583"}
+{"name":"YMCA", "country":"United Kingdom", "village":"Lossiemouth", "city":"Inverness", "location":"57.71532, -3.30537"}
+{"name":"YMCA", "country":"United Kingdom", "village":"Renfrew", "city":"Glasgow", "location":"55.87944, -4.38537"}
+{"name":"YMCA", "country":"United Kingdom", "village":"Shotts", "city":"Motherwell", "location":"55.81612, -3.81153"}
+{"name":"YMCA", "country":"United Kingdom", "village":"Stornoway", "city":"Stornoway", "location":"58.21228, -6.38762"}
+{"name":"YMCA", "country":"United Kingdom", "village":"Stranraer", "city":"Stranraer", "location":"54.90226, -5.01652"}
+{"name":"YMCA", "country":"United Kingdom", "village":"Tain", "city":"Inverness", "location":"57.81029, -4.05338"}
+{"name":"YMCA", "country":"United Kingdom", "village":"Perth", "city":"Perth", "location":"56.39707, -3.43227"}
+{"name":"YMCA", "country":"United Kingdom", "village":"Glasgow", "city":"Glasgow", "location":"55.84320, -4.16956"}

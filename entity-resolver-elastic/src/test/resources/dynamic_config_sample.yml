@@ -1,0 +1,413 @@
+FamousDates:
+  index: canonical_dates
+  fields:
+    - name: Event
+      type: text
+      required: true
+    - name: Date
+      type: date
+      required: true
+      boost: 10.0
+      distance:
+        pivot: 7d
+FamousDatesOld:
+  index: canonical_dates_old
+  fields:
+    - name: Event
+      type: text
+      required: true
+    - name: Date
+      type: text
+      required: true
+      boost: 10.0
+Hostels:
+  index: canonical_hostels
+  fields:
+    - name: name
+      type: text
+      required: true
+    - name: village
+      type: text
+      boost: 1.0
+      required: true
+    - name: city
+      type: text
+      boost: 1.0
+      required: true
+    - name: country
+      type: text
+      boost: 1.0
+      required: true
+    - name: location
+      type: geo-point
+      boost: 1.0
+      required: true
+      distance:
+        pivot: "1in"
+HostelsOld:
+  index: canonical_hostels_old
+  fields:
+    - name: name
+      type: text
+      required: true
+    - name: village
+      type: text
+      required: true
+    - name: city
+      type: text
+      required: true
+    - name: country
+      type: text
+      required: true
+    - name: location
+      type: text
+      required: true
+CoreCanonicalIesPerson:
+  index: canonical_person
+  fields:
+    - name: name_elements-surname
+      type: text
+      required: true
+      boost: 1.2
+      fuzziness:
+        enabled: true
+        min: 0
+        max: 3
+    - name: name_elements-forename
+      type: text
+      required: true
+      boost: 4.0
+      fuzziness:
+        enabled: true
+    - name: name_elements-middle_name
+      type: text
+      required: true
+      boost: 1.0
+      fuzziness:
+        enabled: true
+    - name: name_elements-title
+      type: text
+      required: true
+      boost: 0.1
+      fuzziness:
+        enabled: false
+    - name: nationality
+      type: keyword
+      required: true
+      boost: 0.1
+    - name: date_of_birth-year
+      type: number
+      required: false
+      boost: 1.5
+    - name: date_of_birth-month
+      type: number
+      required: false
+      boost: 1.5
+    - name: date_of_birth
+      type: date
+      required: false
+      boost: 1.5
+Palaces:
+  index: canonical_palaces
+  fields:
+    - name: palace-name
+      type: text
+      required: true
+      boost: 1.0
+      fuzziness:
+        enabled: true
+    - name: address-locality
+      type: text
+      required: true
+      boost: 1.0
+      fuzziness:
+        enabled: true
+    - name: address-region
+      type: text
+      required: true
+      boost: 1.0
+      fuzziness:
+        enabled: true
+    - name: address-country
+      type: text
+      required: true
+      boost: 1.0
+      fuzziness:
+        enabled: true
+    - name: address-premises
+      type: text
+      required: true
+      boost: 1.0
+      fuzziness:
+        enabled: true
+    - name: location
+      type: geo-point
+      required: true
+      boost: 5.0
+      distance:
+        pivot: 1mi
+TestAllTypesMinimum:
+  fields:
+    - name: text-field
+      type: text
+      required: true
+      boost: 1.0
+    - name: keyword-field
+      type: keyword
+      required: true
+      boost: 1.0
+    - name: location-field
+      type: geo-point
+      required: true
+      boost: 1.0
+    - name: integer-field
+      type: integer
+      required: true
+      boost: 1.0
+    - name: long-field
+      type: long
+      required: true
+      boost: 1.0
+    - name: double-field
+      type: double
+      required: true
+      boost: 1.0
+    - name: float-field
+      type: float
+      required: true
+      boost: 1.0
+    - name: number-field
+      type: number
+      required: true
+      boost: 1.0
+    - name: date-field
+      type: date
+      required: true
+      boost: 1.0
+    - name: boolean-field
+      type: boolean
+      required: true
+      boost: 1.0
+TestAllTypesMaximum:
+  index: tests_similarity
+  fields:
+    - name: text-field
+      type: text
+      required: true
+      boost: 1.0
+      fuzziness:
+        enabled: true
+        min: 1
+        max: 6
+    - name: keyword-field
+      type: keyword
+      required: true
+      boost: 1.0
+    - name: location-field
+      type: geo-point
+      required: true
+      boost: 1.0
+      distance:
+        pivot: 250m
+    - name: integer-field
+      type: integer
+      required: true
+      boost: 1.0
+      decay:
+        decay: 0.5
+        offset: "5"
+        scale: "5"
+    - name: long-field
+      type: long
+      required: true
+      boost: 1.0
+      decay:
+        decay: 0.5
+        offset: "10"
+        scale: "10"
+    - name: double-field
+      type: double
+      required: true
+      boost: 1.0
+      decay:
+        decay: 0.5
+        offset: "0.05"
+        scale: "0.1"
+    - name: float-field
+      type: float
+      required: true
+      boost: 1.0
+      decay:
+        decay: 0.5
+        offset: "0.1"
+        scale: "0.1"
+    - name: number-field
+      type: number
+      required: true
+      boost: 1.0
+      decay:
+        decay: 0.5
+        offset: "0"
+        scale: "500"
+    - name: date-field
+      type: date
+      required: true
+      boost: 1.0
+      distance:
+        pivot: "7d"
+    - name: boolean-field
+      type: boolean
+      required: true
+      boost: 1.0
+Birthdays:
+  index: canonical_birthdays
+  fields:
+    - name: age
+      type: number
+      required: true
+      boost: 0.9
+      decay:
+        decay: 0.9
+        offset: 10
+        scale: 5
+    - name: firstname
+      type: text
+      required: false
+      boost: 0.3
+      fuzziness:
+        enabled: true
+    - name: surname
+      type: text
+      required: false
+      boost: 0.1
+      fuzziness:
+        enabled: false
+    - name: dob
+      type: date
+      required: false
+      boost: 0.4
+Boxers:
+  index: canonical_boxers
+  fields:
+    - name: height
+      type: float
+      required: true
+      boost: 1.0
+      decay:
+        decay: 0.5
+        offset: 1
+        scale: 5
+    - name: weight
+      type: double
+      required: false
+      boost: 1.0
+      decay:
+        decay: 0.9
+        offset: 10
+        scale: 5
+    - name: name
+      type: text
+      required: true
+      boost: 1.0
+      fuzziness:
+        enabled: true
+    - name: reach
+      type: long
+      required: true
+      boost: 0.5
+      decay:
+        decay: 0.9
+        offset: 10
+        scale: 5
+    - name: fights
+      type: integer
+      required: true
+      boost: 0.7
+      decay:
+        decay: 0.9
+        offset: 10
+        scale: 5
+    - name: wins
+      type: integer
+      required: true
+      boost: 0.7
+      decay:
+        decay: 0.9
+        offset: 10
+        scale: 5
+    - name: losses
+      type: integer
+      required: true
+      boost: 0.7
+      decay:
+        decay: 0.9
+        offset: 10
+        scale: 5
+    - name: draws
+      type: integer
+      required: true
+      boost: 0.7
+      decay:
+        decay: 0.9
+        offset: 10
+        scale: 5
+    - name: kos
+      type: number
+      required: true
+      boost: 0.3
+      decay:
+        decay: 0.9
+        offset: 10
+        scale: 5
+TestAllTypesExactMatch:
+  fields:
+    - name: text-field
+      type: text
+      required: true
+      boost: 1.0
+      exactMatch: true
+    - name: keyword-field
+      type: keyword
+      required: true
+      boost: 1.0
+      exactMatch: true
+    - name: location-field
+      type: geo-point
+      required: true
+      boost: 1.0
+      exactMatch: true
+    - name: integer-field
+      type: integer
+      required: true
+      boost: 1.0
+      exactMatch: true
+    - name: long-field
+      type: long
+      required: true
+      boost: 1.0
+      exactMatch: true
+    - name: double-field
+      type: double
+      required: true
+      boost: 1.0
+      exactMatch: true
+    - name: float-field
+      type: float
+      required: true
+      boost: 1.0
+      exactMatch: true
+    - name: number-field
+      type: number
+      required: true
+      boost: 1.0
+      exactMatch: true
+    - name: date-field
+      type: date
+      required: true
+      boost: 1.0
+      exactMatch: true
+    - name: boolean-field
+      type: boolean
+      required: true
+      boost: 1.0
+      exactMatch: true

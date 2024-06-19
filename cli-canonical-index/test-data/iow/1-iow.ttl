@@ -1,0 +1,26 @@
+<http://telicent.io/test-data/iow#connector_T024_T043> <http://ies.data.gov.uk/ontology/ies4#isConnectedTo> <http://telicent.io/test-data/iow#T024> .
+<http://telicent.io/test-data/iow#T024_ID> <http://ies.data.gov.uk/ontology/ies4#representationValue> "T024"^^<http://www.w3.org/2001/XMLSchema#string> .
+<http://telicent.io/test-data/iow#T024> <http://ies.data.gov.uk/ontology/ies4#isIdentifiedBy> <http://telicent.io/test-data/iow#T024_ID> .
+<http://ordnancesurvey.co.uk/grid#SZ5013495745> <http://ies.data.gov.uk/ontology/ies4#isIdentifiedBy> <http://ordnancesurvey.co.uk/gridRef#SZ5013495745> .
+<http://telicent.io/test-data/iow#34aa495e-2c16-4a6a-87be-979dc5994713> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://ies.data.gov.uk/ontology/ies4#Latitude> .
+<http://telicent.io/test-data/iow#T024_Name> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://ies.data.gov.uk/ontology/ies4#Name> .
+<http://ordnancesurvey.co.uk/gridRef#SZ5013495745> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://ies.data.gov.uk/ontology/ies4#OSGridReference> .
+<http://telicent.io/test-data/iow#ece2d6bb-e50a-4b9b-a808-ac97b945cf6a> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://ies.data.gov.uk/ontology/ies4#AssessCriticality> .
+<http://telicent.io/test-data/iow#T024_Name> <http://ies.data.gov.uk/ontology/ies4#representationValue> "East Cowes Ferry Terminal"^^<http://www.w3.org/2001/XMLSchema#string> .
+<http://ordnancesurvey.co.uk/grid#SZ5013495745> <http://ies.data.gov.uk/ontology/ies4#isIdentifiedBy> <http://telicent.io/test-data/iow#34aa495e-2c16-4a6a-87be-979dc5994713> .
+<http://ordnancesurvey.co.uk/gridRef#SZ5013495745> <http://ies.data.gov.uk/ontology/ies4#representationValue> "SZ 50134 95745" .
+<http://telicent.io/test-data/iow#T024> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://ies.data.gov.uk/ontology/ies4#Facility> .
+<http://telicent.io/test-data/iow#connector_T024_T043> <http://ies.data.gov.uk/ontology/ies4#isConnectedTo> <http://telicent.io/test-data/iow#T043> .
+<http://ordnancesurvey.co.uk/grid#SZ5013495745> <http://ies.data.gov.uk/ontology/ies4#isIdentifiedBy> <http://telicent.io/test-data/iow#1d902ce0-5430-400b-b1fc-cf6c07692da5> .
+<http://telicent.io/test-data/iow#T024> <http://ies.data.gov.uk/ontology/ies4#hasName> <http://telicent.io/test-data/iow#T024_Name> .
+<http://telicent.io/test-data/iow#1d902ce0-5430-400b-b1fc-cf6c07692da5> <http://ies.data.gov.uk/ontology/ies4#representationValue> "-1.2905602729882664"^^<http://www.w3.org/2001/XMLSchema#string> .
+<http://telicent.io/test-data/iow#ece2d6bb-e50a-4b9b-a808-ac97b945cf6a> <http://ies.data.gov.uk/ontology/ies4#assessed> <http://telicent.io/test-data/iow#connector_T024_T043> .
+<http://telicent.io/test-data/iow#34aa495e-2c16-4a6a-87be-979dc5994713> <http://ies.data.gov.uk/ontology/ies4#representationValue> "50.7591443709977"^^<http://www.w3.org/2001/XMLSchema#string> .
+<http://telicent.io/test-data/iow#Transport_Assessment> <http://ies.data.gov.uk/ontology/ies4#assessed> <http://telicent.io/test-data/iow#T024> .
+<http://telicent.io/test-data/iow#T024> <http://ies.data.gov.uk/ontology/ies4#inLocation> <http://ordnancesurvey.co.uk/grid#SZ5013495745> .
+<http://telicent.io/test-data/iow#T024> <http://telicent.io/ontology/primaryName> "East Cowes Ferry Terminal" .
+<http://ordnancesurvey.co.uk/grid#SZ5013495745> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://ies.data.gov.uk/ontology/ies4#MapGridArea> .
+<http://telicent.io/test-data/iow#1d902ce0-5430-400b-b1fc-cf6c07692da5> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://ies.data.gov.uk/ontology/ies4#Longitude> .
+<http://telicent.io/test-data/iow#T024_ID> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://ies.data.gov.uk/ontology/ies4#Identifier> .
+<http://telicent.io/test-data/iow#connector_T024_T043> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://ies.data.gov.uk/ontology/ies4#Connector> .
+<http://telicent.io/test-data/iow#ece2d6bb-e50a-4b9b-a808-ac97b945cf6a> <http://ies.data.gov.uk/ontology/ies4#criticalityRating> "3.0"^^<http://www.w3.org/2001/XMLSchema#float> .

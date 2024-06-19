@@ -1,0 +1,286 @@
+{
+    "CoreCanonicalIesPerson": {
+        "index": "canonical_person",
+        "fields": [
+            {
+                "name": "name_elements-surname",
+                "type": "text",
+                "required": true,
+                "boost": 1.2,
+                "fuzziness": {
+                    "enabled": true,
+                    "min": 0,
+                    "max": 3
+                }
+            },
+            {
+                "name": "name_elements-forename",
+                "type": "text",
+                "required": true,
+                "boost": 4,
+                "fuzziness": {
+                    "enabled": true
+                }
+            },
+            {
+                "name": "name_elements-middle_name",
+                "type": "text",
+                "required": true,
+                "boost": 1,
+                "fuzziness": {
+                    "enabled": true
+                }
+            },
+            {
+                "name": "name_elements-title",
+                "type": "text",
+                "required": true,
+                "boost": 0.1,
+                "fuzziness": {
+                    "enabled": false
+                }
+            },
+            {
+                "name": "nationality",
+                "type": "keyword",
+                "required": true,
+                "boost": 0.1
+            },
+            {
+                "name": "date_of_birth-year",
+                "type": "number",
+                "required": false,
+                "boost": 1.5
+            },
+            {
+                "name": "date_of_birth-month",
+                "type": "number",
+                "required": false,
+                "boost": 1.5
+            },
+            {
+                "name": "date_of_birth",
+                "type": "date",
+                "required": false,
+                "boost": 1.5
+            }
+        ]
+    },
+    "CoreCanonicalIesAddress": {
+        "index": "test_index_3",
+        "fields": [
+            {
+                "name": "address-address_line_1",
+                "type": "text",
+                "required": true,
+                "boost": 1,
+                "fuzziness": {
+                    "enabled": true
+                }
+            },
+            {
+                "name": "address-locality",
+                "type": "text",
+                "required": true,
+                "boost": 1,
+                "fuzziness": {
+                    "enabled": true
+                }
+            },
+            {
+                "name": "address-region",
+                "type": "text",
+                "required": true,
+                "boost": 1,
+                "fuzziness": {
+                    "enabled": true
+                }
+            },
+            {
+                "name": "address-country",
+                "type": "text",
+                "required": true,
+                "boost": 1,
+                "fuzziness": {
+                    "enabled": true
+                }
+            },
+            {
+                "name": "address-premises",
+                "type": "text",
+                "required": true,
+                "boost": 1,
+                "fuzziness": {
+                    "enabled": true
+                }
+            },
+            {
+                "name": "location",
+                "type": "geo-point",
+                "required": true,
+                "boost": 5,
+                "distance": {
+                    "pivot": "1mi"
+                }
+            }
+        ]
+    },
+    "Test": {
+        "index": "canonical",
+        "fields": [
+            {
+                "name": "address-address_line_1",
+                "type": "text",
+                "required": true,
+                "boost": 1,
+                "fuzziness": {
+                    "enabled": true
+                }
+            },
+            {
+                "name": "address-locality",
+                "type": "text",
+                "required": true,
+                "boost": 1,
+                "fuzziness": {
+                    "enabled": true
+                }
+            },
+            {
+                "name": "address-region",
+                "type": "text",
+                "required": true,
+                "boost": 1,
+                "fuzziness": {
+                    "enabled": true
+                }
+            },
+            {
+                "name": "address-country",
+                "type": "text",
+                "required": true,
+                "boost": 1,
+                "fuzziness": {
+                    "enabled": true
+                }
+            },
+            {
+                "name": "address-premises",
+                "type": "text",
+                "required": true,
+                "boost": 1,
+                "fuzziness": {
+                    "enabled": true
+                }
+            },
+            {
+                "name": "name_elements-surname",
+                "type": "text",
+                "required": true,
+                "boost": 1.2,
+                "fuzziness": {
+                    "enabled": true,
+                    "min": 0,
+                    "max": 3
+                }
+            },
+            {
+                "name": "name_elements-forename",
+                "type": "keyword",
+                "required": true,
+                "boost": 10
+            },
+            {
+                "name": "name_elements-middle_name",
+                "type": "text",
+                "required": true,
+                "boost": 1,
+                "fuzziness": {
+                    "enabled": true
+                }
+            },
+            {
+                "name": "name_elements-title",
+                "type": "text",
+                "required": true,
+                "boost": 0.1,
+                "fuzziness": {
+                    "enabled": false
+                }
+            },
+            {
+                "name": "nationality",
+                "type": "keyword",
+                "required": true,
+                "boost": 0.1
+            },
+            {
+                "name": "date_of_birth-year",
+                "type": "number",
+                "required": false,
+                "boost": 1.5
+            },
+            {
+                "name": "date_of_birth-month",
+                "type": "number",
+                "required": false,
+                "boost": 1.5
+            },
+            {
+                "name": "date_of_birth",
+                "type": "date",
+                "required": false,
+                "boost": 1.5,
+                "distance": {
+                    "pivot": "3d"
+                }
+            }
+        ]
+    },
+    "Birthday": {
+        "index": "canonical_birthdays",
+        "fields": [
+            {
+                "name": "age",
+                "type": "integer",
+                "required": true,
+                "boost": 0.9,
+                "decay": {
+                    "decay": 0.9,
+                    "offset": 10,
+                    "scale": 5
+                }
+            },
+            {
+                "name": "firstname",
+                "type": "text",
+                "required": false,
+                "boost": 0.3,
+                "fuzziness": {
+                    "enabled": true
+                }
+            },
+            {
+                "name": "surname",
+                "type": "text",
+                "required": false,
+                "boost": 0.1,
+                "fuzziness": {
+                    "enabled": false
+                }
+            },
+            {
+                "name": "dob",
+                "type": "date",
+                "required": false,
+                "boost": 0.4
+            },
+            {
+                "name": "likesCake",
+                "type": "boolean",
+                "required": false,
+                "boost": 0.2
+            }
+        ]
+    }
+}

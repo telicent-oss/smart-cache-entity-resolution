@@ -1,0 +1,734 @@
+#
+#   Copyright (c) Telicent Ltd.
+#
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+#
+
+openapi: 3.0.2
+info:
+  title: Smart Cache Entity Resolution API
+  description: |
+    Provides an API that allows resolving entities against previously indexed
+    canonical forms
+  version: 0.6.0
+servers:
+  - url: http://localhost:8081
+    description: Local development server
+components:
+  securitySchemes:
+    BearerAuth:
+      description: Generic Bearer Authentication is supported using JWTs
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    AwsBearerAuth:
+      description: |
+        For AWS usage we support JWTs that are injected into requests by the ELB.  
+        Since these come in a non-standard HTTP header we have to declare this as
+        an API Key scheme in OpenAPI spec as it doesn't have a notion of using a
+        HTTP scheme in a non-standard way (yay AWS weirdness!)
+      type: apiKey
+      in: header
+      name: X-Amzn-Oidc-Data
+
+  parameters:
+    QueryParam:
+      description: |
+        Provides a search query used to search documents.  
+        
+        The interpretation of this parameter, and thus the 
+        search results, may be affected by the `type` parameter.
+      name: query
+      in: query
+      required: true
+      schema:
+        type: string
+
+    QueryTypeParam:
+      description: |
+        Specifies the type of search query.
+
+        This parameter impacts the interpretation of, and thus 
+        the search results, returned by the search query given by the
+        `query` parameter.
+
+        The default type value `query` means that the search query is 
+        parsed and interpreted using the underlying search index's query 
+        syntax.
+
+        A type of `term` means the search query is interpreted as a set 
+        of terms that should be matched exactly.  Though a given result
+        does not necessarily need to match every term.
+
+        A type of `phrase` means that the search query is interpreted as
+        a complete phrase that must be matched.  Thus a given result matches 
+        the entire phrase given.
+
+        A type of `wildcard` means that the search query is interpreted as
+        a set of wildcard terms that may partially match.  For example a 
+        query of `pre` with type `wildcard` should return results that 
+        contain any term starting with `pre`.
+      name: type
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/QueryType'
+
+    LimitParam:
+      description: |
+        Specifies the maximum number of results to return in a single response.
+
+        This **DOES NOT** limit overall results, therefore it may be used 
+        in conjunction with the `offset` parameter to provide paging over
+        results.
+
+        A value of `-1` means that no limit is imposed.  If no `offset` is
+        provided either then you would retrieve all results in a single request.
+      name: limit
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/Limit'
+
+    OffsetParam:
+      description: |
+        Specifies the offset within the results to start returning 
+        results from, this is relative to the total results.  In 
+        combination with the `limit` parameter this can be used to 
+        provide paging over results.
+
+        This is interpreted as a 1 based offset.  Thus an offset
+        of 1 means start from the first result.  So if you wanted 
+        to request 25 results starting from the 100th result you'd use 
+        `limit=25&offset=100` in your request.
+      name: offset
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/Offset'
+
+    HighlightingEnabledParam:
+      description: |
+        Specifies whether result highlighting is enabled.
+        
+        When `true` search results will contain the additional `highlighted`
+        field which contains the highlighted portions of the document.
+      name: highlighting
+      in: query
+      required: false
+      schema:
+        type: boolean
+        default: false
+
+    HighlightingPreTagParam:
+      description: |
+        Specifies a pre-tag to use in the highlighted results.
+        
+        If not specified then the choice of pre-tag is left to the underlying
+        search index.
+      name: highlighting-pre-tag
+      in: query
+      required: false
+      schema:
+        type: string
+        default: null
+
+    HighlightingPostTagParam:
+      description: |
+        Specifies a post-tag to use in the highlighted results.
+
+        If not specified then the choice of post-tag is left to the underlying
+        search index.
+      name: highlighting-post-tag
+      in: query
+      required: false
+      schema:
+        type: string
+        default: null
+
+    IdParam:
+      description: |
+        Specifies the ID of a document to be retrieved.
+
+        Note that IDs are not necessarily data driven, they may be internal
+        identifiers assigned by the underlying search index.
+
+        As such API consumers **MAY** not know any IDs in advance and **MUST**
+        first make appropriate search requests to discover the IDs of interest
+        to them.
+
+        Since these **MAY** be internal identifiers applications **SHOULD NOT**
+        present these IDs to the user.
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+
+    IdQueryParam:
+      description: |
+        Specifies the IDs of the documents to be retrieved.
+
+        Note that IDs are not necessarily data driven, they may be internal
+        identifiers assigned by the underlying search index.
+
+        As such API consumers **MAY** not know any IDs in advance and **MUST**
+        first make appropriate search requests to discover the IDs of interest
+        to them.
+
+        Since these **MAY** be internal identifiers applications **SHOULD NOT**
+        present these IDs to the user.
+      name: id
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+
+    IsBase64Param:
+      description: |
+        Specifies whether Base64 encoding is enabled for the specified ID.
+
+        When `true`, the ID will be Base64 decoded (e.g. for URIs).
+      name: is-base64
+      in: query
+      required: false
+      schema:
+        type: boolean
+        default: false
+
+    TypeFilterParam:
+      description: |
+        Entity/identifier type to filter by.
+      name: type-filter
+      in: query
+      required: false
+      schema:
+        type: string
+
+    IsTypeFilterBase64Param:
+      description: |
+        Specifies whether Base64 encoding is enabled for the specified type filter.
+
+        When `true`, the type filter will be Base64 decoded (e.g. for URIs).
+      name: is-type-filter-base64
+      in: query
+      required: false
+      schema:
+        type: boolean
+        default: false
+
+    TypeFilterModeParam:
+      description: |
+        Specifies whether to filter by entity, identifier or by a match to either of the two.
+      name: type-filter-mode
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/TypeFilterMode'
+
+    ShowSecurityLabelsParam:
+      description: |
+        Specifies whether security labels will be returned as part of the documents.
+
+        When `true`, security labels will be returned.
+      name: show-security-labels
+      in: query
+      required: false
+      schema:
+        type: boolean
+        default: false
+
+    FieldsParam:
+      description: |
+        Specifies the fields upon which the query should apply.  This allows for 
+        more targeted searches than would otherwise be possible.
+        
+        As an API consumer may not know the exact internal field names used in the
+        underlying indexes two pieces of behaviour are mandated.  Firstly that 
+        wildcards may be used e.g. *primaryName, and secondly that if no fields are
+        supplied the underlying implementation may substitute whatever set of default
+        fields it considers useful.
+      name: fields
+      in: query
+      required: false
+      schema:
+        type: string
+      style: form
+      explode: true
+
+    FacetParam:
+      description: |
+        Specifies the facet upon which documents should be grouped.  This should be 
+        expressed in terms of a document field name e.g. types
+
+        Where it is desired to facet based upon a nested document field separate the
+        field names with a / character e.g. metadata/documentFormat
+      name: facet
+      in: query
+      required: true
+      schema:
+        type: string
+
+    IsFacetBase64Param:
+      description: |
+        Specifies whether Base64 encoding is enabled for the specified facet
+
+        When `true`, the facet field will be Base64 decoded (e.g. for URIs).
+      name: is-facet-base64
+      in: query
+      required: false
+      schema:
+        type: boolean
+        default: false
+
+    SortParam:
+      description: |
+        Specifies a custom sorting for the results.
+
+        This is provided as a comma separated list of sort conditions.  Each condition
+        is a field name, optionally prefixed by `>` for decreasing order, or `<` for 
+        increasing order.  The default order for a field is descending.
+
+        For example `<start,<end` will sort results by increasing `start`` and then by 
+        increasing `end` value.
+
+        It is only permitted to sort upon numeric or keyword fields so some sort conditions
+        may not be honoured, or may result in a server error.
+      name: sort
+      in: query
+      required: false
+      schema:
+        type: string
+
+  schemas:
+    SimilarityResults:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SimilarityResult'
+
+    SimilarityResult:
+      type: object
+      properties:
+        IDSourceEntity:
+          type: string
+          description: ID of the source entity
+        hits:
+          type: array
+          items:
+            $ref: '#/components/schemas/Hit'
+
+    Hit:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Document ID
+        score:
+          type: number
+          description: Document Score
+        document:
+          $ref: '#/components/schemas/Document'
+
+    QueryType:
+      description: Supported query types
+      type: string
+      enum:
+        - query
+        - term
+        - phrase
+        - wildcard
+      default: query
+
+    TypeFilterMode:
+      description: Supported type filter modes
+      type: string
+      enum:
+        - any
+        - entity
+        - identifier
+      default: any
+
+    Total:
+      type: integer
+      description: |
+        Indicates the total number of results returned by the query.
+
+        This **DOES NOT** necessarily mean that this many results are returned
+        in the current response because the actual slice of results returned 
+        is affected by the `limit` and `offset` parameters.
+      minimum: 0
+      default: 0
+      example: 100
+
+    Limit: 
+      type: integer
+      description: |
+        Indicates the limit that is applied to the results i.e. this is the 
+        maximum number of results that will appear in the response.
+
+        A value of -1 is interpreted as no limit i.e. all results are returned.
+        
+        A value of 0 means that no results are returned, however the metadata 
+        about the results would still be returned.  Thus, a limit of 0 can be used
+        to retrieve the metadata about the query, before making a decision of how
+        to actually page through the results.
+      minimum: -1
+      default: -1
+      example: 10
+
+    Offset:
+      type: integer
+      description: |
+        Indicates the offset that is applied to the results i.e. this is the 
+        result number that the results starts from.
+
+        This is interpreted as an inclusive 1 based offset so 1 indicates the 1st
+        result onwards, 74 the 74th result onwards and so forth.
+      minimum: 1
+      default: 1
+      example: 100
+
+    SearchResults:
+      type: object
+      description: |
+        Represents the results of a search.  This provides information about the
+        total number of results found and what slice of the results are currently
+        being returned.
+      properties:
+        total:
+          $ref: '#/components/schemas/Total'
+        limit:
+          $ref: '#/components/schemas/Limit'
+        offset:
+          $ref: '#/components/schemas/Offset'
+        query:
+          type: string
+          description: |
+            Contains the query that was used to produce these results.
+          example: John
+        type:
+          $ref: '#/components/schemas/QueryType'
+        results:
+          type: array
+          description: |
+            The array of results.  This may represent a slice of the overall 
+            results or the complete results.
+
+            The actual slice of results that is returned may be determined by 
+            looking at the `limit` and `offset` declared in this response.
+            
+            The results are provided in descending order of relevance i.e. the most
+            relevant results should always be at the start of the results.  Each
+            result will express its relevance via the score parameter of the result.
+            How the underlying search index calculates and assigns relevance scores is
+            up to the underlying index so clients **SHOULD NOT** attempt to interpret 
+            the scores in any way.
+          items:
+            $ref: '#/components/schemas/Result'
+
+    Result:
+      type: object
+      properties:
+        id:
+          type: string
+          description: |
+            The ID of the document that can be used to lookup the specific document.
+            
+            Depending on the underlying search index this may be an internal 
+            identifier rather than a data specific identifier.
+
+            This ID **SHOULD NOT** be presented to the user.
+          example: ab45645c
+        score:
+          type: number
+          description: |
+            A relevance score for the document.
+
+            How the scores are calculated and their acceptable ranges of values are 
+            left to the underlying search index.  API consumers **SHOULD NOT**
+            present this value to the user, nor attempt to interpret it as part of their
+            results presentation.  Relevance scores can change from query to query, 
+            especially as new data is indexed, and may be calculated differently by 
+            different underlying search index implementations.
+          format: double
+          example: 2.54
+        document:
+          $ref: '#/components/schemas/Document'
+        highlighted:
+          $ref: '#/components/schemas/Document'
+
+    Document:
+      type: object
+      description: |
+        Represents a document describing some entities in the data.
+      additionalProperties: true
+      properties:
+        uri:
+          type: string
+        types:
+          $ref: '#/components/schemas/StringList'
+        literals:
+          type: object
+          additionalProperties: 
+            type: array
+            items:
+              type: string
+        hasName:
+          $ref: '#/components/schemas/RepresentationList'
+        isIdentifiedBy:
+          $ref: '#/components/schemas/RepresentationList'
+      example:
+        uri: http://example.com/entities/123456
+        types: 
+        - http://ies.data.gov.uk/ontology/ies4#Person
+        - http://ies.data.gov.uk/ontology/ies4#LivingPerson
+        literals:
+          'telicent:primaryName': [ "John Smith" ]
+          'foaf:age': [ 37 ]
+          'foaf:givenName': [ "John" ]
+          'foaf:familyName': [ "Smith" ]
+          'foaf:title': [ "Mr", "Dr" ]
+          'foaf:nick': [ "Smithy", "JohnSmithOfficial"]
+        hasName:
+          - types:
+            - http://ies.data.gov.uk/ontology/ies4#Nickname
+            predicate: http://ies.data.gov.uk/ontology/ies4#hasName
+            representationValue: "Smithy"
+          - types:
+            - http://ies.data.gov.uk/ontology/ies4#Username
+            predicate: http://ies.data.gov.uk/ontology/ies4#hasName
+            instance: http://example.com/emails/abc456
+            representationValue: john.smith@bigco.com
+        isIdentifiedBy:
+          - types:
+            - http://ies.data.gov.uk/ontology/ies4#NationalIdentityNumber
+            predicate: http://ies.data.gov.uk/ontology/ies4#isIdentifiedBy
+            representationValue: AB 01 23 45 C
+
+    DocumentSelection:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/Document'
+
+    RepresentationList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Representation'
+
+    Representation:
+      type: object
+      additionalProperties: true
+      properties:
+        types:
+          $ref: '#/components/schemas/StringList' 
+        representationValue:
+          type: string
+        predicate:
+          type: string
+        instance:
+          type: string
+
+    StringList:
+      type: array
+      items:
+        type: string
+      example:
+        - http://ontology.org/ontology#Person
+        - http://ontology.org/ontology#LivingPerson
+
+    Rfc7807Problem:
+      description: |
+        An object describing a problem processing an API request.
+
+        This is based upon [RFC 7807](https://www.rfc-editor.org/rfc/rfc7807.html)
+      type: object
+      properties:
+        type:
+          type: string
+          example: http://problems.org/IllegalArgument
+        title:
+          type: string
+          example: Invalid Query Type
+        status:
+          type: integer
+          minimum: 100
+          maximum: 599
+          example: 400
+        detail:
+          type: string
+          example: The provided type parameter was not one of the supported query types.
+        instance:
+          type: string
+          example: SomeSpecificProblemInstance
+
+    HealthStatus:
+      description: |
+        Provides information about the health status of the server
+      type: object
+      properties:
+        healthy:
+          type: boolean
+          example: false
+        reasons:
+          type: array
+          items:
+            type: string
+          example:
+            - "Search Client was incorrectly configured"
+        config:
+          type: object
+          items:
+            type: object
+          additionalProperties: true
+          example:
+            searchIndex: localhost:1234/index
+            searchClient: io.telicent.smart.cache.search.elastic.ElasticSearchClient
+
+    VersionInfoEntry: 
+      description: |
+        Provides version information for one component of the server
+      type: object
+      properties:
+        name:
+          type: string
+        version:
+          type: string
+      additionalProperties: true
+      example:
+        name: Telicent Smart Caches - Search - API Server
+        version: 0.9.0
+        artifactId: search-api-server
+
+    VersionInfo:
+      description: |
+        Provides version information for the server
+      type: array
+      items:
+        $ref: '#/components/schemas/VersionInfoEntry'
+
+paths:
+  /similarity:
+    put:
+      summary: Get Similar Entities
+      operationId: getSimilar
+      description: |
+        Returns the most similar entities to the ones passed as input in the JSON file. The file is in ndjson format with
+        one line per entity, the content of the JSON is similar to what is returned by the search endpoint and mimics the
+        structure of the documents in the search backend.
+      security: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+              required:
+                - file
+      parameters:
+        - name: maxResults
+          in: query
+          description: Max number of hits per entity (default 1)
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: minScore
+          in: query
+          description: Minimal score that hits must have in order to be returned (default 0)
+          schema:
+            type: number
+            minimum: 0
+            default: 0
+        - name: withinInput
+          in: query
+          description: Look for similarities within the input entities (default false)
+          schema:
+            type: boolean
+            default: false
+        - name: overrides
+          in: formData
+          description: Mapping overrides for the query (default empty)
+          schema:
+            type: string
+            default: ""
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimilarityResults'
+        500:
+          description: Internal Server Error i.e. the server failed to process the request.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Rfc7807Problem'
+        503:
+          description: Service Unavailable, there is no underlying search index or canonical model available to process the request.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Rfc7807Problem'
+
+  /healthz:
+    get:
+      summary: Gets the health status of the server
+      operationId: getHealthStatus
+      description: |
+        Retrieves a Health Status representation for the server indicating whether the server is healthy
+        and able to service requests.
+      security: []
+      responses:
+        200:
+          description: The server is healthy.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthStatus'
+        503:
+          description: The server is unhealthy.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthStatus'
+
+  /version-info:
+    get:
+      summary: Gets the version information of the server
+      operationId: getVersionInfo
+      description: |
+        Retrieves version information for the server that can be used to check the software the deployed server is 
+        running.
+      security: []
+      responses:
+        200:
+          description: Server version information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionInfo'
+      
+
+security:
+  - BearerAuth: []
+  - AwsAuth: []

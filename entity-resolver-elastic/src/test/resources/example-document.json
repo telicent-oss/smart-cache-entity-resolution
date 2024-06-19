@@ -1,0 +1,25 @@
+{
+  "uri" : "http://data.gov.uk/testdata#Fred",
+  "types" : [ "http://ies.data.gov.uk/ontology/ies4#Person" ],
+  "hasName" : [ {
+    "instance" : "http://data.gov.uk/testdata#fredName",
+    "predicate" : "http://ies.data.gov.uk/ontology/ies4#hasName",
+    "types" : [ "http://ies.data.gov.uk/ontology/ies4#PersonName" ],
+    "representationValue" : "Fred Smith"
+  } ],
+  "isIdentifiedBy" : [ {
+    "instance" : "http://data.gov.uk/testdata#fredNHSNum",
+    "predicate" : "http://ies.data.gov.uk/ontology/ies4#isIdentifiedBy",
+    "types" : [ "http://ies.data.gov.uk/ontology/ies4#NationalIdentityNumber" ],
+    "representationValue" : "12AB3456789",
+    "securityLabels" : {
+      "instance" : "gdpr",
+      "predicate" : "gdpr"
+    }
+  } ],
+  "securityLabels" : {
+    "defaults" : "public",
+    "graph" : "@prefix authz: <http://telicent.io/security#> .\n@prefix foaf:  <http://xmlns.com/foaf/0.1/> .\n@prefix ies:   <http://ies.data.gov.uk/ontology/ies4#> .\n@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n\n[ authz:label    \"gdpr\" ;\n  authz:pattern  \"ANY ies:isIdentifiedBy ANY\"\n] .\n"
+  }
+}
+

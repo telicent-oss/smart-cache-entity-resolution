@@ -1,0 +1,44 @@
+name: Entity Resolution Builds
+
+on:
+  # Run workflow for any push to a branch or a tag
+  push:
+    branches:
+      - '**'
+    tags:
+      - '**'
+  # Allow manual triggering of the workflow
+  workflow_dispatch:
+
+jobs:
+  maven-build:
+    uses: telicent-oss/shared-workflows/.github/workflows/maven.yml@main
+    with:
+      # Some Docker based tests in this repository use public images
+      USES_DOCKERHUB_IMAGES: true
+      # Want SNAPSHOTs to be published from main
+      PUBLISH_SNAPSHOTS: true
+      MAIN_BRANCH: main
+      MAVEN_DEBUG_ARGS: -Dlogback.configurationFile=logback-debug.xml
+      JAVA_VERSION: 21
+    secrets: inherit
+
+  docker-build:
+    strategy:
+      matrix:
+        image: [ smart-cache-entity-resolution-api, smart-cache-elastic-can-index ]
+      fail-fast: false
+    needs: maven-build
+    uses: Telicent-io/telicent-test/.github/workflows/push-to-registries.yml@main
+    with:
+      APP_NAME: ${{ matrix.image }}
+      APP_NAME_PREFIX: ""
+      PATH: .
+      DOCKERFILE: docker/Dockerfile
+      VERSION: ${{ needs.maven-build.outputs.version }}
+      TARGET: ${{ matrix.image }}
+      BUILD_ARGS: |
+        PROJECT_VERSION=${{ needs.maven-build.outputs.version }}
+      USES_MAVEN: true
+      JAVA_VERSION: 21
+    secrets: inherit

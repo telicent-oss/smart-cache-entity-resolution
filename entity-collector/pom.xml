@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.telicent.smart-caches.entity-resolution</groupId>
+        <artifactId>parent</artifactId>
+        <version>0.6.2-SNAPSHOT</version>
+    </parent>
+    <artifactId>entity-collector</artifactId>
+    <name>Telicent Smart Caches - Entity Resolution - Entity Collection API</name>
+
+    <properties>
+        <license.header.path>${project.parent.basedir}</license.header.path>
+        <coverage.minimum>0.8</coverage.minimum>
+    </properties>
+
+    <dependencies>
+    <!-- Internal -->
+    <!-- SC Core -->
+        <dependency>
+            <groupId>io.telicent.smart-caches</groupId>
+            <artifactId>projectors-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.telicent.smart-caches</groupId>
+            <artifactId>event-sources-core</artifactId>
+        </dependency>
+
+    <!-- JENA / RDF -->
+        <dependency>
+            <groupId>io.telicent.jena</groupId>
+            <artifactId>rdf-abac-core</artifactId>
+        </dependency>
+
+    <!-- External -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+    <!-- Test Dependencies -->
+    <!-- Internal -->
+    <!-- SC Core -->
+        <dependency>
+            <groupId>io.telicent.smart-caches</groupId>
+            <artifactId>projectors-core</artifactId>
+            <version>${dependency.smart-caches}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.telicent.smart-caches</groupId>
+            <artifactId>observability-core</artifactId>
+            <version>${dependency.smart-caches}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+
+    <!-- External -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.valfirst</groupId>
+            <artifactId>slf4j-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-sdk</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${plugin.jacoco}</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>

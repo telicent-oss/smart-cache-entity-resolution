@@ -1,0 +1,11 @@
+{"Date":"1776-07-04","Event":"Declaration of Independence (USA)"}
+{"Date":"1969-07-20","Event":"Apollo 11 Moon Landing"}
+{"Date":"1492-10-12","Event":"Christopher Columbus's Arrival in the Americas"}
+{"Date":"1989-11-09","Event":"Fall of the Berlin Wall"}
+{"Date":"1945-08-06","Event":"Atomic Bombing of Hiroshima (WWII)"}
+{"Date":"1944-06-06","Event":"D-Day - Allied invasion of Normandy during World War II"}
+{"Date":"1989-06-04","Event":"Tiananmen Square protests in Beijing, China"}
+{"Date":"1914-06-28","Event":"Assassination of Archduke Franz Ferdinand, leading to the start of World War I"}
+{"Date":"1950-06-25","Event":"Korean War begins"}
+{"Date":"1967-06-12","Event":"Loving v. Virginia - U.S. Supreme Court case legalizing interracial marriage"}
+{"Date":"1979-05-04","Event":"Margaret Thatcher becomes the first female Prime Minister of the United Kingdom."}

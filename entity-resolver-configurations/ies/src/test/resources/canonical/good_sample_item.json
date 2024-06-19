@@ -1,0 +1,77 @@
+{
+    "type": "CoreCanonicalTestType",
+    "fields": [
+        {
+            "name": "text-field-fuzzy",
+            "type": "text",
+            "required": true,
+            "boost": 1.2,
+            "fuzziness": {
+                "enabled": true,
+                "min": 0,
+                "max": 3
+            }
+        },
+        {
+            "name": "text-field-nonfuzzy",
+            "type": "text",
+            "required": true,
+            "boost": 4,
+            "fuzziness": {
+                "enabled": false
+            }
+        },
+        {
+            "name": "keyword-field-not-required",
+            "type": "keyword",
+            "required": false,
+            "boost": 0.1
+        },
+        {
+            "name": "keyword-field-no-boost",
+            "type": "keyword",
+            "required": true
+        },
+        {
+            "name": "number-field",
+            "type": "number",
+            "required": true,
+            "boost": 0.1,
+            "decay": {
+                "offset": "1",
+                "scale": "10",
+                "decay": 0.5
+            }
+        },
+        {
+            "name": "date-field",
+            "type": "date",
+            "required": true,
+            "boost": 1.5,
+            "distance": {
+                "pivot": "3d"
+            }
+        },
+        {
+            "name": "date-field-no-distance",
+            "type": "number",
+            "required": false,
+            "boost": 1.5
+        },
+        {
+            "name": "location-field",
+            "type": "geo-point",
+            "required": false,
+            "boost": 10,
+            "distance": {
+                "pivot": "5m"
+            }
+        },
+        {
+            "name": "location-field-no-distance",
+            "type": "geo-point",
+            "required": false,
+            "boost": 1.5
+        }
+    ]
+}

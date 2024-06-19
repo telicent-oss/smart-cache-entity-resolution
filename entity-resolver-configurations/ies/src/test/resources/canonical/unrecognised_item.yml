@@ -1,0 +1,6 @@
+type: CoreCanonicalTestType
+fields:
+  - name: unknown-name
+    type: unknown
+    required: true
+    boost: 1.2

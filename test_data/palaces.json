@@ -1,0 +1,30 @@
+{"index":{"_id" : "1"}}
+{"palace-name":"Buckingham Palace","address-country":"United Kingdom","address-locality":"Westminster","address-region":"London","location":"51.50,-0.14"}
+{"index":{"_id" : "2"}}
+{"palace-name":"Windsor Castle","address-country":"United Kingdom","address-locality":"Windsor","address-region":"Oxford","location":"51.48,-0.60"}
+{"index":{"_id" : "3"}}
+{"palace-name":"Hampton Court Palace","address-country":"United Kingdom","address-locality":"Hampton","address-region":"Richmond upon Thames","location":"51.40,-0.33"}
+{"index":{"_id" : "4"}}
+{"palace-name":"Kensington Palace","address-country":"United Kingdom","address-locality":"Kensington","address-region":"London","location":"51.50,-0.18"}
+{"index":{"_id" : "5"}}
+{"palace-name":"Westminster Palace","address-country":"United Kingdom","address-locality":"Westminster","address-region":"London","location":"51.49,-0.12"}
+{"index":{"_id" : "6"}}
+{"palace-name":"Holyrood Palace","address-country":"United Kingdom","address-locality":"Canongate","address-region":"Edinburgh","location":"55.95,-3.17"}
+{"index":{"_id" : "7"}}
+{"palace-name":"St James's Palace","address-country":"United Kingdom","address-locality":"St James's","address-region":"London","location":"51.50,-0.13"}
+{"index":{"_id" : "8"}}
+{"palace-name":"Balmoral Castle","address-country":"United Kingdom","address-locality":"Crathie","address-region":"Balmoral","location":"57.03,-3.22"}
+{"index":{"_id" : "9"}}
+{"palace-name":"Blenheim Palace","address-country":"United Kingdom","address-locality":"Woodstock","address-region":"Oxford","location":"51.84,-1.36"}
+{"index":{"_id" : "10"}}
+{"palace-name":"Osborne House","address-country":"United Kingdom","address-locality":"East Cowes","address-region":"Isle of Wight","location":"50.75,-1.26"}
+{"index":{"_id" : "11"}}
+{"palace-name":"Hillsborough Caslte","address-country":"United Kingdom","address-locality":"Hillsborough","address-region":"Northern Ireland","location":"54.46,-6.08"}
+{"index":{"_id" : "12"}}
+{"palace-name":"People's Palace","address-country":"United Kingdom","address-locality":"Glasgow","address-region":"Glasgow","location":"55.85,-4.23"}
+{"index":{"_id" : "13"}}
+{"palace-name":"People's Palace","address-country":"United Kingdom","address-locality":"Mile End","address-region":"London","location":"51.52,-0.04"}
+{"index":{"_id" : "14"}}
+{"palace-name":"The Queen's Walk","address-country":"United Kingdom","address-locality":"Westminster","address-region":"London","location":"51.50,-0.11"}
+{"index":{"_id" : "15"}}
+{"palace-name":"Palace Theatre","address-country":"United Kingdom","address-locality":"Westminster","address-region":"Manchester","location":"53.47,-2.24"}

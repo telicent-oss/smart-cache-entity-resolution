@@ -1,0 +1,87 @@
+@prefix data:    <http://data.gov.uk/testdata#> .
+@prefix ies:     <http://ies.data.gov.uk/ontology/ies4#> .
+@prefix iso8601: <http://iso.org/iso8601#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+
+data:Ward1  rdf:type    ies:PartOfFacility ;
+        ies:inLocation  data:UniversityHospital .
+
+data:bs3  rdf:type     ies:BoundingState ;
+        ies:inPeriod   iso8601:2014-01-04T19:00 ;
+        ies:isStartOf  data:ep1 .
+
+data:bed101  rdf:type   data:HospitalBed , ies:PartOfFacility ;
+        ies:inLocation  data:Ward1 .
+
+iso8601:2014-01-04T21:00
+        rdf:type  ies:ParticularPeriod .
+
+data:bs2  rdf:type    ies:BoundingState ;
+        ies:inPeriod  iso8601:2014-01-04T19:00 ;
+        ies:isEndOf   data:s1 .
+
+data:s2  rdf:type       ies:PersonState ;
+        ies:inLocation  data:bed101 ;
+        ies:isStateOf   data:Fred .
+
+data:ep1  rdf:type             ies:EventParticipant ;
+        ies:inLocation         data:theatreA ;
+        ies:isParticipationOf  data:Fred .
+
+data:bs1  rdf:type     ies:BoundingState ;
+        ies:inPeriod   iso8601:2014-01-04T09:00 ;
+        ies:isStartOf  data:s1 .
+
+data:s1  rdf:type       ies:PersonState ;
+        ies:inLocation  data:bed101 ;
+        ies:isStateOf   data:Fred .
+
+data:bs6  rdf:type    ies:BoundingState ;
+        ies:inPeriod  iso8601:2014-01-05T11:00 ;
+        ies:isEndOf   data:s2 .
+
+data:UniversityHospital
+        rdf:type  ies:Facility .
+
+data:theatreA  rdf:type  ies:PartOfFacility ;
+        ies:inLocation  data:UniversityHospital .
+
+data:bs5  rdf:type     ies:BoundingState ;
+        ies:inPeriod   iso8601:2014-01-04T21:00 ;
+        ies:isStartOf  data:s2 .
+
+data:Fred  rdf:type         ies:Person ;
+        foaf:name           "Fred Test" ;
+        foaf:age            34 ;
+        ies:hasName         data:fredName ;
+        ies:isIdentifiedBy  data:fredNHSNum .
+
+data:nhsNumber  rdf:type  ies:NamingScheme ;
+        ies:schemeOwner  data:NHS .
+
+iso8601:2014-01-04T19:00
+        rdf:type  ies:ParticularPeriod .
+
+data:HospitalBed  rdf:type  rdfs:Class ;
+        rdfs:subClassOf  ies:PartOfFacility .
+
+data:bs4  rdf:type    ies:BoundingState ;
+        ies:inPeriod  iso8601:2014-01-04T21:00 ;
+        ies:isEndOf   data:ep1 .
+
+iso8601:2014-01-05T11:00
+        rdf:type  ies:ParticularPeriod .
+
+data:fredName  rdf:type          ies:PersonName ;
+        ies:representationValue  "Fred Smith" .
+
+data:NHS  rdf:type  ies:GovernmentOrganisation .
+
+iso8601:2014-01-04T09:00
+        rdf:type  ies:ParticularPeriod .
+
+data:fredNHSNum  rdf:type        ies:NationalIdentityNumber ;
+        ies:inScheme             data:nhsNumber ;
+        ies:representationValue  "12AB3456789" .

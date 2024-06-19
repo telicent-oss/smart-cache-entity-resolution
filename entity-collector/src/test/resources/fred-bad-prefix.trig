@@ -1,0 +1,31 @@
+@prefix data:    <http://data.gov.uk/testdata#> .
+@prefix ies:     <http://ies.data.gov.uk/ontology/ies4#> .
+@prefix iso8601: <http://iso.org/iso8601#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+@prefix authz:   <http://telicent.io/security#> .
+{
+  data:Fred a ies:Person,
+              ies:EventParticipant;
+            foaf:name "Fred Test",
+                      "Frederick A. Test";
+            foaf:age 34 ;
+            foaf:phone "01234 567 890";
+            foaf:mbox "mailto:fred@gmail.com",
+                      "mailto:fred@work.com",
+                      "mailto:fred+banking@gmail.com";
+            foaf:nick "Freddie",
+                      "The Fredster" .
+ }
+
+ # Intentionally change the prefix definition for foaf to the wrong URL
+ # This should cause the subsequent rules involving foaf prefixed names to not actually match the data
+ @prefix foaf:    <http://not-the-foaf-url/vocab#> .
+
+authz:labels {
+  [ authz:pattern 'data:Fred foaf:phone "01234 567 890"' ;  authz:label "public" ] .
+  [ authz:pattern 'data:Fred foaf:age 34' ;  authz:label "gdpr" ] .
+  [ authz:pattern 'data:Fred foaf:mbox "mailto:fred@work.com"' ;  authz:label "work" ] .
+  [ authz:pattern 'data:Fred foaf:mbox "mailto:fred+banking@gmail.com"' ;  authz:label "private" ] .
+}

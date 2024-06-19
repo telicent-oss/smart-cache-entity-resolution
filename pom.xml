@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>io.telicent.smart-caches</groupId>
+        <artifactId>parent</artifactId>
+        <version>0.16.1</version>
+    </parent>
+    <groupId>io.telicent.smart-caches.entity-resolution</groupId>
+    <artifactId>parent</artifactId>
+    <version>0.6.2-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>Telicent Smart Caches - Entity Resolution</name>
+    <description>Provides a smart cache implementation specifically for Entity Resolution</description>
+    <url>https://github.com/telicent-oss/smart-cache-entity-resolution</url>
+
+    <developers>
+        <developer>
+            <name>Telicent Developers</name>
+            <email>opensource@telicent.io</email>
+            <organization>Telicent Ltd</organization>
+            <organizationUrl>https://telicent.io</organizationUrl>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+        </license>
+    </licenses>
+
+    <organization>
+        <name>Telicent Ltd.</name>
+        <url>https://telicent.io/</url>
+    </organization>
+
+    <scm>
+        <connection>scm:git:https://github.com/telicent-oss/smart-cache-entity-resolution</connection>
+        <developerConnection>scm:git:ssh://git@github.com/telicent-oss/smart-cache-entity-resolution</developerConnection>
+        <url>https://github.com/telicent-oss/smart-cache-entity-resolution</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>sonatype-oss</id>
+            <name>Sonatype OSS Snapshots</name>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>sonatype-oss</id>
+            <name>Sonatype OSS</name>
+            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
+    <modules>
+        <module>entity-resolver-api</module>
+        <module>entity-resolver-api-server</module>
+        <module>entity-resolver-elastic</module>
+        <module>entity-collector</module>
+        <module>cli-canonical-index</module>
+        <module>entity-resolver-configurations</module>
+        <module>test-clusters</module>
+    </modules>
+
+    <properties>
+    <!-- License Plugin Configuration -->
+    <!--
+        Note that all submodules need to declare this appropriately as well so that the plugin can correctly find
+        the header.txt file in this top directory even when run on a submodule -->
+        <license.header.path>${project.basedir}</license.header.path>
+        <javadoc.failOnWarnings>false</javadoc.failOnWarnings>
+    <!-- Plugin Versions -->
+        <plugin.clean>3.3.2</plugin.clean>
+        <plugin.cyclonedx>2.7.11</plugin.cyclonedx>
+        <plugin.editorconfig>0.1.3</plugin.editorconfig>
+        <plugin.exec>3.1.1</plugin.exec>
+        <plugin.gpg>3.2.4</plugin.gpg>
+        <plugin.resources>3.3.1</plugin.resources>
+        <plugin.sonatype>1.7.0</plugin.sonatype>
+        <plugin.source>3.3.1</plugin.source>
+        <plugin.surefire>3.2.3</plugin.surefire>
+
+    <!-- Dependency Versions -->
+    <!-- See Smart Cache Core for Parent dependencies -->
+        <dependency.commons-codec>1.16.0</dependency.commons-codec>
+        <dependency.commons-compress>1.26.0</dependency.commons-compress>
+        <dependency.elastic>7.17.16</dependency.elastic>
+        <dependency.fa-metadata>6.5.1</dependency.fa-metadata>
+        <dependency.httpclient>4.5.14</dependency.httpclient>
+        <dependency.httpcore>4.4.16</dependency.httpcore>
+        <dependency.httpclient>4.5.14</dependency.httpclient>
+        <dependency.jetty>11.0.18</dependency.jetty>
+        <dependency.jwt-auth>0.13.0</dependency.jwt-auth>
+        <dependency.logback>1.5.6</dependency.logback>
+        <dependency.mockserver>5.15.0</dependency.mockserver>
+        <dependency.opensearch-test>2.0.1</dependency.opensearch-test>
+        <dependency.parsson>1.0.5</dependency.parsson>
+        <dependency.smart-caches>0.18.0</dependency.smart-caches>
+        <dependency.snappy>1.1.10.5</dependency.snappy>
+        <dependency.wiremock>3.3.1</dependency.wiremock>
+
+    <!-- CORE Overrides -->
+        <jdk.version>21</jdk.version>
+
+        <!-- Test Image Versions -->
+        <image.elasticsearch>7.17.5.2</image.elasticsearch>
+        <image.opensearch>1.3.10</image.opensearch>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+      <!-- Dependencies from Smart Caches Core -->
+            <dependency>
+                <groupId>io.telicent.smart-caches</groupId>
+                <artifactId>projectors-core</artifactId>
+                <version>${dependency.smart-caches}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.telicent.smart-caches</groupId>
+                <artifactId>cli-core</artifactId>
+                <version>${dependency.smart-caches}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.telicent.smart-caches</groupId>
+                <artifactId>jaxrs-base-server</artifactId>
+                <version>${dependency.smart-caches}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.telicent.smart-caches</groupId>
+                <artifactId>configurator</artifactId>
+                <version>${dependency.smart-caches}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.telicent.smart-caches</groupId>
+                <artifactId>event-sources-core</artifactId>
+                <version>${dependency.smart-caches}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.telicent.smart-caches</groupId>
+                <artifactId>observability-core</artifactId>
+                <version>${dependency.smart-caches}</version>
+            </dependency>
+
+      <!-- ElasticSearch Integration Testing -->
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>elasticsearch</artifactId>
+                <version>${dependency.testcontainers}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.httpcomponents</groupId>
+                        <artifactId>httpclient</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${dependency.httpclient}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mock-server</groupId>
+                <artifactId>mockserver-netty</artifactId>
+                <version>${dependency.mockserver}</version>
+                <scope>test</scope>
+            </dependency>
+
+      <!-- OpenSearch Integration Testing -->
+            <dependency>
+                <groupId>org.opensearch</groupId>
+                <artifactId>opensearch-testcontainers</artifactId>
+                <version>${dependency.opensearch-test}</version>
+            </dependency>
+
+      <!-- Kafka Integration Testing -->
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>kafka</artifactId>
+                <version>${dependency.testcontainers}</version>
+                <scope>test</scope>
+            </dependency>
+
+      <!-- RDF ABAC -->
+            <dependency>
+                <groupId>io.telicent.jena</groupId>
+                <artifactId>rdf-abac-core</artifactId>
+                <version>${dependency.rdf-abac}</version>
+            </dependency>
+
+      <!-- Jena -->
+            <dependency>
+                <groupId>org.apache.jena</groupId>
+                <artifactId>jena-base</artifactId>
+                <version>${dependency.jena}</version>
+            </dependency>
+
+      <!-- JWT Servlet Authentication Support -->
+            <dependency>
+                <groupId>io.telicent.public</groupId>
+                <artifactId>jwt-servlet-auth-jaxrs3</artifactId>
+                <version>${dependency.jwt-auth}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.telicent.public</groupId>
+                <artifactId>jwt-servlet-auth-aws</artifactId>
+                <version>${dependency.jwt-auth}</version>
+            </dependency>
+
+      <!-- Commons Codecs for Base64 -->
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${dependency.commons-codec}</version>
+            </dependency>
+
+      <!-- Resilience4j -->
+            <dependency>
+                <groupId>io.github.resilience4j</groupId>
+                <artifactId>resilience4j-retry</artifactId>
+                <version>${dependency.resilience4j}</version>
+            </dependency>
+
+      <!-- Fixes for dependency issues - review in future -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-compress</artifactId>
+                <version>${dependency.commons-compress}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-xml</artifactId>
+                <version>${dependency.jetty}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.xerial.snappy</groupId>
+                <artifactId>snappy-java</artifactId>
+                <version>${dependency.snappy}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.webjars</groupId>
+                <artifactId>jquery</artifactId>
+                <version>3.6.4</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${dependency.slf4j}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${dependency.logback}</version>
+            </dependency>
+        </dependencies>
+
+    </dependencyManagement>
+
+    <repositories>
+        <repository>
+            <id>sonatype-oss</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>${plugin.dependency}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>go-offline</goal>
+                            </goals>
+                            <configuration>
+                <!--
+                                When going offline don't try to resolve internal project dependencies.  This is
+                                primarily only a problem when the version gets bumped.  However, in a CI/CD environment
+                                this is always needed.
+                                -->
+                                <excludeGroupIds>io.telicent.smart-cache.entity-resolution</excludeGroupIds>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+
+        </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${plugin.resources}</version>
+            </plugin>
+
+      <!-- Compiler Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${plugin.compiler}</version>
+                <configuration>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
+                    <release>${jdk.version}</release>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>com.google.errorprone</groupId>
+                            <artifactId>error_prone_core</artifactId>
+                            <version>2.23.0</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${dependency.lombok}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+            <!-- Source Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${plugin.source}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+      <!-- License Plugin -->
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>${plugin.license}</version>
+                <configuration>
+                    <failIfMissing>true</failIfMissing>
+                    <aggregate>false</aggregate>
+                    <useDefaultMapping>true</useDefaultMapping>
+                    <strictCheck>true</strictCheck>
+                    <licenseSets>
+                        <licenseSet>
+                            <header>${license.header.path}/header.txt</header>
+                            <excludes>
+                                <exclude>header.txt</exclude>
+                                <exclude>pom.xml</exclude>
+                                <exclude>**/pom.xml</exclude>
+                                <exclude>LICENSE</exclude>
+                                <exclude>NOTICE</exclude>
+                                <exclude>.github/**/*</exclude>
+                                <exclude>elastic-log.txt</exclude>
+                                <exclude>**/test-keys/*</exclude>
+                                <exclude>**/test-data/**</exclude>
+                                <exclude>test_data/*</exclude>
+                                <exclude>*-code-style.xml</exclude>
+                                <exclude>.editorconfig</exclude>
+                                <exclude>**/*.jpeg</exclude>
+                                <exclude>**/org.mockito.plugins.MockMaker</exclude>
+                                <exclude>**/entity-resolver-api-server</exclude>
+                <!-- RDF Data Test Files -->
+                                <exclude>**/*.ttl</exclude>
+                                <exclude>**/*.trig</exclude>
+                                <exclude>**/*.nq</exclude>
+                                <exclude>**/*.nt</exclude>
+                <!-- Config -->
+                                <exclude>**/*.yml</exclude>
+                                <exclude>.gitattributes</exclude>
+                            </excludes>
+                        </licenseSet>
+                    </licenseSets>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.ec4j.maven</groupId>
+                <artifactId>editorconfig-maven-plugin</artifactId>
+                <version>${plugin.editorconfig}</version>
+                <executions>
+                    <execution>
+                        <id>check</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>*-code-style.xml</exclude>
+                        <exclude>docs/images/</exclude>
+                        <exclude>temp.token</exclude>
+                        <exclude>.vscode/*</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.cyclonedx</groupId>
+                <artifactId>cyclonedx-maven-plugin</artifactId>
+                <version>${plugin.cyclonedx}</version>
+                <executions>
+                    <execution>
+                        <id>build-sbom-cyclonedx</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>makeAggregateBom</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <outputName>${project.artifactId}-${project.version}-bom</outputName>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>${plugin.gpg}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                        <phase>verify</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>${plugin.sonatype}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>sonatype-oss</serverId>
+                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    <keepStagingRepositoryOnCloseRuleFailure>true</keepStagingRepositoryOnCloseRuleFailure>
+                    <stagingProgressTimeoutMinutes>15</stagingProgressTimeoutMinutes>
+                </configuration>
+            </plugin>
+        </plugins>
+
+    </build>
+
+</project>

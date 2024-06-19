@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.telicent.smart-caches.entity-resolution</groupId>
+        <artifactId>parent</artifactId>
+        <version>0.6.2-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <artifactId>entity-resolver-api-server</artifactId>
+    <packaging>jar</packaging>
+    <name>Telicent Smart Caches - Entity Resolution - API Server</name>
+
+    <properties>
+        <license.header.path>${project.parent.basedir}</license.header.path>
+        <coverage.minimum>0.8</coverage.minimum>
+    <!-- Default test port used for ElasticSearch tests that require a fixed port configuration -->
+        <elastic.port>19200</elastic.port>
+        <path.root />
+    </properties>
+
+    <dependencies>
+    <!--Internal-->
+        <dependency>
+            <groupId>io.telicent.smart-caches.entity-resolution</groupId>
+            <artifactId>entity-resolver-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.telicent.smart-caches.entity-resolution</groupId>
+            <artifactId>entity-resolver-elastic</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+    <!--SC Core-->
+        <dependency>
+            <groupId>io.telicent.smart-caches</groupId>
+            <artifactId>cli-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.telicent.smart-caches</groupId>
+            <artifactId>jaxrs-base-server</artifactId>
+            <version>${dependency.smart-caches}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.telicent.public</groupId>
+            <artifactId>jwt-servlet-auth-jaxrs3</artifactId>
+            <version>${dependency.jwt-auth}</version>
+        </dependency>
+
+        <!-- External -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${dependency.logback}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.opentelemetry.javaagent</groupId>
+            <artifactId>opentelemetry-javaagent</artifactId>
+            <version>${dependency.opentelemetry.agent}</version>
+            <scope>runtime</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-multipart</artifactId>
+            <version>${dependency.jersey}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${dependency.slf4j}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jul-to-slf4j</artifactId>
+            <version>${dependency.slf4j}</version>
+        </dependency>
+
+    <!-- Test Dependencies -->
+    <!-- Internal -->
+        <dependency>
+            <groupId>io.telicent.smart-caches.entity-resolution</groupId>
+            <artifactId>test-clusters</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.telicent.smart-caches.entity-resolution</groupId>
+            <artifactId>entity-resolver-elastic</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+
+    <!-- SC Core -->
+        <dependency>
+            <groupId>io.telicent.smart-caches</groupId>
+            <artifactId>event-source-kafka</artifactId>
+            <version>${dependency.smart-caches}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.telicent.smart-caches</groupId>
+            <artifactId>cli-core</artifactId>
+            <version>${dependency.smart-caches}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+
+    <!-- RDF / Jena -->
+        <dependency>
+            <groupId>io.telicent.jena</groupId>
+            <artifactId>rdf-abac-fuseki</artifactId>
+            <version>${dependency.rdf-abac}</version>
+            <scope>test</scope>
+        </dependency>
+
+    <!-- External -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${dependency.testng}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>kafka</artifactId>
+            <version>${dependency.testcontainers}</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>${plugin.clean}</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>lib/</directory>
+                            <followSymlinks>false</followSymlinks>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>${plugin.dependency}</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.basedir}/lib</outputDirectory>
+                            <includeTypes>jar</includeTypes>
+                            <includeScope>runtime</includeScope>
+                            <excludeGroupIds>io.opentelemetry.javaagent</excludeGroupIds>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-agents</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.basedir}/agents</outputDirectory>
+                            <includeTypes>jar</includeTypes>
+                            <includeScope>runtime</includeScope>
+                            <includeGroupIds>io.opentelemetry.javaagent</includeGroupIds>
+                            <stripVersion>true</stripVersion>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+      <!-- Run the application using "mvn exec:java" to deploy to Grizzly Servlet-->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>${plugin.exec}</version>
+                <configuration>
+                    <mainClass>io.telicent.smart.cache.entity.resolver.server.EntityResolutionApiEntrypoint</mainClass>
+                </configuration>
+            </plugin>
+
+      <!-- Tests that don't involve Docker -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${plugin.surefire}</version>
+                <configuration>
+                    <includes>
+                        <include>**/Test*.java</include>
+                    </includes>
+
+                    <reuseForks>true</reuseForks>
+                    <trimStackTrace>true</trimStackTrace>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>windows</id>
+            <activation>
+                <os>
+                    <family>Windows</family>
+                </os>
+            </activation>
+        </profile>
+
+        <profile>
+            <id>docker</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <os>
+                    <family>Windows</family>
+                </os>
+            </activation>
+            <build>
+                <plugins>
+          <!-- Tests that do involve Docker -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>${plugin.surefire}</version>
+                        <configuration>
+                            <includes>
+                                <include>**/Test*.java</include>
+                                <include>**/Docker*Test*.java</include>
+                            </includes>
+
+                            <reuseForks>true</reuseForks>
+                            <trimStackTrace>true</trimStackTrace>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>${plugin.jacoco}</version>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>

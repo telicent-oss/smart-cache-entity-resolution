@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.telicent.smart-caches.entity-resolution</groupId>
+        <artifactId>parent</artifactId>
+        <version>0.6.2-SNAPSHOT</version>
+    </parent>
+    <artifactId>test-clusters</artifactId>
+    <name>Telicent Smart Caches - Entity Resolution - Test Clusters</name>
+
+    <description>Provides utilities around standing up test search index clusters for use in unit and integration
+        testing of other modules.
+    </description>
+
+    <properties>
+        <license.header.path>${project.parent.basedir}</license.header.path>
+    </properties>
+
+    <dependencies>
+    <!-- Internal -->
+        <dependency>
+            <groupId>io.telicent.smart-caches.entity-resolution</groupId>
+            <artifactId>entity-resolver-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+    <!-- External -->
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>elasticsearch</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.opensearch</groupId>
+            <artifactId>opensearch-testcontainers</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+        </dependency>
+
+    <!-- Test Dependencies -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>test</scope>
+            <version>${dependency.logback}</version>
+        </dependency>
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>docker</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>${plugin.jacoco}</version>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>${plugin.surefire}</version>
+                        <configuration>
+                            <includes>
+                                <include>**/Test*.java</include>
+                                <include>**/DockerTest*.java</include>
+                            </includes>
+
+                            <reuseForks>true</reuseForks>
+                            <trimStackTrace>true</trimStackTrace>
+                            <useFile>false</useFile>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>
