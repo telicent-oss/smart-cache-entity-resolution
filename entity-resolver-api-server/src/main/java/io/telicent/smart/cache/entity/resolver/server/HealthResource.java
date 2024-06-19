@@ -16,7 +16,6 @@
 package io.telicent.smart.cache.entity.resolver.server;
 
 import io.telicent.jena.abac.core.AttributesStore;
-import io.telicent.servlet.auth.jwt.ServletConstants;
 import io.telicent.smart.cache.configuration.Configurator;
 import io.telicent.smart.cache.entity.resolver.EntityResolver;
 import io.telicent.smart.cache.server.jaxrs.model.HealthStatus;
@@ -27,6 +26,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static io.telicent.servlet.auth.jwt.JwtServletConstants.ATTRIBUTE_JWT_VERIFIER;
 import static io.telicent.smart.caches.configuration.auth.AuthConstants.ENV_JWKS_URL;
 import static io.telicent.smart.caches.configuration.auth.AuthConstants.ENV_USER_ATTRIBUTES_URL;
 
@@ -65,7 +65,7 @@ public class HealthResource extends AbstractHealthResource {
         return Map.of("searchIndex", resolver != null ? resolver.toString() : "",
                       "entityResolver", resolver != null ? resolver.getClass().getCanonicalName() : "",
                       "authentication", configAsString(ENV_JWKS_URL),
-                      "jwtVerifier", asString(context, ServletConstants.ATTRIBUTE_JWT_VERIFIER),
+                      "jwtVerifier", asString(context, ATTRIBUTE_JWT_VERIFIER),
                       "authorization", configAsString(ENV_USER_ATTRIBUTES_URL),
                       "attributesStore", asString(context, AttributesStore.class.getCanonicalName()),
                       "searchClientReady", healthy);
