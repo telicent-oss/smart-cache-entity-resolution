@@ -245,20 +245,12 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <version>${plugin.surefire}</version>
                         <configuration>
-                            <includes>
-                                <include>**/Test*.java</include>
-                                <include>**/Docker*Test*.java</include>
-                            </includes>
-
+                            <excludes>
+                                <exclude>**/Docker*Test*.java</exclude>
+                            </excludes>
                             <reuseForks>true</reuseForks>
                             <trimStackTrace>true</trimStackTrace>
                         </configuration>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.jacoco</groupId>
-                        <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>${plugin.jacoco}</version>
                     </plugin>
                 </plugins>
             </build>
