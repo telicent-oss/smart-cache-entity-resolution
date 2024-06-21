@@ -4,10 +4,10 @@
     <parent>
         <groupId>io.telicent.smart-caches.entity-resolution</groupId>
         <artifactId>parent</artifactId>
-        <version>0.6.4</version>
+        <version>0.6.5-SNAPSHOT</version>
     </parent>
     <artifactId>entity-resolver-api</artifactId>
-    <version>0.6.4</version>
+    <version>0.6.5-SNAPSHOT</version>
     <name>Telicent Smart Caches - Entity Resolution - Entity Resolver API</name>
 
     <properties>
