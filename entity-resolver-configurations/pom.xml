@@ -4,11 +4,11 @@
     <parent>
         <groupId>io.telicent.smart-caches.entity-resolution</groupId>
         <artifactId>parent</artifactId>
-        <version>0.6.2</version>
+        <version>0.6.3-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>entity-resolver-configurations</artifactId>
-    <version>0.6.2</version>
+    <version>0.6.3-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Telicent Smart Caches - Entity Resolution - Configurations</name>
