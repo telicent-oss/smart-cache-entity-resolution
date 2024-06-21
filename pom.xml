@@ -5,7 +5,7 @@
     <parent>
         <groupId>io.telicent.smart-caches</groupId>
         <artifactId>parent</artifactId>
-        <version>0.16.1</version>
+        <version>0.20.1</version>
     </parent>
     <groupId>io.telicent.smart-caches.entity-resolution</groupId>
     <artifactId>parent</artifactId>
@@ -81,7 +81,7 @@
         <plugin.gpg>3.2.4</plugin.gpg>
         <plugin.resources>3.3.1</plugin.resources>
         <plugin.sonatype>1.7.0</plugin.sonatype>
-        <plugin.source>3.3.1</plugin.source>
+        <plugin.source>3.2.1</plugin.source>
         <plugin.surefire>3.2.3</plugin.surefire>
 
     <!-- Dependency Versions -->
@@ -94,12 +94,12 @@
         <dependency.httpcore>4.4.16</dependency.httpcore>
         <dependency.httpclient>4.5.14</dependency.httpclient>
         <dependency.jetty>11.0.18</dependency.jetty>
-        <dependency.jwt-auth>0.13.0</dependency.jwt-auth>
+        <dependency.jwt-auth>0.15.0</dependency.jwt-auth>
         <dependency.logback>1.5.6</dependency.logback>
         <dependency.mockserver>5.15.0</dependency.mockserver>
         <dependency.opensearch-test>2.0.1</dependency.opensearch-test>
         <dependency.parsson>1.0.5</dependency.parsson>
-        <dependency.smart-caches>0.18.0</dependency.smart-caches>
+        <dependency.smart-caches>0.20.1</dependency.smart-caches>
         <dependency.snappy>1.1.10.5</dependency.snappy>
         <dependency.wiremock>3.3.1</dependency.wiremock>
 

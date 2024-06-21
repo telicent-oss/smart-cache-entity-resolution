@@ -29,7 +29,7 @@ jobs:
         image: [ smart-cache-entity-resolution-api, smart-cache-elastic-can-index ]
       fail-fast: false
     needs: maven-build
-    uses: Telicent-io/telicent-test/.github/workflows/push-to-registries.yml@main
+    uses: telicent-oss/shared-workflows/.github/workflows/docker-push-to-registries.yml@main
     with:
       APP_NAME: ${{ matrix.image }}
       APP_NAME_PREFIX: ""
