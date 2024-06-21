@@ -37,8 +37,7 @@ print_commit_logs() {
   local current_tag=$1
   local previous_tag=$2
 
-  tag_date=$(git log -1 --pretty=format:'%ad' --date=short "$previous_tag")
-  printf '## %s (%s)\n\n' "$previous_tag" "$tag_date"
+  printf '# %s\n\n' "$previous_tag"
 
   git log "$current_tag...$previous_tag" --no-merges --pretty=format:'*  %s [Details]('"${repository_url}"'commits/%H)' --reverse | grep -v Merge | grep -v "maven-release-plugin"
   if [ $? -ne 0 ]; then
@@ -58,8 +57,7 @@ generate_changelog() {
     previous_tag="$current_tag"
   done
 
-  tag_date=$(git log --reverse --pretty=format:'%ad' --date=short | head -1)
-  printf '## %s (%s) \n\n' "${current_tag}" "${tag_date}"
+  printf '# %s\n\n' "${current_tag}"
 
   git log "${current_tag}" --no-merges --pretty=format:'*  %s [Details]('"${repository_url}"'commits/%H)' --reverse | grep -v Merge | grep -v "maven-release-plugin"
   if [ $? -ne 0 ]; then
@@ -119,5 +117,3 @@ else
   create_file_with_entries "$temp_file"
   echo "Changelog generated and saved to $changelog_file."
 fi
-
-
