@@ -9,7 +9,7 @@
     </parent>
     <groupId>io.telicent.smart-caches.entity-resolution</groupId>
     <artifactId>parent</artifactId>
-    <version>0.6.4-SNAPSHOT</version>
+    <version>0.6.4</version>
     <packaging>pom</packaging>
     <name>Telicent Smart Caches - Entity Resolution</name>
     <description>Provides a smart cache implementation specifically for Entity Resolution</description>
@@ -40,7 +40,7 @@
         <connection>scm:git:https://github.com/telicent-oss/smart-cache-entity-resolution</connection>
         <developerConnection>scm:git:ssh://git@github.com/telicent-oss/smart-cache-entity-resolution</developerConnection>
         <url>https://github.com/telicent-oss/smart-cache-entity-resolution</url>
-        <tag>HEAD</tag>
+        <tag>0.6.4</tag>
     </scm>
 
     <distributionManagement>
