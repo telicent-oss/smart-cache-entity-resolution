@@ -4,7 +4,7 @@
     <parent>
         <groupId>io.telicent.smart-caches.entity-resolution</groupId>
         <artifactId>parent</artifactId>
-        <version>0.6.3-SNAPSHOT</version>
+        <version>0.6.3</version>
     </parent>
     <artifactId>entity-collector</artifactId>
     <name>Telicent Smart Caches - Entity Resolution - Entity Collection API</name>
