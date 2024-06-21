@@ -1,8 +1,9 @@
-## 0.6.3 (2024-06-19)
+# 0.6.4
+# 0.6.3
 
-* Correcting change log. 
+*  [Minor] Adding change log entries [Details](https://github.com/Telicent-io/smart-cache-entity-resolution/commits/76eb1d04abfedd8bfbca36e87bf9f88fe19d25e4)
 
-## 0.6.2 (2024-06-19) 
+# 0.6.2
 
 *  Initial Open Source commit [Details](https://github.com/Telicent-io/smart-cache-entity-resolution/commits/ae97562e0314ba5b60dc9d028cc5d88d189bbd97)
 *  [Minor] Fixing build issues with initial commits [Details](https://github.com/Telicent-io/smart-cache-entity-resolution/commits/5772a35ea9dc79d9e65feca88adb9a78abfdb4fe)

@@ -4,7 +4,7 @@
     <parent>
         <groupId>io.telicent.smart-caches.entity-resolution</groupId>
         <artifactId>parent</artifactId>
-        <version>0.6.4-SNAPSHOT</version>
+        <version>0.6.5-SNAPSHOT</version>
     </parent>
     <artifactId>test-clusters</artifactId>
     <name>Telicent Smart Caches - Entity Resolution - Test Clusters</name>
