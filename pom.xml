@@ -101,7 +101,7 @@
         <dependency.parsson>1.0.5</dependency.parsson>
         <dependency.smart-caches>0.20.1</dependency.smart-caches>
         <dependency.snappy>1.1.10.5</dependency.snappy>
-        <dependency.wiremock>3.3.1</dependency.wiremock>
+        <dependency.wiremock>3.6.0</dependency.wiremock>
 
     <!-- CORE Overrides -->
         <jdk.version>21</jdk.version>
