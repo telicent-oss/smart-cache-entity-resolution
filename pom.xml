@@ -88,7 +88,7 @@
     <!-- See Smart Cache Core for Parent dependencies -->
         <dependency.commons-codec>1.17.0</dependency.commons-codec>
         <dependency.commons-compress>1.26.2</dependency.commons-compress>
-        <dependency.elastic>7.17.16</dependency.elastic>
+        <dependency.elastic>8.14.2</dependency.elastic>
         <dependency.error_prone>2.28.0</dependency.error_prone>
         <dependency.fa-metadata>6.5.1</dependency.fa-metadata>
         <dependency.httpclient>4.5.14</dependency.httpclient>
