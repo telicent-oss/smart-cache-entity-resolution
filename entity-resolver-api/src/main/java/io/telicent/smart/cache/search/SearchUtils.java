@@ -128,7 +128,7 @@ public final class SearchUtils {
         }
     }
 
-    private static void notWaitingDueToShutdown(SearchBackend backend) {
+    public static void notWaitingDueToShutdown(SearchBackend backend) {
         LOGGER.warn("Stopped waiting for {} to become ready due to JVM Shutdown", backend.name());
         throw new SearchException(
                 String.format("JVM shutting down, aborted waiting for %s to become ready", backend.name()));

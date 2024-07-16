@@ -15,6 +15,7 @@
  */
 package io.telicent.smart.cache.cli.options.search.elastic;
 
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.Script;
 import com.github.rvesse.airline.annotations.Option;
 import com.github.rvesse.airline.annotations.restrictions.RequiredUnlessEnvironment;
@@ -30,11 +31,18 @@ import io.telicent.smart.cache.search.elastic.ElasticIndexManager;
 import io.telicent.smart.cache.search.elastic.ElasticSearchIndexer;
 import io.telicent.smart.cache.search.elastic.compat.OpenSearchWithElasticIndexManager;
 import io.telicent.smart.cache.search.elastic.utils.ElasticIndexMonitor;
+import io.telicent.smart.cache.server.jaxrs.model.HealthStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Options for connecting to ElasticSearch
@@ -83,8 +91,7 @@ public class ElasticSearchOptions {
     int port = Configurator.get(ELASTIC_PORT, Integer::parseInt, 9200);
 
     @Option(name = {
-            "--opensearch-compatibility",
-            "--no-opensearch-compatibility"
+            "--opensearch-compatibility", "--no-opensearch-compatibility"
     }, arity = 0, description = "Specifies that the ElasticSearch clients should be configured in such a way as to make them compatible with OpenSearch servers.  ElasticSearch Client APIs are still used but the HTTP client is modified to adjust some headers so that the APIs can communicate with OpenSearch servers successfully.  Defaults to disabled.")
     boolean makeOpenSearchCompatible = Configurator.get(OPENSEARCH_COMPATIBILITY, Boolean::parseBoolean, false);
 
@@ -116,10 +123,35 @@ public class ElasticSearchOptions {
     int maxRetries = 3;
 
     @Option(name = {
-            "--upsert",
-            "--no-upsert"
+            "--upsert", "--no-upsert"
     }, description = "Specifies whether documents are indexed into ElasticSearch via upserts i.e. modifying existing documents rather than each generated document completely overwriting any previous document.  Default mode is upsert.")
     boolean upsert = true;
+
+    /**
+     * Default options constructor, assumes that this options instance will be populated by Airline's CLI injection
+     */
+    public ElasticSearchOptions() {
+        // Nothing to do
+    }
+
+    /**
+     * Custom options constructor for allowing options to be manually constructed for testing or non-Airline usage
+     *
+     * @param host     Host
+     * @param port     Port
+     * @param index    Index
+     * @param user     Username
+     * @param password Password
+     */
+    public ElasticSearchOptions(String host, int port, String index, String user, String password,
+                                boolean makeOpenSearchCompatible) {
+        this.host = host;
+        this.port = port;
+        this.index = index;
+        this.user = user;
+        this.password = password;
+        this.makeOpenSearchCompatible = makeOpenSearchCompatible;
+    }
 
     /**
      * Prepares an ElasticSearch backed {@link SearchIndexer}
@@ -139,11 +171,43 @@ public class ElasticSearchOptions {
             throw new SearchException("Specified index configuration " + indexConfigName + " is not supported");
         }
 
-        this.manager = makeOpenSearchCompatible ?
-                       new OpenSearchWithElasticIndexManager(this.host, this.port, this.user, this.password, null) :
-                       new ElasticIndexManager(this.host, this.port, this.user, this.password);
+        prepareElasticManager();
 
         // ElasticSearch might not be up yet so wait for it to come up
+        // Do this by submitting a task on a background thread as this allows us to reliably respond to interrupts and
+        // cancel the ongoing wait, otherwise if we wait directly on our main thread the application won't respond to
+        // interrupts cleanly, and it's impossible to abort the application during this startup phase
+        ExecutorService executor = null;
+        try {
+            executor = Executors.newSingleThreadExecutor();
+            Future<?> future = executor.submit(() -> {
+                SearchUtils.waitForReady(this.manager, this.maxConnectAttempts, this.minConnectInterval,
+                                         this.maxConnectInterval);
+            });
+            try {
+                ExecutorService finalExecutor = executor;
+                Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                    future.cancel(true);
+                    finalExecutor.shutdownNow();
+                }));
+                future.get();
+            } catch (ExecutionException e) {
+                if (e.getCause() instanceof SearchException) {
+                    throw (SearchException) e.getCause();
+                } else {
+                    throw new SearchException("Failed waiting for Search backend to become ready", e);
+                }
+            } catch (InterruptedException e) {
+                future.cancel(true);
+                SearchUtils.notWaitingDueToShutdown(this.manager);
+            }
+        } finally {
+            if (executor != null) {
+                executor.shutdownNow();
+            }
+        }
+
+
         SearchUtils.waitForReady(this.manager, this.maxConnectAttempts, this.minConnectInterval,
                                  this.maxConnectInterval);
 
@@ -176,11 +240,82 @@ public class ElasticSearchOptions {
     }
 
     /**
+     * Prepares the Elastic Index Manager (or returns the existing instance thereof)
+     *
+     * @return Index Manager
+     */
+    public synchronized ElasticIndexManager prepareElasticManager() {
+        if (this.manager == null) {
+            this.manager = makeOpenSearchCompatible ?
+                           new OpenSearchWithElasticIndexManager(this.host, this.port, this.user, this.password, null) :
+                           new ElasticIndexManager(this.host, this.port, this.user, this.password);
+        }
+        return this.manager;
+    }
+
+    /**
      * Creates a monitor for the target index
      *
      * @return Index monitor
      */
     public ElasticIndexMonitor createMonitor() {
         return new ElasticIndexMonitor(this.manager, this.index, false, Duration.ofSeconds(this.monitorInterval));
+    }
+
+    /**
+     * Creates a low level ElasticSearch Client, useful for debug tools that need to bypass our higher level APIs
+     *
+     * @return Low level client
+     */
+    public ElasticsearchClient createLowLevelClient() {
+        return AbstractElasticClient.buildElasticClient(this.host, this.port, this.user, this.password,
+                                                        this.makeOpenSearchCompatible);
+    }
+
+    /**
+     * Gets the index that the user has supplied in their options
+     *
+     * @return Index
+     */
+    public String getIndex() {
+        return this.index;
+    }
+
+    /**
+     * Gets a list of libraries whose version information should be presented by the health probe servers liveness
+     * endpoint
+     *
+     * @return Health Probe Libraries
+     */
+    public String[] getHealthProbeLibraries() {
+        return new String[] { "cli-elastic-index", "search-index-elastic", "search-api" };
+    }
+
+    /**
+     * Gets a health probe supplier function that uses the underlying {@link ElasticIndexManager} to determine the
+     * application readiness status
+     *
+     * @return Health Probe supplier function
+     */
+    public Supplier<HealthStatus> getHealthProbeSupplier() {
+        this.prepareElasticManager();
+        return () -> {
+            Boolean ready = manager.isReady();
+            if (ready == null) {
+                return HealthStatus.builder()
+                                   .healthy(false)
+                                   .reasons(
+                                           List.of("Failed to obtain readiness status from underlying Index Manager " + manager.toString()))
+                                   .build();
+            } else if (ready) {
+                return HealthStatus.builder().healthy(true).build();
+            } else {
+                return HealthStatus.builder()
+                                   .healthy(false)
+                                   .reasons(
+                                           List.of("Underlying Index Manager (" + manager.toString() + ") indicated it is not ready"))
+                                   .build();
+            }
+        };
     }
 }

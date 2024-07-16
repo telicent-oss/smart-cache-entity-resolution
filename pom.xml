@@ -95,16 +95,16 @@
         <dependency.httpcore>4.4.16</dependency.httpcore>
         <dependency.httpclient>4.5.14</dependency.httpclient>
         <dependency.jetbrains>24.1.0</dependency.jetbrains>
-        <dependency.jetty>11.0.18</dependency.jetty>
+        <dependency.jetty>11.0.22</dependency.jetty>
         <dependency.jquery>3.7.1</dependency.jquery>
-        <dependency.jwt-auth>0.15.0</dependency.jwt-auth>
+        <dependency.jwt-auth>0.15.1</dependency.jwt-auth>
         <dependency.logback>1.5.6</dependency.logback>
         <dependency.mockserver>5.15.0</dependency.mockserver>
         <dependency.opensearch-test>2.0.1</dependency.opensearch-test>
         <dependency.parsson>1.0.5</dependency.parsson>
-        <dependency.smart-caches>0.20.2</dependency.smart-caches>
+        <dependency.smart-caches>0.21.1</dependency.smart-caches>
         <dependency.snappy>1.1.10.5</dependency.snappy>
-        <dependency.wiremock>3.7.0</dependency.wiremock>
+        <dependency.wiremock>3.8.0</dependency.wiremock>
 
     <!-- CORE Overrides -->
         <jdk.version>21</jdk.version>
