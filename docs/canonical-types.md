@@ -1,37 +1,66 @@
-# Canonical Forms
+# Understanding Canonical Forms in Entity Resolution
+## What are Canonical Forms?
 
-## Summary 
-Canonical forms are a key concept in Entity Resolution, providing a standardized and consistent representation of 
-entities that facilitates accurate and efficient matching across diverse datasets. They contribute to the overall goal of creating a reliable and consolidated view of entities within a data environment.
+In Entity Resolution (ER), canonical forms are a way to represent entities consistently. This ensures that even if information about the same real-world entity appears differently across various datasets, it can still be accurately matched and identified.
 
-### Definition:
-Canonical forms in Entity Resolution refer to a standardized and normalized representation of entities that facilitates the comparison and identification of duplicates or related records. These forms serve as a reference point for comparing attributes and features associated with entities.
+### Think of it like this
+Imagine you're looking for information about a specific car. You might find details 
+about it in a government database (reliable source), a police report (less reliable source), and an insurance claim (unreliable source). Each source might use slightly different formats or terminology. Canonical forms help standardize this information into a common structure, making it easier to recognize that all these descriptions refer to the same car.
 
-### Standardization:
-Canonical forms aim to standardize the representation of entities by transforming diverse and potentially inconsistent data into a common format. This standardization process often includes normalization of attributes, such as names, addresses, or identifiers, to ensure a consistent and uniform structure.
+## Benefits of Canonical Forms
 
-### Attributes Mapping:
-Canonical forms map attributes from different sources or records to a common set of attributes. For example, variations in the representation of names or addresses are reconciled to a standardized format, ensuring that similar entities are accurately identified despite differences in the original data.
+### Improved Accuracy 
+By standardizing data, canonical forms reduce errors caused by inconsistencies and variations in how entities are represented.
+Enhanced Efficiency: Matching entities becomes faster and more efficient when they're all presented in a consistent format.
+Better Scalability: As you deal with larger datasets, having a standardized representation allows for more efficient processing and matching.
 
-### Feature Extraction:
-Canonical forms may involve the extraction of relevant features or characteristics from entity attributes. These features could include tokenized versions of names, geospatial information, or other key identifiers. Feature extraction aids in the comparison process during entity resolution.
+## How Canonical Forms Work
+### Standardization
+This involves transforming data from various sources into a common format. For example, names 
+might be converted to a specific format (e.g., last name, first name), addresses might be formatted consistently, and abbreviations might be expanded.
 
-### Key Components:
-Canonical forms typically include key components or attributes that are critical for entity matching. These components are carefully selected based on the nature of the entities and the characteristics that are most indicative of a match.
+### Attribute Mapping
+Attributes from different sources are mapped to a common set. For instance, "color" from one 
+source might be mapped to "colour" from another, ensuring both refer to the same concept.
+### Feature Extraction
+Key features or characteristics are extracted from entity attributes. These might include things like unique identifiers (VIN for vehicles), tokenized versions of text (e.g., separating words in a name), or geospatial information (e.g., location data). Feature extraction aids in the comparison process during ER.
 
-### Facilitating Comparison:
-The use of canonical forms simplifies the comparison process during entity resolution. Entities with similar or matching canonical forms are more likely to represent the same real-world entity, even if the original records exhibit variations or inconsistencies.
+## Key Components of a Canonical Form
+A well-defined canonical form will typically include a set of critical attributes that are essential for matching entities. These attributes are chosen based on the specific type of entity and the most reliable indicators of a match.
 
-### Integration with ER Pipelines:
-Canonical forms are often integrated into Entity Resolution pipelines, serving as an intermediate or final representation of entities. The ER process involves comparing canonical forms to identify and link related records, contributing to the generation of a consolidated and accurate dataset.
+### Example: Matching Vehicles
 
-### Scalability and Performance:
-The use of canonical forms enhances the scalability and performance of Entity Resolution systems. By standardizing representations, the matching process becomes computationally more efficient, enabling the resolution of entities in large datasets.
+Let's look at how canonical forms can be used to match information about vehicles from different sources:
 
-## Example Use Case (Vehicles)
-### Intro
-In this simple example we will consider vehicles and will assume we are collating data from different sources with a 
-range of fidelity.
+#### High-Fidelity Source
+This could be a trusted source like a government vehicle registration database, containing 
+detailed and accurate information about each vehicle.
+#### Medium-Fidelity Source
+This might be a police report describing a vehicle involved in an incident. The details 
+provided could depend on the situation.
+#### Low-Fidelity Source
+This could be an eyewitness report mentioning a vehicle's type and color, with potentially 
+subjective or incomplete information.
+
+#### Canonical Vehicle Definition
+
+We can define a canonical form to represent a vehicle entity, including key fields like license plate number, manufacturer, vehicle type, VIN (Vehicle Identification Number), number of doors, and year of manufacture.
+
+#### Matching Process
+
+Information from each source is extracted and mapped to the corresponding fields in the canonical form (if available).
+The extracted data is then used to query a similarity endpoint (a matching algorithm).
+The similarity score determines how likely it is that the data refers to the same vehicle:
+High Score (e.g., 90% or above): Indicates a successful match. The data is used to update or add details to the existing record in the canonical index (a central repository of standardized entities).
+Low Score (e.g., 10% or below): Indicates no match. If enough data is available, a new entry is created in the canonical index. Otherwise, the data might be discarded.
+Mid-Range Score: Indicates an uncertain match. Manual intervention might be needed to determine if the data refers to a new or existing vehicle.
+Conclusion:
+
+Canonical forms are a valuable tool in Entity Resolution, contributing to cleaner, more accurate, and efficient data integration. They ensure consistent data representation across diverse sources, facilitating the identification and linking of related records.
+
+## Detailed Use Case
+
+We will consider vehicles and will assume we are collating data from different sources with a range of fidelity.
 
 #### Full fidelity
 In this case, The Driver and Vehicle Licensing Agency (DVLA). As close to a 100% reliable, trusted source as 
@@ -243,16 +272,17 @@ In the bottom half, for each item of data from the unreliable source the relevan
 possible). It is then used to query the Similarity Endpoint. Depending on the score (and related configuration) the 
 following expectations exist:
 
-#### <span style="color:green">Successful match</span>
+#### 🟩 <span style="color:green">Successful match</span>
 If we have a score that is sufficiently high, say 90% or above, the data can then be mapped as an update or addendum 
 to the existing matching entry.
 
-#### <span style="color:red">No match</span>.
+#### 🟥 <span style="color:red">No match</span>
 If we have a score that is sufficiently low, say 10% or less, we map the data as a brand-new entry, if sufficient 
 data is provided, or discarded if not.
 
-#### <span style="color:orange">Uncertain match</span>.
-If we have a score that falls in-between our high/low thresholds, indicating that 
+#### 🟧 <span style="color:orange">Uncertain match</span>
+If we have a score that falls in-between our high/low thresholds, indicating that an automatic decision could not 
+be made. Manual intervention may be required. 
 
 #### Note
 In the above coloured descriptions, the assumption is that there are three (or four) possible options. Depending on 
