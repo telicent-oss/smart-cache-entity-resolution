@@ -27,6 +27,9 @@ RUN apt-get update && \
 WORKDIR /app
 RUN mkdir -p /app/ /app/lib/ /app/agents/ /opt/telicent/sbom/
 
+RUN useradd -Mg root telicent-service
+USER telicent-service
+
 ARG PROJECT_VERSION
 COPY cli-common.sh cli-entrypoint.sh /app/
 

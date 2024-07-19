@@ -27,6 +27,7 @@ import io.telicent.smart.cache.live.model.IODescriptor;
 import io.telicent.smart.cache.projectors.Projector;
 import io.telicent.smart.cache.projectors.Sink;
 import io.telicent.smart.cache.search.sinks.BulkSearchIndexerSink;
+import io.telicent.smart.cache.server.jaxrs.model.HealthStatus;
 import io.telicent.smart.cache.sources.Event;
 import io.telicent.smart.cache.sources.EventSource;
 import io.telicent.smart.cache.sources.kafka.KafkaEventSource;
@@ -37,6 +38,7 @@ import org.apache.kafka.common.serialization.Serializer;
 import org.apache.kafka.common.utils.Bytes;
 
 import java.util.UUID;
+import java.util.function.Supplier;
 
 /**
  * A command for indexing canonical records into ElasticSearch
@@ -92,6 +94,16 @@ public class CanonicalIndexCommand extends
     protected String getThroughputItemsName() {
         return "Canonical Forms";
     }
+
+    protected String[] getHealthProbeLibraries() {
+        return this.elastic.getHealthProbeLibraries();
+    }
+
+    @Override
+    protected Supplier<HealthStatus> getHealthProbeSupplier() {
+        return this.elastic.getHealthProbeSupplier();
+    }
+
 
     @Override
     protected EventSource<Bytes, CanonicalFormMap> getSource() {
