@@ -100,7 +100,7 @@
         <dependency.jwt-auth>0.15.1</dependency.jwt-auth>
         <dependency.logback>1.5.6</dependency.logback>
         <dependency.mockserver>5.15.0</dependency.mockserver>
-        <dependency.opensearch-test>2.0.1</dependency.opensearch-test>
+        <dependency.opensearch-test>2.1.0</dependency.opensearch-test>
         <dependency.parsson>1.0.5</dependency.parsson>
         <dependency.smart-caches>0.21.1</dependency.smart-caches>
         <dependency.snappy>1.1.10.5</dependency.snappy>
