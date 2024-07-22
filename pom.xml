@@ -97,7 +97,7 @@
         <dependency.jetbrains>24.1.0</dependency.jetbrains>
         <dependency.jetty>11.0.22</dependency.jetty>
         <dependency.jquery>3.7.1</dependency.jquery>
-        <dependency.jwt-auth>0.15.1</dependency.jwt-auth>
+        <dependency.jwt-auth>0.15.2</dependency.jwt-auth>
         <dependency.logback>1.5.6</dependency.logback>
         <dependency.mockserver>5.15.0</dependency.mockserver>
         <dependency.opensearch-test>2.0.1</dependency.opensearch-test>
