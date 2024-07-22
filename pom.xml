@@ -86,7 +86,7 @@
 
     <!-- Dependency Versions -->
     <!-- See Smart Cache Core for Parent dependencies -->
-        <dependency.commons-codec>1.17.0</dependency.commons-codec>
+        <dependency.commons-codec>1.17.1</dependency.commons-codec>
         <dependency.commons-compress>1.26.2</dependency.commons-compress>
         <dependency.elastic>7.17.16</dependency.elastic>
         <dependency.error_prone>2.28.0</dependency.error_prone>
