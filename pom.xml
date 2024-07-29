@@ -89,7 +89,7 @@
         <dependency.commons-codec>1.17.1</dependency.commons-codec>
         <dependency.commons-compress>1.26.2</dependency.commons-compress>
         <dependency.elastic>7.17.16</dependency.elastic>
-        <dependency.error_prone>2.28.0</dependency.error_prone>
+        <dependency.error_prone>2.29.2</dependency.error_prone>
         <dependency.fa-metadata>6.5.1</dependency.fa-metadata>
         <dependency.httpclient>4.5.14</dependency.httpclient>
         <dependency.httpcore>4.4.16</dependency.httpcore>
