@@ -78,7 +78,7 @@
         <plugin.cyclonedx>2.8.0</plugin.cyclonedx>
         <plugin.editorconfig>0.1.3</plugin.editorconfig>
         <plugin.exec>3.3.0</plugin.exec>
-        <plugin.gpg>3.2.4</plugin.gpg>
+        <plugin.gpg>3.2.5</plugin.gpg>
         <plugin.resources>3.3.1</plugin.resources>
         <plugin.sonatype>1.7.0</plugin.sonatype>
         <plugin.source>3.2.1</plugin.source>
