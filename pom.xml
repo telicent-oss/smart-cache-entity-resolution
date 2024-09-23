@@ -95,7 +95,7 @@
         <dependency.httpcore>4.4.16</dependency.httpcore>
         <dependency.httpclient>4.5.14</dependency.httpclient>
         <dependency.jetbrains>24.1.0</dependency.jetbrains>
-        <dependency.jetty>11.0.22</dependency.jetty>
+        <dependency.jetty>11.0.24</dependency.jetty>
         <dependency.jquery>3.7.1</dependency.jquery>
         <dependency.jwt-auth>0.15.2</dependency.jwt-auth>
         <dependency.logback>1.5.6</dependency.logback>
