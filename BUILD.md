@@ -201,6 +201,12 @@ This project requires a custom version of the Docker image for Elasticsearch whi
 This image is on [Dockerhub](https://hub.docker.com/repository/docker/telicent/elasticsearch/general). This is required
 for running the tests.
 
+The tests will try to pull down this image which can be large. That can fail due to timeouts. 
+It's better to pull down the image ahead of time. 
+```bash
+$ docker pull telicent/elasticsearch:8.12.2.1
+```
+
 ### Using an External ElasticSearch instance for testing
 
 As noted above various integration tests need to have an ElasticSearch instance available which is provided using a

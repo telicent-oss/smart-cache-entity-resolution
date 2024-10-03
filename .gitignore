@@ -38,3 +38,6 @@ elastic-log.txt
 
 # testNG
 test-output/
+
+# Trivy cache
+.trivy/

@@ -27,6 +27,7 @@ import io.telicent.smart.cache.live.model.LiveStatus;
 import io.telicent.smart.cache.live.serializers.LiveHeartbeatDeserializer;
 import io.telicent.smart.cache.server.jaxrs.model.HealthStatus;
 import io.telicent.smart.cache.sources.Event;
+import io.telicent.smart.cache.sources.kafka.BasicKafkaTestCluster;
 import io.telicent.smart.cache.sources.kafka.KafkaEventSource;
 import io.telicent.smart.cache.sources.kafka.KafkaTestCluster;
 import jakarta.ws.rs.client.Client;
@@ -52,7 +53,7 @@ import java.util.concurrent.Future;
 
 public class DockerSearchCommandTests extends AbstractCommandTests {
 
-    private final KafkaTestCluster kafka = new KafkaTestCluster();
+    private final KafkaTestCluster kafka = new BasicKafkaTestCluster();
 
     private static final Client client = ClientBuilder.newClient();
 
