@@ -41,6 +41,7 @@ import io.telicent.smart.cache.sources.Event;
 import io.telicent.smart.cache.sources.Header;
 import io.telicent.smart.cache.sources.file.FileEventFormatProvider;
 import io.telicent.smart.cache.sources.file.FileEventSource;
+import io.telicent.smart.cache.sources.kafka.BasicKafkaTestCluster;
 import io.telicent.smart.cache.sources.kafka.KafkaTestCluster;
 import io.telicent.smart.cache.sources.kafka.serializers.DatasetGraphDeserializer;
 import io.telicent.smart.cache.sources.kafka.serializers.DatasetGraphSerializer;
@@ -75,7 +76,7 @@ public class AbstractElasticIndexCommandTests extends AbstractCommandTests {
 
     @SuppressWarnings("rawtypes")
     protected final AbstractSearchCluster elastic;
-    protected final KafkaTestCluster kafka = new KafkaTestCluster();
+    protected final KafkaTestCluster kafka = new BasicKafkaTestCluster();
 
     public AbstractElasticIndexCommandTests() {
         elastic = createTestCluster(null);

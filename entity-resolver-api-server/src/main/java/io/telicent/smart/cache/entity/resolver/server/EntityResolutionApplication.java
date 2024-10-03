@@ -17,6 +17,7 @@ package io.telicent.smart.cache.entity.resolver.server;
 
 import io.telicent.smart.cache.configuration.Configurator;
 import io.telicent.smart.cache.server.jaxrs.applications.AbstractApplication;
+import io.telicent.smart.cache.server.jaxrs.resources.AbstractHealthResource;
 import jakarta.ws.rs.ApplicationPath;
 import org.apache.commons.lang3.StringUtils;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
@@ -64,5 +65,10 @@ public class EntityResolutionApplication extends AbstractApplication {
     @Override
     protected boolean isAuthEnabled() {
         return !StringUtils.equalsIgnoreCase(Configurator.get(ENV_JWKS_URL), AUTH_DISABLED);
+    }
+
+    @Override
+    protected Class<? extends AbstractHealthResource> getHealthResourceClass() {
+        return HealthResource.class;
     }
 }
