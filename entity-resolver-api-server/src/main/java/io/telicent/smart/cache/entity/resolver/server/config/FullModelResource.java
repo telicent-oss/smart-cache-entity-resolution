@@ -13,9 +13,9 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package io.telicent.smart.cache.entity.resolver.server;
+package io.telicent.smart.cache.entity.resolver.server.config;
 
-import io.telicent.smart.cache.canonical.configuration.CanonicalTypeConfiguration;
+import io.telicent.smart.cache.canonical.configuration.FullModel;
 import jakarta.servlet.ServletContext;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.ws.rs.*;
@@ -23,12 +23,12 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.media.multipart.FormDataParam;
-/**
- * REST Endpoint for controlling Canonical Type Configuration
- */
-@Path(CanonicalTypeConfiguration.TYPE)
-public class CanonicalTypeConfigurationResource extends AbstractConfigurationResource {
 
+/**
+ * REST Endpoints for handling the full details of Model config
+ */
+@Path(FullModel.TYPE)
+public class FullModelResource extends AbstractConfigurationResource {
     /**
      * Get the configuration
      * @param id unique ID
@@ -37,10 +37,10 @@ public class CanonicalTypeConfigurationResource extends AbstractConfigurationRes
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/{ct_id}")
-    public Response getCTByID(@PathParam("ct_id") final String id,
-                                     @Context final ServletContext servletContext) {
-        return getById(id, CanonicalTypeConfiguration.TYPE, servletContext);
+    @Path("/{FullModel_id}")
+    public Response getFullModelByID(@PathParam("FullModel_id") final String id,
+                                 @Context final ServletContext servletContext) {
+        return getById(id, FullModel.TYPE, servletContext);
     }
 
     /**
@@ -50,8 +50,8 @@ public class CanonicalTypeConfigurationResource extends AbstractConfigurationRes
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllCTs(@Context final ServletContext servletContext) {
-        return getAllForType(CanonicalTypeConfiguration.TYPE, servletContext);
+    public Response getAllFullModels(@Context final ServletContext servletContext) {
+        return getAllForType(FullModel.TYPE, servletContext);
     }
 
     /**
@@ -61,10 +61,10 @@ public class CanonicalTypeConfigurationResource extends AbstractConfigurationRes
      * @return a string message saying if config was deleted
      */
     @DELETE
-    @Path("/{ct_id}")
-    public Response deleteCTByID(@PathParam("ct_id") @NotBlank final String id,
-                                        @Context final ServletContext servletContext) {
-        return deleteById(id, CanonicalTypeConfiguration.TYPE, servletContext);
+    @Path("/{FullModel_id}")
+    public Response deleteFullModelByID(@PathParam("FullModel_id") @NotBlank final String id,
+                                    @Context final ServletContext servletContext) {
+        return deleteById(id, FullModel.TYPE, servletContext);
     }
 
     /**
@@ -75,13 +75,13 @@ public class CanonicalTypeConfigurationResource extends AbstractConfigurationRes
      * @return a string message indicating success
      */
     @POST
-    @Path("/{ct_id}")
+    @Path("/{FullModel_id}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createCTByID(@PathParam("ct_id") @NotBlank final String id,
-                                        @FormDataParam("entry") @DefaultValue("{}") final String entry,
-                                        @Context final ServletContext servletContext) {
-        return createById(id, CanonicalTypeConfiguration.TYPE, entry, servletContext);
+    public Response createFullModelByID(@PathParam("FullModel_id") @NotBlank final String id,
+                                    @FormDataParam("entry") @DefaultValue("{}") final String entry,
+                                    @Context final ServletContext servletContext) {
+        return createById(id, FullModel.TYPE, entry, servletContext);
     }
 
     /**
@@ -93,12 +93,12 @@ public class CanonicalTypeConfigurationResource extends AbstractConfigurationRes
      * Note: currently is the same as POST
      */
     @PUT
-    @Path("/{ct_id}")
+    @Path("/{FullModel_id}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateFullModelByID(@PathParam("ct_id") @NotBlank final String id,
-                                        @FormDataParam("entry") @DefaultValue("{}") final String entry,
-                                        @Context final ServletContext servletContext) {
-        return updateById(id, CanonicalTypeConfiguration.TYPE, entry, servletContext);
+    public Response updateFullModelByID(@PathParam("FullModel_id") @NotBlank final String id,
+                                    @FormDataParam("entry") @DefaultValue("{}") final String entry,
+                                    @Context final ServletContext servletContext) {
+        return updateById(id, FullModel.TYPE, entry, servletContext);
     }
 }

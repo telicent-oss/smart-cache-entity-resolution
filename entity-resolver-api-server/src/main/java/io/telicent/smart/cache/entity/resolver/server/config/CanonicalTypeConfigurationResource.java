@@ -13,9 +13,9 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package io.telicent.smart.cache.entity.resolver.server;
+package io.telicent.smart.cache.entity.resolver.server.config;
 
-import io.telicent.smart.cache.canonical.configuration.Relation;
+import io.telicent.smart.cache.canonical.configuration.CanonicalTypeConfiguration;
 import jakarta.servlet.ServletContext;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.ws.rs.*;
@@ -23,12 +23,11 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.media.multipart.FormDataParam;
-
 /**
- * REST Endpoints for handling Relation config
+ * REST Endpoint for controlling Canonical Type Configuration
  */
-@Path(Relation.TYPE)
-public class RelationsResource extends AbstractConfigurationResource {
+@Path(CanonicalTypeConfiguration.TYPE)
+public class CanonicalTypeConfigurationResource extends AbstractConfigurationResource {
 
     /**
      * Get the configuration
@@ -38,10 +37,10 @@ public class RelationsResource extends AbstractConfigurationResource {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/{relation_id}")
-    public Response getRelationByID(@PathParam("relation_id") @NotBlank final String id,
-                                    @Context final ServletContext servletContext) {
-        return getById(id, Relation.TYPE, servletContext);
+    @Path("/{ct_id}")
+    public Response getCTByID(@PathParam("ct_id") final String id,
+                                     @Context final ServletContext servletContext) {
+        return getById(id, CanonicalTypeConfiguration.TYPE, servletContext);
     }
 
     /**
@@ -51,8 +50,8 @@ public class RelationsResource extends AbstractConfigurationResource {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllModels(@Context final ServletContext servletContext) {
-        return getAllForType(Relation.TYPE, servletContext);
+    public Response getAllCTs(@Context final ServletContext servletContext) {
+        return getAllForType(CanonicalTypeConfiguration.TYPE, servletContext);
     }
 
     /**
@@ -62,10 +61,10 @@ public class RelationsResource extends AbstractConfigurationResource {
      * @return a string message saying if config was deleted
      */
     @DELETE
-    @Path("/{resolver_id}")
-    public Response deleteResolverByID(@PathParam("resolver_id") @NotBlank final String id,
-                                       @Context final ServletContext servletContext) {
-        return deleteById(id, Relation.TYPE, servletContext);
+    @Path("/{ct_id}")
+    public Response deleteCTByID(@PathParam("ct_id") @NotBlank final String id,
+                                        @Context final ServletContext servletContext) {
+        return deleteById(id, CanonicalTypeConfiguration.TYPE, servletContext);
     }
 
     /**
@@ -76,13 +75,13 @@ public class RelationsResource extends AbstractConfigurationResource {
      * @return a string message indicating success
      */
     @POST
-    @Path("/{resolver_id}")
+    @Path("/{ct_id}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createResolverByID(@PathParam("resolver_id") @NotBlank final String id,
-                                       @FormDataParam("entry") @DefaultValue("{}") final String entry,
-                                       @Context final ServletContext servletContext) {
-        return createById(id, Relation.TYPE, entry, servletContext);
+    public Response createCTByID(@PathParam("ct_id") @NotBlank final String id,
+                                        @FormDataParam("entry") @DefaultValue("{}") final String entry,
+                                        @Context final ServletContext servletContext) {
+        return createById(id, CanonicalTypeConfiguration.TYPE, entry, servletContext);
     }
 
     /**
@@ -94,12 +93,12 @@ public class RelationsResource extends AbstractConfigurationResource {
      * Note: currently is the same as POST
      */
     @PUT
-    @Path("/{resolver_id}")
+    @Path("/{ct_id}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateResolverByID(@PathParam("resolver_id") @NotBlank final String id,
-                                       @FormDataParam("entry") @DefaultValue("{}") final String entry,
-                                       @Context final ServletContext servletContext) {
-        return updateById(id, Relation.TYPE, entry, servletContext);
+    public Response updateFullModelByID(@PathParam("ct_id") @NotBlank final String id,
+                                        @FormDataParam("entry") @DefaultValue("{}") final String entry,
+                                        @Context final ServletContext servletContext) {
+        return updateById(id, CanonicalTypeConfiguration.TYPE, entry, servletContext);
     }
 }

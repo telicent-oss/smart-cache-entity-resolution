@@ -17,6 +17,7 @@ package io.telicent.smart.cache.canonical.configuration;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.telicent.smart.cache.canonical.utility.Mapper;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,21 +41,23 @@ public class Model {
     }
 
     /**
-     * Unique ID of models
+     * Unique ID of model
      */
+    @Getter
     public String modelId;
     /**
-     * List of indices that the model can be applied to
+     * Index to which the model can be applied to
      */
-    public List<String> indexes = new ArrayList<>();
+    @Getter
+    public String index = "";
     /**
      * List of relations that the model can use
      */
     public List<String> relations = new ArrayList<>();
     /**
-     * List of scorers that the model can use
+     * List of scorer that the model can use
      */
-    public List<String> scorers = new ArrayList<>();
+    public String scores = "";
 
     /**
      * Create a new Model from the given JSON String
@@ -82,12 +85,12 @@ public class Model {
     public static Model loadFromFullModel(FullModel fullModel) {
         Model model = new Model();
         model.modelId = fullModel.modelId;
-        model.indexes = fullModel.indexes;
+        model.index = fullModel.index;
         for(Relation relation : fullModel.relations) {
             model.relations.add(relation.resolverId);
         }
-        for(Scorer scorer : fullModel.scorers) {
-            model.scorers.add(scorer.scorerId);
+        if (fullModel.scores != null) {
+            model.scores = fullModel.scores.scorerId;
         }
         return model;
     }

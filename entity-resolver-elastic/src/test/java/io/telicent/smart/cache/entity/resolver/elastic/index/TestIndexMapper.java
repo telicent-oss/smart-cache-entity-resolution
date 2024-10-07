@@ -67,9 +67,9 @@ public class TestIndexMapper {
     final TypeMapping mockTypeMapping = mock(TypeMapping.class);
 
     private static final String MODEL_JSON =
-            "{\"indexes\":[\"canonical_index\"],\"relations\":[\"resolver-1\",\"resolver-2\",\"resolver-3\"],\"scorers\":[\"score-1\",\"score-2\"]}";
+            "{\"index\":\"canonical_index\",\"relations\":[\"resolver-1\",\"resolver-2\",\"resolver-3\"],\"scores\":\"score-1\"}";
     private static final String MODEL_JSON_WITH_ID =
-            "{\"modelId\":\"test_id\",\"indexes\":[\"canonical_index\"],\"relations\":[\"resolver-1\",\"resolver-2\",\"resolver-3\"],\"scorers\":[\"score-1\",\"score-2\"]}";
+            "{\"modelId\":\"test_id\",\"index\":\"canonical_index\",\"relations\":[\"resolver-1\",\"resolver-2\",\"resolver-3\"],\"scores\":\"score-1\"}";
 
     private static final String RESOLVER_JSON = "{\"weight\":5, \"fields\" : [\"field_1\", \"field_2\"]}";
     private static final String RESOLVER_JSON_WITH_ID =
@@ -506,7 +506,7 @@ public class TestIndexMapper {
     @Test
     public void test_populateFullModel_empty() {
         // given
-        String expectedString = "{\"modelId\":null,\"indexes\":[],\"relations\":[],\"scorers\":[]}";
+        String expectedString = "{\"modelId\":null,\"index\":\"\",\"relations\":[],\"scores\":null}";
         Model model = Model.loadFromString(expectedString);
         // when
         FullModel result = IndexMapper.populateFullModelFromModel(mockClient, model);
@@ -524,17 +524,16 @@ public class TestIndexMapper {
         when(mockGetResponse.source()).thenReturn(mockJsonNode);
         when(mockJsonNode.has("entry")).thenReturn(true);
         when(mockJsonNode.get("entry"))
-                .thenReturn(new TextNode(RESOLVER_JSON_WITH_ID))
-                .thenReturn(new TextNode(RESOLVER_JSON_WITH_ID))
-                .thenReturn(new TextNode(RESOLVER_JSON_WITH_ID))
                 .thenReturn(new TextNode(SCORER_JSON_WITH_ID))
-                .thenReturn(new TextNode(SCORER_JSON_WITH_ID));
+                .thenReturn(new TextNode(RESOLVER_JSON_WITH_ID))
+                .thenReturn(new TextNode(RESOLVER_JSON_WITH_ID))
+                .thenReturn(new TextNode(RESOLVER_JSON_WITH_ID));
 
         String modelString =
-                "{\"indexes\":[\"canonical_index\"],\"relations\":[\"resolver-1\",\"resolver-2\",\"resolver-3\"],\"scorers\":[\"score-1\",\"score-2\"]}";
+                "{\"index\":\"canonical_index\",\"relations\":[\"resolver-1\",\"resolver-2\",\"resolver-3\"],\"scores\":\"score-1\"}";
         Model model = Model.loadFromString(modelString);
         String expectedString =
-                "{\"modelId\":null,\"indexes\":[\"canonical_index\"],\"relations\":[{\"resolverId\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5},{\"resolverId\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5},{\"resolverId\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5}],\"scorers\":[{\"fieldScores\":{\"field_1\":5.0},\"scorerId\":\"other_id\"},{\"fieldScores\":{\"field_1\":5.0},\"scorerId\":\"other_id\"}]}";
+                "{\"modelId\":null,\"index\":\"canonical_index\",\"relations\":[{\"resolverId\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5},{\"resolverId\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5},{\"resolverId\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5}],\"scores\":{\"fieldScores\":{\"field_1\":5.0},\"scorerId\":\"other_id\"}}";
 
         // when
         FullModel result = IndexMapper.populateFullModelFromModel(mockClient, model);
@@ -554,7 +553,7 @@ public class TestIndexMapper {
         when(mockJsonNode.get("entry")).thenReturn(new TextNode("{\"rubbish\":\"test\"}"));
 
         String modelString =
-                "{\"indexes\":[\"canonical_index\"],\"relations\":[\"resolver-1\",\"resolver-2\",\"resolver-3\"],\"scorers\":[\"score-1\",\"score-2\"]}";
+                "{\"index\":\"canonical_index\",\"relations\":[\"resolver-1\",\"resolver-2\",\"resolver-3\"],\"scores\":\"score-1\"}";
         Model model = Model.loadFromString(modelString);
         // when
         // then
@@ -568,7 +567,7 @@ public class TestIndexMapper {
         when(mockIndices.exists(any(ExistsRequest.class))).thenReturn(response);
         when(mockClient.get(any(GetRequest.class), any())).thenThrow(IOException.class);
         String modelString =
-                "{\"indexes\":[\"canonical_index\"],\"relations\":[\"resolver-1\",\"resolver-2\",\"resolver-3\"],\"scorers\":[\"score-1\",\"score-2\"]}";
+                "{\"index\":\"canonical_index\",\"relations\":[\"resolver-1\",\"resolver-2\",\"resolver-3\"],\"scores\":\"score-1\"}";
         Model model = Model.loadFromString(modelString);
         // when
         // then
@@ -595,15 +594,14 @@ public class TestIndexMapper {
 
         when(mockJsonNode2.has("entry")).thenReturn(true);
         when(mockJsonNode2.get("entry"))
-                .thenReturn(new TextNode(RESOLVER_JSON_WITH_ID))
-                .thenReturn(new TextNode(RESOLVER_JSON_WITH_ID))
-                .thenReturn(new TextNode(RESOLVER_JSON_WITH_ID))
                 .thenReturn(new TextNode(SCORER_JSON_WITH_ID))
-                .thenReturn(new TextNode(SCORER_JSON_WITH_ID));
+                .thenReturn(new TextNode(RESOLVER_JSON_WITH_ID))
+                .thenReturn(new TextNode(RESOLVER_JSON_WITH_ID))
+                .thenReturn(new TextNode(RESOLVER_JSON_WITH_ID));
 
 
         String expectedJson =
-                "{\"id\":{\"modelId\":\"test_id\",\"indexes\":[\"canonical_index\"],\"relations\":[{\"resolverId\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5},{\"resolverId\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5},{\"resolverId\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5}],\"scorers\":[{\"fieldScores\":{\"field_1\":5.0},\"scorerId\":\"other_id\"},{\"fieldScores\":{\"field_1\":5.0},\"scorerId\":\"other_id\"}]}}";
+                "{\"id\":{\"modelId\":\"test_id\",\"index\":\"canonical_index\",\"relations\":[{\"resolverId\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5},{\"resolverId\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5},{\"resolverId\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5}],\"scores\":{\"fieldScores\":{\"field_1\":5.0},\"scorerId\":\"other_id\"}}}";
         // when
         String actualJson = IndexMapper.getAllIndexFullModelEntriesAsString(mockClient);
         // then
@@ -654,7 +652,7 @@ public class TestIndexMapper {
         when(mockIndices.exists(any(ExistsRequest.class))).thenReturn(response);
         when(mockClient.index(any(IndexRequest.class))).thenReturn(mockIndexResponse);
         String fullModelJSON =
-                "{\"modelId\":\"test_id\",\"indexes\":[\"canonical_index\"],\"relations\":[{\"resolverId\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5}],\"scorers\":[{\"fieldScores\":{\"field_1\":5.0},\"scorerId\":\"other_id\"}]}";
+                "{\"modelId\":\"test_id\",\"index\":\"canonical_index\",\"relations\":[{\"resolverId\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5}],\"scores\":{\"fieldScores\":{\"field_1\":5.0},\"scorerId\":\"other_id\"}}";
         // when
         Throwable t = null;
         try {
@@ -687,15 +685,14 @@ public class TestIndexMapper {
         when(mockJsonNode2.has("entry")).thenReturn(true);
         when(mockJsonNode2.get("entry"))
                 .thenReturn(new TextNode(MODEL_JSON_WITH_ID))
-                .thenReturn(new TextNode(RESOLVER_JSON_WITH_ID))
-                .thenReturn(new TextNode(RESOLVER_JSON_WITH_ID))
-                .thenReturn(new TextNode(RESOLVER_JSON_WITH_ID))
                 .thenReturn(new TextNode(SCORER_JSON_WITH_ID))
-                .thenReturn(new TextNode(SCORER_JSON_WITH_ID));
+                .thenReturn(new TextNode(RESOLVER_JSON_WITH_ID))
+                .thenReturn(new TextNode(RESOLVER_JSON_WITH_ID))
+                .thenReturn(new TextNode(RESOLVER_JSON_WITH_ID));
 
 
         String expectedJson =
-                "{\"modelId\":\"test_id\",\"indexes\":[\"canonical_index\"],\"relations\":[{\"resolverId\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5},{\"resolverId\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5},{\"resolverId\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5}],\"scorers\":[{\"fieldScores\":{\"field_1\":5.0},\"scorerId\":\"other_id\"},{\"fieldScores\":{\"field_1\":5.0},\"scorerId\":\"other_id\"}]}";
+                "{\"modelId\":\"test_id\",\"index\":\"canonical_index\",\"relations\":[{\"resolverId\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5},{\"resolverId\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5},{\"resolverId\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5}],\"scores\":{\"fieldScores\":{\"field_1\":5.0},\"scorerId\":\"other_id\"}}";
         // when
         String actualJson = IndexMapper.getFullModelIndexEntry(mockClient, "id");
         // then
@@ -742,7 +739,7 @@ public class TestIndexMapper {
         // when
         IndexMapper.deleteIndexFullModelEntry(mockClient, "id");
         // then
-        verify(mockClient, times(6)).delete(any(DeleteRequest.class));
+        verify(mockClient, times(5)).delete(any(DeleteRequest.class));
     }
 
     @Test(expectedExceptions = IndexException.class)

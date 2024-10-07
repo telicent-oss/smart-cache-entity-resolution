@@ -13,9 +13,9 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package io.telicent.smart.cache.entity.resolver.server;
+package io.telicent.smart.cache.entity.resolver.server.config;
 
-import io.telicent.smart.cache.canonical.configuration.Scorer;
+import io.telicent.smart.cache.canonical.configuration.Model;
 import jakarta.servlet.ServletContext;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.ws.rs.*;
@@ -25,11 +25,10 @@ import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
 /**
- * REST Endpoints for handling Scorer config
+ * REST Endpoints for handling Model config
  */
-@Path(Scorer.TYPE)
-public class ScorerResource extends AbstractConfigurationResource {
-
+@Path(Model.TYPE)
+public class ModelResource extends AbstractConfigurationResource {
     /**
      * Get the configuration
      * @param id unique ID
@@ -37,12 +36,11 @@ public class ScorerResource extends AbstractConfigurationResource {
      * @return A string response of the data
      */
     @GET
-    @Path("/{score_id}")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getScoreByID(@PathParam("score_id") final String id,
+    @Path("/{model_id}")
+    public Response getModelByID(@PathParam("model_id") final String id,
                                  @Context final ServletContext servletContext) {
-        return getById(id, Scorer.TYPE, servletContext);
+        return getById(id, Model.TYPE, servletContext);
     }
 
     /**
@@ -53,7 +51,7 @@ public class ScorerResource extends AbstractConfigurationResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllModels(@Context final ServletContext servletContext) {
-        return getAllForType(Scorer.TYPE, servletContext);
+        return getAllForType(Model.TYPE, servletContext);
     }
 
     /**
@@ -63,10 +61,10 @@ public class ScorerResource extends AbstractConfigurationResource {
      * @return a string message saying if config was deleted
      */
     @DELETE
-    @Path("/{score_id}")
-    public Response deleteScoreByID(@PathParam("score_id") @NotBlank final String id,
+    @Path("/{model_id}")
+    public Response deleteModelByID(@PathParam("model_id") @NotBlank final String id,
                                     @Context final ServletContext servletContext) {
-        return deleteById(id, Scorer.TYPE, servletContext);
+        return deleteById(id, Model.TYPE, servletContext);
     }
 
     /**
@@ -77,13 +75,13 @@ public class ScorerResource extends AbstractConfigurationResource {
      * @return a string message indicating success
      */
     @POST
-    @Path("/{score_id}")
+    @Path("/{model_id}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createScoreByID(@PathParam("score_id") @NotBlank final String id,
+    public Response createModelByID(@PathParam("model_id") @NotBlank final String id,
                                     @FormDataParam("entry") @DefaultValue("{}") final String entry,
                                     @Context final ServletContext servletContext) {
-        return createById(id, Scorer.TYPE, entry, servletContext);
+        return createById(id, Model.TYPE, entry, servletContext);
     }
 
     /**
@@ -95,12 +93,12 @@ public class ScorerResource extends AbstractConfigurationResource {
      * Note: currently is the same as POST
      */
     @PUT
-    @Path("/{score_id}")
+    @Path("/{model_id}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateScoreById(@PathParam("score_id") @NotBlank final String id,
+    public Response updateModelByID(@PathParam("model_id") @NotBlank final String id,
                                     @FormDataParam("entry") @DefaultValue("{}") final String entry,
                                     @Context final ServletContext servletContext) {
-        return updateById(id, Scorer.TYPE, entry, servletContext);
+        return updateById(id, Model.TYPE, entry, servletContext);
     }
 }

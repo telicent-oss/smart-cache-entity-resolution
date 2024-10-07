@@ -29,8 +29,8 @@ public class DockerTestElasticSearchEntityResolverSimilarityConfig extends Abstr
         this.elastic.resetIndex("er_config_models");
     }
 
-    public static final String EMPTY_MODEL_JSON = "{\"modelId\":\"test_id\",\"indexes\":[],\"relations\":[],\"scorers\":[]}";
-    public static final String PARTIAL_MODEL_JSON = "{\"modelId\":\"test_id\",\"indexes\":[\"updated_index\"],\"relations\":[],\"scorers\":[]}";
+    public static final String EMPTY_MODEL_JSON = "{\"modelId\":\"test_id\",\"index\":\"\",\"relations\":[],\"scores\":null}";
+    public static final String PARTIAL_MODEL_JSON = "{\"modelId\":\"test_id\",\"index\":\"updated_index\",\"relations\":[],\"scores\":\"\"}";
 
     @Test
     public void test_configEndpoints_and_to_string() {
@@ -104,7 +104,7 @@ public class DockerTestElasticSearchEntityResolverSimilarityConfig extends Abstr
         client.updateConfig("fullmodel", EMPTY_MODEL_JSON, "model_id");
         // and
         String laterActual = client.readAllConfig("fullmodel");
-        String laterExpected = "{\"model_id\":{\"modelId\":\"model_id\",\"indexes\":[],\"relations\":[],\"scorers\":[]}}";
+        String laterExpected = "{\"model_id\":{\"modelId\":\"model_id\",\"index\":\"\",\"relations\":[],\"scores\":null}}";
         Assert.assertEquals(laterActual, laterExpected);
     }
 

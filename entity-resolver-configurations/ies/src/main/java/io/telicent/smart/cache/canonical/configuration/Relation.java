@@ -17,6 +17,7 @@ package io.telicent.smart.cache.canonical.configuration;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.telicent.smart.cache.canonical.utility.Mapper;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,15 +40,18 @@ public class Relation {
     /**
      * List of fields that are connected.
      */
+    @Getter
     public final List<String> fields = new ArrayList<>();
+
 
     /**
      * Weight (0-10) that is to be applied to the resolver
      * for ordering in relation to other relations.
      */
+    @Getter
     public int weight;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Model.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Relation.class);
 
     /**
      * Create new resolver

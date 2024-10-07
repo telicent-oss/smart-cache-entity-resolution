@@ -40,15 +40,15 @@ public class FullModel {
     /**
      * A list of the indices to which this model can be applied.
      */
-    public List<String> indexes = new ArrayList<>();
+    public String index = "";
     /**
-     * A list of the resolvers that this model will use.
+     * A list of weighted relations that this model will use.
      */
     public final List<Relation> relations = new ArrayList<>();
     /**
-     * A list of scorers to be applied for this model.
+     * A set of scores to be applied for this model.
      */
-    public final List<Scorer> scorers = new ArrayList<>();
+    public Scores scores = null;
 
     /**
      * Create new Full Model

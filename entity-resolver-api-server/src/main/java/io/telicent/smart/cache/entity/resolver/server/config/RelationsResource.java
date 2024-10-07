@@ -13,9 +13,9 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package io.telicent.smart.cache.entity.resolver.server;
+package io.telicent.smart.cache.entity.resolver.server.config;
 
-import io.telicent.smart.cache.canonical.configuration.Model;
+import io.telicent.smart.cache.canonical.configuration.Relation;
 import jakarta.servlet.ServletContext;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.ws.rs.*;
@@ -25,10 +25,11 @@ import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
 /**
- * REST Endpoints for handling Model config
+ * REST Endpoints for handling Relation config
  */
-@Path(Model.TYPE)
-public class ModelResource extends AbstractConfigurationResource {
+@Path(Relation.TYPE)
+public class RelationsResource extends AbstractConfigurationResource {
+
     /**
      * Get the configuration
      * @param id unique ID
@@ -37,10 +38,10 @@ public class ModelResource extends AbstractConfigurationResource {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/{model_id}")
-    public Response getModelByID(@PathParam("model_id") final String id,
-                                 @Context final ServletContext servletContext) {
-        return getById(id, Model.TYPE, servletContext);
+    @Path("/{relation_id}")
+    public Response getRelationByID(@PathParam("relation_id") @NotBlank final String id,
+                                    @Context final ServletContext servletContext) {
+        return getById(id, Relation.TYPE, servletContext);
     }
 
     /**
@@ -51,7 +52,7 @@ public class ModelResource extends AbstractConfigurationResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllModels(@Context final ServletContext servletContext) {
-        return getAllForType(Model.TYPE, servletContext);
+        return getAllForType(Relation.TYPE, servletContext);
     }
 
     /**
@@ -61,10 +62,10 @@ public class ModelResource extends AbstractConfigurationResource {
      * @return a string message saying if config was deleted
      */
     @DELETE
-    @Path("/{model_id}")
-    public Response deleteModelByID(@PathParam("model_id") @NotBlank final String id,
-                                    @Context final ServletContext servletContext) {
-        return deleteById(id, Model.TYPE, servletContext);
+    @Path("/{resolver_id}")
+    public Response deleteResolverByID(@PathParam("resolver_id") @NotBlank final String id,
+                                       @Context final ServletContext servletContext) {
+        return deleteById(id, Relation.TYPE, servletContext);
     }
 
     /**
@@ -75,13 +76,13 @@ public class ModelResource extends AbstractConfigurationResource {
      * @return a string message indicating success
      */
     @POST
-    @Path("/{model_id}")
+    @Path("/{resolver_id}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createModelByID(@PathParam("model_id") @NotBlank final String id,
-                                    @FormDataParam("entry") @DefaultValue("{}") final String entry,
-                                    @Context final ServletContext servletContext) {
-        return createById(id, Model.TYPE, entry, servletContext);
+    public Response createResolverByID(@PathParam("resolver_id") @NotBlank final String id,
+                                       @FormDataParam("entry") @DefaultValue("{}") final String entry,
+                                       @Context final ServletContext servletContext) {
+        return createById(id, Relation.TYPE, entry, servletContext);
     }
 
     /**
@@ -93,12 +94,12 @@ public class ModelResource extends AbstractConfigurationResource {
      * Note: currently is the same as POST
      */
     @PUT
-    @Path("/{model_id}")
+    @Path("/{resolver_id}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateModelByID(@PathParam("model_id") @NotBlank final String id,
-                                    @FormDataParam("entry") @DefaultValue("{}") final String entry,
-                                    @Context final ServletContext servletContext) {
-        return updateById(id, Model.TYPE, entry, servletContext);
+    public Response updateResolverByID(@PathParam("resolver_id") @NotBlank final String id,
+                                       @FormDataParam("entry") @DefaultValue("{}") final String entry,
+                                       @Context final ServletContext servletContext) {
+        return updateById(id, Relation.TYPE, entry, servletContext);
     }
 }
