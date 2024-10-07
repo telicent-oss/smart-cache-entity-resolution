@@ -103,7 +103,7 @@
         <dependency.opensearch-test>2.1.0</dependency.opensearch-test>
         <dependency.parsson>1.0.5</dependency.parsson>
         <dependency.smart-caches>0.23.1</dependency.smart-caches>
-        <dependency.snappy>1.1.10.5</dependency.snappy>
+        <dependency.snappy>1.1.10.7</dependency.snappy>
         <dependency.wiremock>3.9.1</dependency.wiremock>
 
         <!-- CORE Overrides -->
