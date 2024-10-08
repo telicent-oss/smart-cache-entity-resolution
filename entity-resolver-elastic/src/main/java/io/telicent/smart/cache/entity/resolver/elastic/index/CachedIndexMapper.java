@@ -33,7 +33,7 @@ public final class CachedIndexMapper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CachedIndexMapper.class);
     private static final List<String> configList =
-            Arrays.asList(Model.TYPE, Relation.TYPE, Scorer.TYPE, CanonicalTypeConfiguration.TYPE);
+            Arrays.asList(Model.TYPE, Relation.TYPE, Scores.TYPE, CanonicalTypeConfiguration.TYPE);
     /**
      * Internal map of config types
      */
@@ -189,6 +189,14 @@ public final class CachedIndexMapper {
     public static String getAllIndexEntriesAsString(ElasticsearchClient client, String type) {
         initialLoadIfNecessary(client);
         return writeValueAsString(cacheMap.get(type));
+    }
+
+    public static Model getModelEntry(ElasticsearchClient client, String id) {
+        Object modelAsObject = getIndexTypEntryObject(client, Model.TYPE, id);
+        if(modelAsObject instanceof Model model) {
+            return model;
+        }
+        return null;
     }
 
     static void initialLoadIfNecessary(ElasticsearchClient client) {

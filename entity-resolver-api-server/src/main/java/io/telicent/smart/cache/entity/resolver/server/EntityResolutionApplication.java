@@ -16,6 +16,7 @@
 package io.telicent.smart.cache.entity.resolver.server;
 
 import io.telicent.smart.cache.configuration.Configurator;
+import io.telicent.smart.cache.entity.resolver.server.config.*;
 import io.telicent.smart.cache.server.jaxrs.applications.AbstractApplication;
 import io.telicent.smart.cache.server.jaxrs.resources.AbstractHealthResource;
 import jakarta.ws.rs.ApplicationPath;

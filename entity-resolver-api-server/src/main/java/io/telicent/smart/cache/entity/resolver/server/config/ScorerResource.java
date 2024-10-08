@@ -13,9 +13,9 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package io.telicent.smart.cache.entity.resolver.server;
+package io.telicent.smart.cache.entity.resolver.server.config;
 
-import io.telicent.smart.cache.canonical.configuration.FullModel;
+import io.telicent.smart.cache.canonical.configuration.Scores;
 import jakarta.servlet.ServletContext;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.ws.rs.*;
@@ -25,10 +25,11 @@ import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
 /**
- * REST Endpoints for handling the full details of Model config
+ * REST Endpoints for handling Scorer config
  */
-@Path(FullModel.TYPE)
-public class FullModelResource extends AbstractConfigurationResource {
+@Path(Scores.TYPE)
+public class ScorerResource extends AbstractConfigurationResource {
+
     /**
      * Get the configuration
      * @param id unique ID
@@ -36,11 +37,12 @@ public class FullModelResource extends AbstractConfigurationResource {
      * @return A string response of the data
      */
     @GET
+    @Path("/{score_id}")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/{FullModel_id}")
-    public Response getFullModelByID(@PathParam("FullModel_id") final String id,
+    public Response getScoreByID(@PathParam("score_id") final String id,
                                  @Context final ServletContext servletContext) {
-        return getById(id, FullModel.TYPE, servletContext);
+        return getById(id, Scores.TYPE, servletContext);
     }
 
     /**
@@ -50,8 +52,8 @@ public class FullModelResource extends AbstractConfigurationResource {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllFullModels(@Context final ServletContext servletContext) {
-        return getAllForType(FullModel.TYPE, servletContext);
+    public Response getAllModels(@Context final ServletContext servletContext) {
+        return getAllForType(Scores.TYPE, servletContext);
     }
 
     /**
@@ -61,10 +63,10 @@ public class FullModelResource extends AbstractConfigurationResource {
      * @return a string message saying if config was deleted
      */
     @DELETE
-    @Path("/{FullModel_id}")
-    public Response deleteFullModelByID(@PathParam("FullModel_id") @NotBlank final String id,
+    @Path("/{score_id}")
+    public Response deleteScoreByID(@PathParam("score_id") @NotBlank final String id,
                                     @Context final ServletContext servletContext) {
-        return deleteById(id, FullModel.TYPE, servletContext);
+        return deleteById(id, Scores.TYPE, servletContext);
     }
 
     /**
@@ -75,13 +77,13 @@ public class FullModelResource extends AbstractConfigurationResource {
      * @return a string message indicating success
      */
     @POST
-    @Path("/{FullModel_id}")
+    @Path("/{score_id}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createFullModelByID(@PathParam("FullModel_id") @NotBlank final String id,
+    public Response createScoreByID(@PathParam("score_id") @NotBlank final String id,
                                     @FormDataParam("entry") @DefaultValue("{}") final String entry,
                                     @Context final ServletContext servletContext) {
-        return createById(id, FullModel.TYPE, entry, servletContext);
+        return createById(id, Scores.TYPE, entry, servletContext);
     }
 
     /**
@@ -93,12 +95,12 @@ public class FullModelResource extends AbstractConfigurationResource {
      * Note: currently is the same as POST
      */
     @PUT
-    @Path("/{FullModel_id}")
+    @Path("/{score_id}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateFullModelByID(@PathParam("FullModel_id") @NotBlank final String id,
+    public Response updateScoreById(@PathParam("score_id") @NotBlank final String id,
                                     @FormDataParam("entry") @DefaultValue("{}") final String entry,
                                     @Context final ServletContext servletContext) {
-        return updateById(id, FullModel.TYPE, entry, servletContext);
+        return updateById(id, Scores.TYPE, entry, servletContext);
     }
 }

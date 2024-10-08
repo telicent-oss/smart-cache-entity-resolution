@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * Represents a set of scores per fields for matching purposes.
  */
-public class Scorer {
+public class Scores {
     /**
      * Type representing scorers
      */
@@ -40,12 +40,12 @@ public class Scorer {
      */
     public String scorerId;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Scorer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Scores.class);
 
     /**
      * Create new Scorer
      */
-    public Scorer() {
+    public Scores() {
     }
 
     /**
@@ -53,8 +53,8 @@ public class Scorer {
      * @param json representation of class
      * @return Scorer
      */
-    public static Scorer loadFromString(String json) {
-        return Mapper.loadFromString(Scorer.class, json);
+    public static Scores loadFromString(String json) {
+        return Mapper.loadFromString(Scores.class, json);
     }
 
     /**
@@ -62,12 +62,31 @@ public class Scorer {
      * @param node representation of class
      * @return Scorer
      */
-    public static Scorer loadFromNode(JsonNode node) {
-        return Mapper.loadFromString(Scorer.class, node.asText());
+    public static Scores loadFromNode(JsonNode node) {
+        return Mapper.loadFromString(Scores.class, node.asText());
     }
 
     @Override
     public String toString() {
         return Mapper.writeValueAsString(this);
+    }
+
+    /**
+     * Return the score for the given field
+     * @param field the field to check
+     * @return the score if we have one, 0.0 if not
+     */
+
+    public double getScore(String field) {
+        return fieldScores.getOrDefault(field, 0.0);
+    }
+
+    /**
+     * Return whether we have a score for the given field
+     * @param field the field to check
+     * @return true if we have a score, false if not
+     */
+    public boolean hasField(String field) {
+        return fieldScores.containsKey(field);
     }
 }

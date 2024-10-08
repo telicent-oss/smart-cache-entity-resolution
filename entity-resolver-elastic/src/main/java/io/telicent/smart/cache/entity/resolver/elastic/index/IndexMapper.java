@@ -122,10 +122,10 @@ public final class IndexMapper {
      * effect than doing elsewhere
      */
     public static Object validateEntry(String type, String id, String value) {
-        if (Scorer.TYPE.equalsIgnoreCase(type)) {
-            Scorer scorer = Scorer.loadFromString(value);
-            scorer.scorerId = id;
-            return scorer;
+        if (Scores.TYPE.equalsIgnoreCase(type)) {
+            Scores scores = Scores.loadFromString(value);
+            scores.scorerId = id;
+            return scores;
         } else if (Relation.TYPE.equalsIgnoreCase(type)) {
             Relation relation = Relation.loadFromString(value);
             relation.resolverId = id;
@@ -205,8 +205,8 @@ public final class IndexMapper {
             for (Relation relation : fullModel.relations) {
                 addObjectToIndex(client, relation.resolverId, CONFIG_INDEX_PREFIX + Relation.TYPE, relation);
             }
-            for (Scorer scorer : fullModel.scorers) {
-                addObjectToIndex(client, scorer.scorerId, CONFIG_INDEX_PREFIX + Scorer.TYPE, scorer);
+            if(fullModel.scores != null) {
+                addObjectToIndex(client, fullModel.scores.scorerId, CONFIG_INDEX_PREFIX + Scores.TYPE, fullModel.scores);
             }
         }
     }
@@ -223,9 +223,7 @@ public final class IndexMapper {
             for (String resolverId : model.relations) {
                 deleteIndexEntry(client, Relation.TYPE, resolverId);
             }
-            for (String scorerId : model.scorers) {
-                deleteIndexEntry(client, Scorer.TYPE, scorerId);
-            }
+            deleteIndexEntry(client, Scores.TYPE, model.scores);
             deleteIndexEntry(client, Model.TYPE, model.modelId);
         }
     }
@@ -391,8 +389,8 @@ public final class IndexMapper {
         if (null == entryNode) {
             return null;
         }
-        if (Scorer.TYPE.equalsIgnoreCase(type)) {
-            return Scorer.loadFromNode(entryNode);
+        if (Scores.TYPE.equalsIgnoreCase(type)) {
+            return Scores.loadFromNode(entryNode);
         } else if (Relation.TYPE.equalsIgnoreCase(type)) {
             return Relation.loadFromNode(entryNode);
         } else if (Model.TYPE.equalsIgnoreCase(type)) {
@@ -438,14 +436,14 @@ public final class IndexMapper {
         try {
             FullModel fullModel = new FullModel();
             fullModel.modelId = model.modelId;
-            fullModel.indexes = model.indexes;
-            for (String resolverId : model.relations) {
-                JsonNode node = getJsonIndexEntry(client, Relation.TYPE, resolverId);
-                fullModel.relations.add(Relation.loadFromNode(node));
+            fullModel.index = model.index;
+            if (model.scores != null && !model.scores.isEmpty()) {
+                JsonNode scoreNode = getJsonIndexEntry(client, Scores.TYPE, model.scores);
+                fullModel.scores = Scores.loadFromNode(scoreNode);
             }
-            for (String scorerId : model.scorers) {
-                JsonNode node = getJsonIndexEntry(client, Scorer.TYPE, scorerId);
-                fullModel.scorers.add(Scorer.loadFromNode(node));
+            for (String resolverId : model.relations) {
+                JsonNode relationsNode = getJsonIndexEntry(client, Relation.TYPE, resolverId);
+                fullModel.relations.add(Relation.loadFromNode(relationsNode));
             }
             return fullModel;
         } catch (IOException e) {
@@ -515,7 +513,7 @@ public final class IndexMapper {
 
         Map<String, String> validationResults = new HashMap<>();
         if (object instanceof Model model) {
-            if (model.indexes.contains(index)) {
+            if (model.index.equalsIgnoreCase(index)) {
                 validationResults.put(index, "index matches");
             } else {
                 validationResults.put(index, "index not included");
@@ -528,9 +526,9 @@ public final class IndexMapper {
                     validationResults.put(fieldName, "no match in Index");
                 }
             }
-        } else if (object instanceof Scorer scorer) {
+        } else if (object instanceof Scores scores) {
             // Check list of scorers against map
-            for (String fieldName : scorer.fieldScores.keySet()) {
+            for (String fieldName : scores.fieldScores.keySet()) {
                 if (indexMapping.containsKey(fieldName)) {
                     validationResults.put(fieldName, "Matches Index entry");
                 } else {

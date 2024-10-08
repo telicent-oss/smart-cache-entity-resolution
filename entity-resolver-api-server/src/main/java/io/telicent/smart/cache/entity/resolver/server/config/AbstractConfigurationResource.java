@@ -13,11 +13,12 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package io.telicent.smart.cache.entity.resolver.server;
+package io.telicent.smart.cache.entity.resolver.server.config;
 
 import io.telicent.smart.cache.canonical.exception.IndexException;
 import io.telicent.smart.cache.canonical.exception.ValidationException;
 import io.telicent.smart.cache.entity.resolver.EntityResolver;
+import io.telicent.smart.cache.entity.resolver.server.AbstractEntityResolutionResource;
 import io.telicent.smart.cache.server.jaxrs.model.Problem;
 import jakarta.servlet.ServletContext;
 import jakarta.ws.rs.core.Response;

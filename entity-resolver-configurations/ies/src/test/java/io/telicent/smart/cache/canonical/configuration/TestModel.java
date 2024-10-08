@@ -27,14 +27,14 @@ import static io.telicent.smart.cache.canonical.configuration.TestFullModel.FULL
 
 public class TestModel {
 
-    public static final String JSON = "{\"modelId\":\"test_id\",\"indexes\":[\"canonical_index\"],\"relations\":[\"resolver-1\",\"resolver-2\",\"resolver-3\"],\"scorers\":[\"score-1\",\"score-2\"]}";
+    public static final String JSON = "{\"modelId\":\"test_id\",\"index\":\"canonical_index\",\"relations\":[\"resolver-1\",\"resolver-2\",\"resolver-3\"],\"scores\":\"score-1\"}";
 
     private Model getExpectedModel() {
         Model expectedModel = new Model();
         expectedModel.modelId = "test_id";
-        expectedModel.indexes = List.of("canonical_index");
+        expectedModel.index = "canonical_index";
         expectedModel.relations = List.of("resolver-1", "resolver-2", "resolver-3");
-        expectedModel.scorers = List.of("score-1", "score-2");
+        expectedModel.scores = "score-1";
         return expectedModel;
     }
 
@@ -90,7 +90,7 @@ public class TestModel {
     @Test
     public void test_loadFromFullModel_happyPath() {
         // given
-        String expectedResult = "{\"modelId\":\"testcase\",\"indexes\":[\"canonical_index\"],\"relations\":[\"testcase\"],\"scorers\":[\"testcase\"]}";
+        String expectedResult = "{\"modelId\":\"testcase\",\"index\":\"canonical_index\",\"relations\":[\"testcase\"],\"scores\":\"testcase\"}";
         FullModel fullModel = FullModel.loadFromString(FULL_MODEL_HAPPY);
         // when
         Model model = Model.loadFromFullModel(fullModel);

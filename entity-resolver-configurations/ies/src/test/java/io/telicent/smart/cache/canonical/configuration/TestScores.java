@@ -21,15 +21,15 @@ import io.telicent.smart.cache.canonical.exception.ValidationException;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class TestScorer {
+public class TestScores {
     private static final String JSON = "{\"fieldScores\":{\"field_1\":5.0},\"scorerId\":null}";
     @Test
     public void test_toString_empty() {
         // given
-        Scorer scorer = new Scorer();
+        Scores scores = new Scores();
         String expected = "{\"fieldScores\":{},\"scorerId\":null}";
         // when
-        String result = scorer.toString();
+        String result = scores.toString();
         // then
         Assert.assertEquals(result, expected);
     }
@@ -37,12 +37,12 @@ public class TestScorer {
     @Test
     public void test_toString_happy() {
         // given
-        Scorer scorer = new Scorer();
-        scorer.fieldScores.put("field_1", 5.0);
+        Scores scores = new Scores();
+        scores.fieldScores.put("field_1", 5.0);
 
         String expected = "{\"fieldScores\":{\"field_1\":5.0},\"scorerId\":null}";
         // when
-        String result = scorer.toString();
+        String result = scores.toString();
         // then
         Assert.assertEquals(result, expected);
     }
@@ -50,12 +50,12 @@ public class TestScorer {
     @Test
     public void test_loadFromString_happy() {
         // given
-        Scorer expectedScorer = new Scorer();
-        expectedScorer.fieldScores.put("field_1", 5.0);
+        Scores expectedScores = new Scores();
+        expectedScores.fieldScores.put("field_1", 5.0);
         // when
-        Scorer scorer = Scorer.loadFromString(JSON);
+        Scores scores = Scores.loadFromString(JSON);
         // then
-        Assert.assertEquals(scorer.toString(), expectedScorer.toString());
+        Assert.assertEquals(scores.toString(), expectedScores.toString());
     }
 
     @Test(expectedExceptions = ValidationException.class)
@@ -63,19 +63,19 @@ public class TestScorer {
         // given
         // when
         // then
-        Scorer.loadFromString("{\"badJson\":\"test\"}");
+        Scores.loadFromString("{\"badJson\":\"test\"}");
     }
 
     @Test
     public void test_loadFromNode_happy() {
         // given
-        Scorer expectedScorer = new Scorer();
-        expectedScorer.fieldScores.put("field_1", 5.0);
+        Scores expectedScores = new Scores();
+        expectedScores.fieldScores.put("field_1", 5.0);
         JsonNode node = new TextNode(JSON);
         // when
-        Scorer scorer = Scorer.loadFromNode(node);
+        Scores scores = Scores.loadFromNode(node);
         // then
-        Assert.assertEquals(scorer.toString(), expectedScorer.toString());
+        Assert.assertEquals(scores.toString(), expectedScores.toString());
     }
 
     @Test(expectedExceptions = ValidationException.class)
@@ -83,6 +83,50 @@ public class TestScorer {
         // given
         // when
         // then
-        Scorer.loadFromNode(new TextNode("{\"badJson\":\"test\"}"));
+        Scores.loadFromNode(new TextNode("{\"badJson\":\"test\"}"));
     }
+
+    @Test
+    public void test_getScore_happy() {
+        // given
+        Scores scores = new Scores();
+        scores.fieldScores.put("field_1", 5.0);
+        double expectedScore = 5.0;
+        // when
+        double actualScore = scores.getScore("field_1");
+        // then
+        Assert.assertEquals(actualScore, expectedScore);
+    }
+
+    @Test
+    public void test_getScore_miss() {
+        // given
+        Scores scores = new Scores();
+        scores.fieldScores.put("field_1", 5.0);
+        double expectedScore = 0.0;
+        // when
+        double actualScore = scores.getScore("field_2");
+        // then
+        Assert.assertEquals(actualScore, expectedScore);
+    }
+
+    @Test
+    public void test_hasField_happy() {
+        // given
+        Scores scores = new Scores();
+        scores.fieldScores.put("field_1", 5.0);
+        // when
+        // then
+        Assert.assertTrue(scores.hasField("field_1"));
+    }
+
+    @Test
+    public void test_hasField_miss() {
+        // given
+        Scores scores = new Scores();
+        // when
+        // then
+        Assert.assertFalse(scores.hasField("field_1"));
+    }
+
 }

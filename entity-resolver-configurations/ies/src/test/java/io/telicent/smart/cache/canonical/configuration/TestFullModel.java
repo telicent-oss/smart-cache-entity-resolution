@@ -25,9 +25,7 @@ public class TestFullModel {
     static final String FULL_MODEL_HAPPY = """
             {
                 "modelId": "testcase",
-                "indexes": [
-                    "canonical_index"
-                ],
+                "index": "canonical_index",
                 "relations": [
                     {
                         "resolverId": "testcase",
@@ -38,8 +36,7 @@ public class TestFullModel {
                         "weight": 4
                     }
                 ],
-                "scorers": [
-                    {
+                "scores": {
                         "fieldScores": {
                             "name": 0.9,
                             "village": 0.8,
@@ -49,12 +46,11 @@ public class TestFullModel {
                         },
                         "scorerId": "testcase"
                     }
-                ]
             }""";
     @Test
     public void test_toString_empty() {
         // given
-        String expectedString = "{\"modelId\":null,\"indexes\":[],\"relations\":[],\"scorers\":[]}";
+        String expectedString = "{\"modelId\":null,\"index\":\"\",\"relations\":[],\"scores\":null}";
         FullModel fullModel = new FullModel();
         // when
         String actualString = fullModel.toString();

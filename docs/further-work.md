@@ -26,9 +26,9 @@ Central to the model is the scoring system, a gauge of a field's cardinality and
 
 ### Model
 The model as described is made of the following:
-* **Indices**: Identifiers for canonical indices applicable to the model (refer to corresponding [entry](canonical-config.md#index))
+* **Index**: Identifier of the canonical index to apply the model too (refer to corresponding [entry](canonical-config.md#index))
 * **Relations**: A compilation of relationship IDs for utilization
-* **Scores**: An array of scores for application
+* **Scores**: An array of scores to apply.
 
 When queries get made the required model ID should be passed as a parameter to indicate its use.
 

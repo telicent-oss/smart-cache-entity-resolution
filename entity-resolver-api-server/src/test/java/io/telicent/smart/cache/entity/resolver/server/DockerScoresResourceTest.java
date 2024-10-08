@@ -15,7 +15,7 @@
  */
 package io.telicent.smart.cache.entity.resolver.server;
 
-public class DockerScorerResourceWithNoBackendTest extends AbstractConfigurationResourcesWithNoBackend {
+public class DockerScoresResourceTest extends AbstractConfigurationResourceTests {
     @Override
     public String getType() {
         return "scores";
@@ -23,6 +23,21 @@ public class DockerScorerResourceWithNoBackendTest extends AbstractConfiguration
 
     @Override
     public String getEntry() {
-        return "{\"fieldScores\":{field_1\":5.0,\"field_2\":10.0}}";
+        return "{\"fieldScores\":{\"field_1\":5.0,\"field_2\":10.0}}";
+    }
+
+    @Override
+    public String getExpectedResult() {
+        return "{\"fieldScores\":{\"field_1\":5.0,\"field_2\":10.0},\"scorerId\":\"" + UNIQUE_ID + "\"}";
+    }
+
+    @Override
+    public String getUpdatedEntry() {
+        return "{\"fieldScores\":{\"field_2\":20.0}}";
+    }
+
+    @Override
+    public String getExpectedUpdatedResult() {
+        return "{\"fieldScores\":{\"field_2\":20.0},\"scorerId\":\"" + UNIQUE_ID + "\"}";
     }
 }
