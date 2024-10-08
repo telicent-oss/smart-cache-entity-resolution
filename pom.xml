@@ -101,7 +101,7 @@
         <dependency.logback>1.5.8</dependency.logback>
         <dependency.mockserver>5.15.0</dependency.mockserver>
         <dependency.opensearch-test>2.1.1</dependency.opensearch-test>
-        <dependency.parsson>1.0.5</dependency.parsson>
+        <dependency.parsson>1.1.0</dependency.parsson>
         <dependency.smart-caches>0.23.1</dependency.smart-caches>
         <dependency.snappy>1.1.10.7</dependency.snappy>
         <dependency.wiremock>3.9.1</dependency.wiremock>
