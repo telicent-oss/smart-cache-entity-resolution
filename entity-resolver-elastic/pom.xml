@@ -58,30 +58,17 @@
 
     <!--External-->
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>${dependency.httpclient}</version>
-        </dependency>
-        <dependency>
             <groupId>co.elastic.clients</groupId>
             <artifactId>elasticsearch-java</artifactId>
             <version>${dependency.elastic}</version>
             <exclusions>
+                <!-- CVE-2023-7272 -->
+                <!-- CVE-2023-4043 -->
                 <exclusion>
                     <groupId>org.eclipse.parsson</groupId>
                     <artifactId>parsson</artifactId>
                 </exclusion>
-                <exclusion>
-                    <groupId>org.apache.httpcomponents</groupId>
-                    <artifactId>httpclient</artifactId>
-                </exclusion>
             </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>org.eclipse.parsson</groupId>
-            <artifactId>parsson</artifactId>
-            <version>${dependency.parsson}</version>
         </dependency>
 
         <dependency>
@@ -161,6 +148,15 @@
             <artifactId>wiremock</artifactId>
             <version>${dependency.wiremock}</version>
             <scope>test</scope>
+        </dependency>
+
+        <!-- Temporary / Vulnerability dependencies -->
+        <!-- CVE-2023-7272 -->
+        <!-- CVE-2023-4043 -->
+        <dependency>
+            <groupId>org.eclipse.parsson</groupId>
+            <artifactId>parsson</artifactId>
+            <version>${dependency.parsson}</version>
         </dependency>
 
     </dependencies>
