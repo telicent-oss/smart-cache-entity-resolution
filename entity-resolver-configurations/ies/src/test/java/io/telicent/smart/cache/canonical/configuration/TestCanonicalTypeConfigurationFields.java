@@ -108,7 +108,7 @@ public class TestCanonicalTypeConfigurationFields {
     @Test(dataProvider = "mismatchedTypes")
     public void equals_test_mismatches(String type, List<String> otherTypes) {
         // given
-        String matchingName = RandomStringUtils.secure().nextAscii(6);
+        String matchingName = RandomStringUtils.secure().nextAlphanumeric(6);
 
         CanonicalTypeConfiguration
                 originalConfiguration = CanonicalTypeConfiguration.loadFromString(String.format(JSON_STRING, matchingName, type));

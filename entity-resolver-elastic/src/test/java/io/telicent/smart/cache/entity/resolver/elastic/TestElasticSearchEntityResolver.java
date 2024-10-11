@@ -39,8 +39,8 @@ public class TestElasticSearchEntityResolver {
     @Test
     public void test_getIndexToUse_chooseOverrideIfAvailable() {
         // given
-        String randomDefaultIndex = RandomStringUtils.secure().nextAscii(6);
-        String randomOverrideIndex = RandomStringUtils.secure().nextAscii(6);
+        String randomDefaultIndex = RandomStringUtils.secure().nextAlphanumeric(6);
+        String randomOverrideIndex = RandomStringUtils.secure().nextAlphanumeric(6);
 
         CanonicalTypeConfiguration
                 override = CanonicalTypeConfiguration.loadFromString(HAPPY_STRING);
@@ -60,7 +60,7 @@ public class TestElasticSearchEntityResolver {
     @Test
     public void test_getIndexToUse_nullOverride() {
         // given
-        String randomDefaultIndex = RandomStringUtils.secure().nextAscii(6);
+        String randomDefaultIndex = RandomStringUtils.secure().nextAlphanumeric(6);
         try (ElasticSearchEntityResolver resolver = new ElasticSearchEntityResolver("host", 0, randomDefaultIndex)) {
             // when
             String result = resolver.getIndexToUse(null, null);
@@ -74,7 +74,7 @@ public class TestElasticSearchEntityResolver {
     @Test
     public void test_getIndexToUse_nullOverrideIndex() {
         // given
-        String randomDefaultIndex = RandomStringUtils.secure().nextAscii(6);
+        String randomDefaultIndex = RandomStringUtils.secure().nextAlphanumeric(6);
         CanonicalTypeConfiguration
                 override = CanonicalTypeConfiguration.loadFromString(HAPPY_STRING);
         Assert.assertNotNull(override);
