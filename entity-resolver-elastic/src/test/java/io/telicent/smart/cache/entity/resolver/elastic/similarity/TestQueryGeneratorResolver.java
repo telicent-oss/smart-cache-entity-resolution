@@ -25,7 +25,7 @@ import org.testng.annotations.Test;
 
 public class TestQueryGeneratorResolver {
     private static final String HAPPY_PATH = "src/test/resources/dynamic_config_sample.yml";
-    private static final String RANDOM_ID = RandomStringUtils.random(6);
+    private static final String RANDOM_ID = RandomStringUtils.secure().nextAlphanumeric(6);
 
     private static final String CANONICAL_TYPE = "canonicaltype";
 
