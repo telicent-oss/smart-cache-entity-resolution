@@ -100,7 +100,7 @@
         <dependency.error_prone>2.35.1</dependency.error_prone>
         <dependency.fa-metadata>6.5.1</dependency.fa-metadata>
         <dependency.httpcore>4.4.16</dependency.httpcore>
-        <dependency.jetbrains>26.0.0</dependency.jetbrains>
+        <dependency.jetbrains>26.0.1</dependency.jetbrains>
         <dependency.jetty>12.0.14</dependency.jetty>
         <dependency.jquery>3.7.1</dependency.jquery>
         <dependency.logback>1.5.12</dependency.logback>
