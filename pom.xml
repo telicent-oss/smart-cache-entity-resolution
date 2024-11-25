@@ -97,7 +97,7 @@
         <dependency.commons-codec>1.17.1</dependency.commons-codec>
         <dependency.commons-compress>1.27.1</dependency.commons-compress>
         <dependency.elastic>7.17.16</dependency.elastic>
-        <dependency.error_prone>2.35.1</dependency.error_prone>
+        <dependency.error_prone>2.36.0</dependency.error_prone>
         <dependency.fa-metadata>6.5.1</dependency.fa-metadata>
         <dependency.httpcore>4.4.16</dependency.httpcore>
         <dependency.jetbrains>26.0.1</dependency.jetbrains>
