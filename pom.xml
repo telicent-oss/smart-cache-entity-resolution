@@ -78,7 +78,7 @@
 
         <!-- Plugin Versions -->
         <plugin.clean>3.4.0</plugin.clean>
-        <plugin.cyclonedx>2.9.0</plugin.cyclonedx>
+        <plugin.cyclonedx>2.9.1</plugin.cyclonedx>
         <plugin.editorconfig>0.1.3</plugin.editorconfig>
         <plugin.exec>3.5.0</plugin.exec>
         <plugin.gpg>3.2.7</plugin.gpg>
