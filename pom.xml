@@ -107,7 +107,7 @@
         <dependency.mockserver>5.15.0</dependency.mockserver>
         <dependency.opensearch-test>2.1.2</dependency.opensearch-test>
         <dependency.snappy>1.1.10.7</dependency.snappy>
-        <dependency.wiremock>3.9.2</dependency.wiremock>
+        <dependency.wiremock>3.10.0</dependency.wiremock>
 
         <!-- Temporary / Vulnerability dependencies -->
         <!-- CVE-2023-7272 -->
