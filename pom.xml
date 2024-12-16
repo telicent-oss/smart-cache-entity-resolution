@@ -91,7 +91,7 @@
         <!-- See Smart Cache Core for Parent dependencies -->
         <!-- Internal -->
         <dependency.jwt-auth>0.17.5</dependency.jwt-auth>
-        <dependency.smart-caches>0.24.2</dependency.smart-caches>
+        <dependency.smart-caches>0.25.0</dependency.smart-caches>
 
         <!-- External -->
         <dependency.commons-codec>1.17.1</dependency.commons-codec>
