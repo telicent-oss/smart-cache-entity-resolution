@@ -44,6 +44,12 @@
             <artifactId>slf4j-api</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
     <!-- Test Dependencies -->
     <!-- Internal -->
     <!-- SC Core -->
