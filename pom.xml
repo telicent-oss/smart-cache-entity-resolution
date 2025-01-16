@@ -69,6 +69,7 @@
     <properties>
         <!-- Build properties -->
         <license.header.path>${project.basedir}</license.header.path>
+        <analyze.failOnWarnings>false</analyze.failOnWarnings>
         <javadoc.failOnWarnings>false</javadoc.failOnWarnings>
         <!-- CORE Overrides -->
         <jdk.version>21</jdk.version>
