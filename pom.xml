@@ -5,7 +5,7 @@
     <parent>
         <groupId>io.telicent.smart-caches</groupId>
         <artifactId>parent</artifactId>
-        <version>0.25.1</version>
+        <version>0.26.2</version>
     </parent>
     <groupId>io.telicent.smart-caches.entity-resolution</groupId>
     <artifactId>parent</artifactId>
@@ -91,10 +91,10 @@
         <!-- See Smart Cache Core for Parent dependencies -->
         <!-- Internal -->
         <dependency.jwt-auth>0.17.5</dependency.jwt-auth>
-        <dependency.smart-caches>0.25.1</dependency.smart-caches>
+        <dependency.smart-caches>0.26.2</dependency.smart-caches>
 
         <!-- External -->
-        <dependency.commons-codec>1.17.1</dependency.commons-codec>
+        <dependency.commons-codec>1.17.2</dependency.commons-codec>
         <dependency.commons-compress>1.27.1</dependency.commons-compress>
         <dependency.elastic>7.17.16</dependency.elastic>
         <dependency.error_prone>2.36.0</dependency.error_prone>
