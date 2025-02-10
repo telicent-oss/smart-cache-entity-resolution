@@ -21,7 +21,6 @@ jobs:
       MAIN_BRANCH: main
       MAVEN_DEBUG_ARGS: -Dlogback.configurationFile=logback-debug.xml
       JAVA_VERSION: 21
-      GRYPE_SECURITY_ISSUES_BLOCK_ONLY_IF_FIX_AVAILABLE: true
     secrets: inherit
 
   docker-build:
