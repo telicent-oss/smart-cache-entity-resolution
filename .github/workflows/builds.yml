@@ -42,4 +42,5 @@ jobs:
       USES_MAVEN: true
       JAVA_VERSION: 21
       DOWNLOAD_SBOM: false
+      GRYPE_SECURITY_ISSUES_BLOCK_ONLY_IF_FIX_AVAILABLE: true
     secrets: inherit
