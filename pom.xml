@@ -5,7 +5,7 @@
     <parent>
         <groupId>io.telicent.smart-caches</groupId>
         <artifactId>parent</artifactId>
-        <version>0.27.0</version>
+        <version>0.27.1</version>
     </parent>
     <groupId>io.telicent.smart-caches.entity-resolution</groupId>
     <artifactId>parent</artifactId>
@@ -92,7 +92,7 @@
         <!-- See Smart Cache Core for Parent dependencies -->
         <!-- Internal -->
         <dependency.jwt-auth>0.17.5</dependency.jwt-auth>
-        <dependency.smart-caches>0.27.0</dependency.smart-caches>
+        <dependency.smart-caches>0.27.1</dependency.smart-caches>
 
         <!-- External -->
         <dependency.commons-codec>1.18.0</dependency.commons-codec>
@@ -108,7 +108,7 @@
         <dependency.mockserver>5.15.0</dependency.mockserver>
         <dependency.opensearch-test>2.1.2</dependency.opensearch-test>
         <dependency.snappy>1.1.10.7</dependency.snappy>
-        <dependency.wiremock>3.11.0</dependency.wiremock>
+        <dependency.wiremock>3.12.0</dependency.wiremock>
 
         <!-- Temporary / Vulnerability dependencies -->
         <!-- CVE-2023-7272 -->
