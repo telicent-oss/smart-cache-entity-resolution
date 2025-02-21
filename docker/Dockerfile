@@ -17,7 +17,7 @@
 # syntax=docker/dockerfile:1.7
 
 # Application Base Image
-FROM telicent/telicent-java21:1.1.5 AS app-base
+FROM telicent/telicent-java21:1.2.4 AS app-base
 
 USER root
 
@@ -26,7 +26,6 @@ RUN mkdir -p /app/lib /app/agents /opt/telicent/sbom && \
     chown -R user:user /app /opt/telicent/sbom
 
 WORKDIR /app
-USER user
 
 # Define argument with a default value to prevent build failures
 ARG PROJECT_VERSION
@@ -47,6 +46,8 @@ COPY --chown=user:user \
     entity-resolver-api-server/agents/ \
     /app/lib/
 COPY --chown=user:user entity-resolver-api-server/entity-resolver-api-server.sh /app/
+
+USER user
 
 # Set environment and entrypoint
 ENV CLI_SCRIPT=/app/entity-resolver-api-server.sh
@@ -69,6 +70,8 @@ FROM cli-base AS smart-cache-elastic-can-index
 
 # Copy pipeline script
 COPY --chown=user:user cli-canonical-index/elastic-can-index.sh /app/
+
+USER user
 
 # Set environment and entrypoint
 ENV CLI_SCRIPT=/app/elastic-can-index.sh
