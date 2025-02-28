@@ -19,7 +19,17 @@ SCRIPT_DIR=$(dirname "${BASH_SOURCE[0]}")
 SCRIPT_DIR=$(cd "${SCRIPT_DIR}" && pwd)
 
 export CLASS_NAME="io.telicent.smart.cache.cli.commands.projection.search.elastic.canonical.CanonicalIndexCommand"
-PROJECT_VERSION=${PROJECT_VERSION:-0.1.0-SNAPSHOT}
+
+PROJECT_VERSION=
+if command -v mvn >/dev/null 2>&1; then
+  PROJECT_VERSION=$(cd "${SCRIPT_DIR}" && mvn help:evaluate --batch-mode -Dexpression=project.version 2>/dev/null | grep -v "\[")
+else
+  PROJECT_VERSION=$(grep "<version>" "${SCRIPT_DIR}/pom.xml" 2>/dev/null | head -n 1 | awk -F "[><]" '{print $3}')
+fi
+if [ -z "${PROJECT_VERSION}" ]; then
+  abort "Failed to detect Project Version"
+fi
+
 export JAR_NAME="cli-canonical-index-${PROJECT_VERSION}.jar"
 export OTEL_SERVICE_NAME=elastic-can-index
 

@@ -66,7 +66,7 @@ public class ElasticSearchEntityResolver extends AbstractClientAdaptor implement
      **/
     public static final String DEFAULT_NAME_SIMILARITY_INDEX = "canonical";
 
-    private static final int DELETE_ALL_COUNT = 20;
+    private static final int DELETE_ALL_COUNT = 2;
     private static int deleteCount;
 
     /**
