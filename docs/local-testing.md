@@ -59,3 +59,12 @@ Needs to be run from top level directory
 ```bash
 ./run_er_server.sh <CONFIG_FILE> <INDEX>
 ```
+
+## Query the running server
+To query the server, provide the details in the file and call it in a similar manner.
+
+```bash
+curl -s --location --request PUT 'http://localhost:8081/similarity?maxResults=3' \
+--form 'file=@input.json' | jq
+```
+
