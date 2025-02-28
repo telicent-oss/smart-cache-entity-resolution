@@ -3,7 +3,15 @@
 In order to make things easier for users to test, we have supplied a few scripts to assist.
 
 This includes a docker script for bringing up the necessary supporting applications and scripts for populating kafka,
-migrating from kafka to an Elastic Search index and finally the ER application itself.
+migrating from kafka to an ElasticSearch index and finally the ER application itself.
+
+## Prerequisite
+We need to ensure that the relevant jars are built. 
+
+From the top level directory.
+```bash
+mvn clean install -DskipTests=true
+```
 
 ## Supporting Applications
 This will pull down the relevant images and launch them
