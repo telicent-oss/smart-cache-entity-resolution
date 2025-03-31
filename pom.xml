@@ -86,7 +86,7 @@
         <plugin.resources>3.3.1</plugin.resources>
         <plugin.sonatype>1.7.0</plugin.sonatype>
         <plugin.source>3.3.0</plugin.source>
-        <plugin.surefire>3.5.2</plugin.surefire>
+        <plugin.surefire>3.5.3</plugin.surefire>
 
         <!-- Dependency Versions -->
         <!-- See Smart Cache Core for Parent dependencies -->
