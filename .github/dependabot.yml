@@ -22,3 +22,9 @@
             - "minor"
             - "patch"
       open-pull-requests-limit: 5
+    - package-ecosystem: "docker"
+      directory: "docker/"
+      schedule:
+        interval: "daily"
+        time: "07:00"
+      open-pull-requests-limit: 5
