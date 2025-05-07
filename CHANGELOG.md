@@ -1,6 +1,10 @@
-# 0.6.4
-# 0.6.3
+# 0.6.5
+- Build improvements
 
+# 0.6.4
+- Build improvements
+
+# 0.6.3
 *  [Minor] Adding change log entries [Details](https://github.com/Telicent-io/smart-cache-entity-resolution/commits/76eb1d04abfedd8bfbca36e87bf9f88fe19d25e4)
 
 # 0.6.2
