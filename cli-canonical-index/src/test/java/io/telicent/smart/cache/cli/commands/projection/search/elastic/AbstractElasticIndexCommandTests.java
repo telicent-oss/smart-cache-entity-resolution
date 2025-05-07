@@ -38,6 +38,7 @@ import io.telicent.smart.cache.search.model.Document;
 import io.telicent.smart.cache.search.model.SearchResults;
 import io.telicent.smart.cache.search.options.SearchOptions;
 import io.telicent.smart.cache.sources.Event;
+import io.telicent.smart.cache.sources.EventHeader;
 import io.telicent.smart.cache.sources.Header;
 import io.telicent.smart.cache.sources.file.FileEventFormatProvider;
 import io.telicent.smart.cache.sources.file.FileEventSource;
@@ -325,7 +326,7 @@ public class AbstractElasticIndexCommandTests extends AbstractCommandTests {
                                                           .build()) {
             for (String file : testFiles) {
                 RdfPayload payload;
-                List<Header> headers = new ArrayList<>();
+                List<EventHeader> headers = new ArrayList<>();
                 if (StringUtils.endsWith(file, ".patch")) {
                     payload = RdfPayload.of(RDFPatchOps.read(file));
                     headers.add(new Header(HttpHeaders.CONTENT_TYPE, WebContent.contentTypePatch));
