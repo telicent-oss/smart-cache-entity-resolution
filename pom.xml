@@ -405,6 +405,7 @@
                         <exclude>.vscode/*</exclude>
                         <!-- Trivy Cache -->
                         <exclude>.trivy/**</exclude>
+                        <exclude>maven-trivy-gating-report.txt</exclude>
                     </excludes>
                 </configuration>
             </plugin>
