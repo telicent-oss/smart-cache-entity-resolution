@@ -369,6 +369,7 @@
                                 <exclude>.gitattributes</exclude>
                                 <!-- Trivy Cache -->
                                 <exclude>.trivy/**</exclude>
+                                <exclude>maven-trivy-gating-report.txt</exclude>
                             </excludes>
                         </licenseSet>
                     </licenseSets>
