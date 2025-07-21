@@ -103,7 +103,7 @@
         <dependency.logback>1.5.18</dependency.logback>
         <dependency.mockserver>5.15.0</dependency.mockserver>
         <dependency.opensearch-test>2.1.3</dependency.opensearch-test>
-        <dependency.snappy>1.1.10.7</dependency.snappy>
+        <dependency.snappy>1.1.10.8</dependency.snappy>
         <dependency.wiremock>3.13.1</dependency.wiremock>
 
         <!-- Temporary / Vulnerability dependencies -->
