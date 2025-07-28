@@ -87,14 +87,14 @@
         <!-- Dependency Versions -->
         <!-- See Smart Cache Core for Parent dependencies -->
         <!-- Internal -->
-        <dependency.jwt-auth>1.0.3</dependency.jwt-auth>
+        <dependency.jwt-auth>1.0.4</dependency.jwt-auth>
         <dependency.smart-caches>0.29.2</dependency.smart-caches>
 
         <!-- External -->
-        <dependency.commons-codec>1.18.0</dependency.commons-codec>
+        <dependency.commons-codec>1.19.0</dependency.commons-codec>
         <dependency.commons-compress>1.27.1</dependency.commons-compress>
         <dependency.elastic>7.17.16</dependency.elastic>
-        <dependency.error_prone>2.40.0</dependency.error_prone>
+        <dependency.error_prone>2.41.0</dependency.error_prone>
         <dependency.fa-metadata>6.5.1</dependency.fa-metadata>
         <dependency.httpcore>4.4.16</dependency.httpcore>
         <dependency.jetbrains>26.0.2</dependency.jetbrains>
@@ -102,7 +102,7 @@
         <dependency.jquery>3.7.1</dependency.jquery>
         <dependency.logback>1.5.18</dependency.logback>
         <dependency.mockserver>5.15.0</dependency.mockserver>
-        <dependency.opensearch-test>2.1.3</dependency.opensearch-test>
+        <dependency.opensearch-test>2.1.4</dependency.opensearch-test>
         <dependency.snappy>1.1.10.8</dependency.snappy>
         <dependency.wiremock>3.13.1</dependency.wiremock>
 
