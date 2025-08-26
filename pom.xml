@@ -87,7 +87,7 @@
         <!-- Dependency Versions -->
         <!-- See Smart Cache Core for Parent dependencies -->
         <!-- Internal -->
-        <dependency.jwt-auth>1.0.4</dependency.jwt-auth>
+        <dependency.jwt-auth>1.0.5</dependency.jwt-auth>
         <dependency.smart-caches>0.29.4</dependency.smart-caches>
 
         <!-- External -->
