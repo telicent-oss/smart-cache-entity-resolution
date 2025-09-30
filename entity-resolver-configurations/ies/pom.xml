@@ -26,7 +26,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
-            <version>${dependency.jackson}</version>
+            <version>${dependency.jackson-annotations}</version>
         </dependency>
 
         <dependency>
