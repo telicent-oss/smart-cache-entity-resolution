@@ -27,7 +27,7 @@ import static io.telicent.smart.cache.canonical.configuration.TestFullModel.FULL
 
 public class TestModel {
 
-    public static final String JSON = "{\"modelId\":\"test_id\",\"index\":\"canonical_index\",\"relations\":[\"resolver-1\",\"resolver-2\",\"resolver-3\"],\"scores\":\"score-1\"}";
+    public static final String JSON = "{\"id\":\"test_id\",\"index\":\"canonical_index\",\"relations\":[\"resolver-1\",\"resolver-2\",\"resolver-3\"],\"scores\":\"score-1\"}";
 
     private Model getExpectedModel() {
         Model expectedModel = new Model();
@@ -90,12 +90,14 @@ public class TestModel {
     @Test
     public void test_loadFromFullModel_happyPath() {
         // given
-        String expectedResult = "{\"modelId\":\"testcase\",\"index\":\"canonical_index\",\"relations\":[\"testcase\"],\"scores\":\"testcase\"}";
         FullModel fullModel = FullModel.loadFromString(FULL_MODEL_HAPPY);
         // when
         Model model = Model.loadFromFullModel(fullModel);
         // then
         Assert.assertNotNull(model);
-        Assert.assertEquals(expectedResult, model.toString());
+        Assert.assertEquals(model.modelId, "testcase");
+        Assert.assertEquals(model.index, "canonical_index");
+        Assert.assertEquals(model.relations, List.of("testcase"));
+        Assert.assertEquals(model.scores, "testcase");
     }
 }

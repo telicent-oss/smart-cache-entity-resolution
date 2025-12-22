@@ -15,6 +15,8 @@
  */
 package io.telicent.smart.cache.canonical.configuration;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.telicent.smart.cache.canonical.utility.Mapper;
 import org.slf4j.Logger;
@@ -38,6 +40,8 @@ public class Scores {
     /**
      * Unique ID of scorer
      */
+    @JsonProperty("id")
+    @JsonAlias("scorerId")
     public String scorerId;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Scores.class);

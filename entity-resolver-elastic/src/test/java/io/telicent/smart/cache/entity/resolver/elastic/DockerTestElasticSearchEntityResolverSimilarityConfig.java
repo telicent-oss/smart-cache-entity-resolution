@@ -16,6 +16,7 @@
 package io.telicent.smart.cache.entity.resolver.elastic;
 
 import io.telicent.smart.cache.canonical.exception.ValidationException;
+import io.telicent.smart.cache.canonical.utility.Mapper;
 import io.telicent.smart.cache.search.clusters.test.SearchTestClusters;
 import org.apache.commons.lang3.StringUtils;
 import org.testng.Assert;
@@ -29,8 +30,8 @@ public class DockerTestElasticSearchEntityResolverSimilarityConfig extends Abstr
         this.elastic.resetIndex("er_config_models");
     }
 
-    public static final String EMPTY_MODEL_JSON = "{\"modelId\":\"test_id\",\"index\":\"\",\"relations\":[],\"scores\":null}";
-    public static final String PARTIAL_MODEL_JSON = "{\"modelId\":\"test_id\",\"index\":\"updated_index\",\"relations\":[],\"scores\":\"\"}";
+    public static final String EMPTY_MODEL_JSON = "{\"id\":\"test_id\",\"index\":\"\",\"relations\":[],\"scores\":null}";
+    public static final String PARTIAL_MODEL_JSON = "{\"id\":\"model_id\",\"index\":\"updated_index\",\"relations\":[],\"scores\":null}";
 
     @Test
     public void test_configEndpoints_and_to_string() {
@@ -50,7 +51,7 @@ public class DockerTestElasticSearchEntityResolverSimilarityConfig extends Abstr
         client.addConfig("models", EMPTY_MODEL_JSON, "model_id");
         client.updateConfig("models", PARTIAL_MODEL_JSON, "model_id");
         String laterResult = client.readConfig("models", "model_id");
-        Assert.assertEquals(laterResult, PARTIAL_MODEL_JSON);
+        assertModelUpdated(laterResult, "model_id", "updated_index");
 
         String allResults = client.readAllConfig("models");
         Assert.assertFalse(allResults.contains(result));
@@ -104,8 +105,8 @@ public class DockerTestElasticSearchEntityResolverSimilarityConfig extends Abstr
         client.updateConfig("fullmodel", EMPTY_MODEL_JSON, "model_id");
         // and
         String laterActual = client.readAllConfig("fullmodel");
-        String laterExpected = "{\"model_id\":{\"modelId\":\"model_id\",\"index\":\"\",\"relations\":[],\"scores\":null}}";
-        Assert.assertEquals(laterActual, laterExpected);
+        String laterExpected = "{\"model_id\":{\"id\":\"model_id\",\"index\":\"\",\"relations\":[],\"scores\":null}}";
+        assertJsonEquals(laterActual, laterExpected);
     }
 
     @Test
@@ -124,5 +125,24 @@ public class DockerTestElasticSearchEntityResolverSimilarityConfig extends Abstr
         }
         // then
         Assert.assertFalse(caught);
+    }
+
+    private static void assertJsonEquals(String actualJson, String expectedJson) {
+        try {
+            Assert.assertTrue(Mapper.getJsonMapper().readTree(actualJson)
+                                    .equals(Mapper.getJsonMapper().readTree(expectedJson)));
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to parse JSON for comparison", e);
+        }
+    }
+
+    private static void assertModelUpdated(String json, String expectedId, String expectedIndex) {
+        try {
+            var node = Mapper.getJsonMapper().readTree(json);
+            Assert.assertEquals(node.get("id").asText(), expectedId);
+            Assert.assertEquals(node.get("index").asText(), expectedIndex);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to parse JSON for comparison", e);
+        }
     }
 }

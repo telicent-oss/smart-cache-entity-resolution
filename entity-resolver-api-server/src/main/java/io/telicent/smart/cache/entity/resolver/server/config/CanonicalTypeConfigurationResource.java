@@ -22,11 +22,10 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.glassfish.jersey.media.multipart.FormDataParam;
 /**
  * REST Endpoint for controlling Canonical Type Configuration
  */
-@Path(CanonicalTypeConfiguration.TYPE)
+@Path("/config/" + CanonicalTypeConfiguration.TYPE)
 public class CanonicalTypeConfigurationResource extends AbstractConfigurationResource {
 
     /**
@@ -76,10 +75,10 @@ public class CanonicalTypeConfigurationResource extends AbstractConfigurationRes
      */
     @POST
     @Path("/{ct_id}")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createCTByID(@PathParam("ct_id") @NotBlank final String id,
-                                        @FormDataParam("entry") @DefaultValue("{}") final String entry,
+                                        final String entry,
                                         @Context final ServletContext servletContext) {
         return createById(id, CanonicalTypeConfiguration.TYPE, entry, servletContext);
     }
@@ -94,10 +93,10 @@ public class CanonicalTypeConfigurationResource extends AbstractConfigurationRes
      */
     @PUT
     @Path("/{ct_id}")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateFullModelByID(@PathParam("ct_id") @NotBlank final String id,
-                                        @FormDataParam("entry") @DefaultValue("{}") final String entry,
+                                        final String entry,
                                         @Context final ServletContext servletContext) {
         return updateById(id, CanonicalTypeConfiguration.TYPE, entry, servletContext);
     }

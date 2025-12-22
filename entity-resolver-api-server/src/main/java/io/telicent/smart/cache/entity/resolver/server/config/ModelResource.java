@@ -22,12 +22,11 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.glassfish.jersey.media.multipart.FormDataParam;
 
 /**
  * REST Endpoints for handling Model config
  */
-@Path(Model.TYPE)
+@Path("/config/" + Model.TYPE)
 public class ModelResource extends AbstractConfigurationResource {
     /**
      * Get the configuration
@@ -76,11 +75,15 @@ public class ModelResource extends AbstractConfigurationResource {
      */
     @POST
     @Path("/{model_id}")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createModelByID(@PathParam("model_id") @NotBlank final String id,
-                                    @FormDataParam("entry") @DefaultValue("{}") final String entry,
+                                    final String entry,
                                     @Context final ServletContext servletContext) {
+        Response validation = validateIdMatchesPath(id, entry, "id", "modelId");
+        if (validation != null) {
+            return validation;
+        }
         return createById(id, Model.TYPE, entry, servletContext);
     }
 
@@ -94,11 +97,15 @@ public class ModelResource extends AbstractConfigurationResource {
      */
     @PUT
     @Path("/{model_id}")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateModelByID(@PathParam("model_id") @NotBlank final String id,
-                                    @FormDataParam("entry") @DefaultValue("{}") final String entry,
+                                    final String entry,
                                     @Context final ServletContext servletContext) {
+        Response validation = validateIdMatchesPath(id, entry, "id", "modelId");
+        if (validation != null) {
+            return validation;
+        }
         return updateById(id, Model.TYPE, entry, servletContext);
     }
 }

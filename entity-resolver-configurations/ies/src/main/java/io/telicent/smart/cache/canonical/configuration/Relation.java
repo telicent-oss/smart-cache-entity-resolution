@@ -15,6 +15,8 @@
  */
 package io.telicent.smart.cache.canonical.configuration;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.telicent.smart.cache.canonical.utility.Mapper;
 import lombok.Getter;
@@ -35,6 +37,8 @@ public class Relation {
     /**
      * Unique ID of relations
      */
+    @JsonProperty("id")
+    @JsonAlias("resolverId")
     public String resolverId;
 
     /**

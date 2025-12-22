@@ -23,10 +23,6 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.glassfish.jersey.media.multipart.FormDataBodyPart;
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-import org.glassfish.jersey.media.multipart.FormDataMultiPart;
-import org.glassfish.jersey.media.multipart.MultiPart;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -56,21 +52,19 @@ abstract class AbstractConfigurationResourcesWithNoBackend extends AbstractEntit
 
     public abstract String getType();
 
+    public String getPathType() {
+        return getType();
+    }
+
     public abstract String getEntry();
 
     @Test
     public void test_putCall_noBackend() {
-        FormDataBodyPart bodyPart = new FormDataBodyPart("entry",
-                                                         getEntry(),
-                                                         MediaType.TEXT_PLAIN_TYPE);
-        bodyPart.setFormDataContentDisposition(
-                FormDataContentDisposition.name("entry").fileName("data.ndjson").build());
-        try (FormDataMultiPart part = new FormDataMultiPart()) {
-            try (MultiPart multiPart = part.bodyPart(bodyPart)) {
-                WebTarget target = forApiServer("/" + getType() + "/" + UNIQUE_ID);
-                try (Response response = target.request().put(Entity.entity(multiPart, multiPart.getMediaType()))) {
-                    Assert.assertEquals(response.getStatus(), Response.Status.SERVICE_UNAVAILABLE.getStatusCode());
-                }
+        try {
+            WebTarget target = forApiServer("/config/" + getPathType() + "/" + UNIQUE_ID);
+            try (Response response = target.request()
+                                           .put(Entity.entity(getEntry(), MediaType.APPLICATION_JSON_TYPE))) {
+                Assert.assertEquals(response.getStatus(), Response.Status.SERVICE_UNAVAILABLE.getStatusCode());
             }
         } catch (Throwable t) {
             Assert.assertNotNull(t, "Test failed, exception should not be thrown");
@@ -79,17 +73,11 @@ abstract class AbstractConfigurationResourcesWithNoBackend extends AbstractEntit
 
     @Test
     public void test_postCall_noBackend() {
-        FormDataBodyPart bodyPart = new FormDataBodyPart("entry",
-                                                         getEntry(),
-                                                         MediaType.TEXT_PLAIN_TYPE);
-        bodyPart.setFormDataContentDisposition(
-                FormDataContentDisposition.name("entry").fileName("data.ndjson").build());
-        try (FormDataMultiPart part = new FormDataMultiPart()) {
-            try (MultiPart multiPart = part.bodyPart(bodyPart)) {
-                WebTarget target = forApiServer("/" + getType() + "/" + UNIQUE_ID);
-                try (Response response = target.request().post(Entity.entity(multiPart, multiPart.getMediaType()))) {
-                    Assert.assertEquals(response.getStatus(), Response.Status.SERVICE_UNAVAILABLE.getStatusCode());
-                }
+        try {
+            WebTarget target = forApiServer("/config/" + getPathType() + "/" + UNIQUE_ID);
+            try (Response response = target.request()
+                                           .post(Entity.entity(getEntry(), MediaType.APPLICATION_JSON_TYPE))) {
+                Assert.assertEquals(response.getStatus(), Response.Status.SERVICE_UNAVAILABLE.getStatusCode());
             }
         } catch (Throwable t) {
             Assert.assertNotNull(t, "Test failed, exception should not be thrown");
@@ -98,7 +86,7 @@ abstract class AbstractConfigurationResourcesWithNoBackend extends AbstractEntit
 
     @Test
     public void test_getCall_noBackend() {
-        WebTarget target = forApiServer("/" + getType() + "/" + UNIQUE_ID);
+        WebTarget target = forApiServer("/config/" + getPathType() + "/" + UNIQUE_ID);
         try (Response response = target.request().get()) {
             Assert.assertEquals(response.getStatus(), Response.Status.SERVICE_UNAVAILABLE.getStatusCode());
         } catch (Throwable t) {
@@ -108,7 +96,7 @@ abstract class AbstractConfigurationResourcesWithNoBackend extends AbstractEntit
 
     @Test
     public void test_getAllCall_noBackend() {
-        WebTarget target = forApiServer("/" + getType() + "/");
+        WebTarget target = forApiServer("/config/" + getPathType() + "/");
         try (Response response = target.request().get()) {
             Assert.assertEquals(response.getStatus(), Response.Status.SERVICE_UNAVAILABLE.getStatusCode());
         } catch (Throwable t) {
@@ -118,7 +106,7 @@ abstract class AbstractConfigurationResourcesWithNoBackend extends AbstractEntit
 
     @Test
     public void test_deleteCall_noBackend() {
-        WebTarget target = forApiServer("/" + getType() + "/" + UNIQUE_ID);
+        WebTarget target = forApiServer("/config/" + getPathType() + "/" + UNIQUE_ID);
         try (Response response = target.request().delete()) {
             Assert.assertEquals(response.getStatus(), Response.Status.SERVICE_UNAVAILABLE.getStatusCode());
         } catch (Throwable t) {
@@ -128,7 +116,7 @@ abstract class AbstractConfigurationResourcesWithNoBackend extends AbstractEntit
 
     @Test
     public void test_validateCall_noEntry_noBackend() {
-        WebTarget target = forApiServer("validate/" + getType() + "/" + UNIQUE_ID + "/test-index");
+        WebTarget target = forApiServer("/config/validate/" + getType() + "/" + UNIQUE_ID + "/test-index");
         try (Response response = target.request().get()) {
             Assert.assertEquals(response.getStatus(), Response.Status.SERVICE_UNAVAILABLE.getStatusCode());
         } catch (Throwable t) {

@@ -18,11 +18,16 @@ package io.telicent.smart.cache.entity.resolver.server;
 public class DockerFullModelResourceWithNoBackendTest extends AbstractConfigurationResourcesWithNoBackend {
     @Override
     public String getType() {
-        return "fullmodels";
+        return "fullmodel";
+    }
+
+    @Override
+    public String getPathType() {
+        return "full-models";
     }
 
     @Override
     public String getEntry() {
-        return "{\"modelId\":\"test_id\",\"indexes\":[],\"relations\":[],\"scorers\":[]}";
+        return "{\"index\":\"\",\"relations\":[],\"scores\":null}";
     }
 }

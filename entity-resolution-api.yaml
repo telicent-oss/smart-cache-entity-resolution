@@ -313,6 +313,88 @@ components:
         type: string
 
   schemas:
+    Model:
+      type: object
+      required:
+        - id
+        - index
+        - relations
+        - scores
+      properties:
+        id:
+          type: string
+        index:
+          type: string
+        relations:
+          type: array
+          items:
+            type: string
+        scores:
+          type: string
+          nullable: true
+
+    Relation:
+      type: object
+      required:
+        - id
+        - fields
+        - weight
+      properties:
+        id:
+          type: string
+        fields:
+          type: array
+          items:
+            type: string
+        weight:
+          type: number
+
+    Scores:
+      type: object
+      required:
+        - id
+        - fieldScores
+      properties:
+        id:
+          type: string
+        fieldScores:
+          type: object
+          additionalProperties:
+            type: number
+
+    FullModel:
+      type: object
+      required:
+        - id
+        - index
+        - relations
+        - scores
+      properties:
+        id:
+          type: string
+        index:
+          type: string
+        relations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Relation'
+        scores:
+          $ref: '#/components/schemas/Scores'
+          nullable: true
+
+    ValidationResult:
+      type: object
+      additionalProperties: true
+      properties:
+        indexMapping:
+          type: object
+          additionalProperties:
+            type: string
+        validation:
+          type: object
+          additionalProperties:
+            type: string
+
     SimilarityResults:
       type: object
       properties:
@@ -622,6 +704,465 @@ components:
         $ref: '#/components/schemas/VersionInfoEntry'
 
 paths:
+  /config/models:
+    get:
+      summary: List models
+      operationId: listModels
+      description: Returns all model configurations keyed by ID.
+      responses:
+        200:
+          description: Model map
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/Model'
+    post:
+      summary: Create model
+      operationId: createModel
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model'
+      responses:
+        200:
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: string
+
+  /config/models/{model_id}:
+    get:
+      summary: Get model
+      operationId: getModel
+      parameters:
+        - name: model_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Model
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model'
+    put:
+      summary: Update model
+      operationId: updateModel
+      parameters:
+        - name: model_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model'
+      responses:
+        200:
+          description: Updated
+          content:
+            application/json:
+              schema:
+                type: string
+    delete:
+      summary: Delete model
+      operationId: deleteModel
+      parameters:
+        - name: model_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                type: string
+
+  /config/full-models:
+    get:
+      summary: List full models
+      operationId: listFullModels
+      description: Returns all full models keyed by ID.
+      responses:
+        200:
+          description: Full model map
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/FullModel'
+    post:
+      summary: Create full model
+      operationId: createFullModel
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FullModel'
+      responses:
+        200:
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: string
+
+  /config/full-models/{model_id}:
+    get:
+      summary: Get full model
+      operationId: getFullModel
+      parameters:
+        - name: model_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Full model
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FullModel'
+    put:
+      summary: Update full model
+      operationId: updateFullModel
+      parameters:
+        - name: model_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FullModel'
+      responses:
+        200:
+          description: Updated
+          content:
+            application/json:
+              schema:
+                type: string
+    delete:
+      summary: Delete full model
+      operationId: deleteFullModel
+      parameters:
+        - name: model_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                type: string
+
+  /config/relations:
+    get:
+      summary: List relations
+      operationId: listRelations
+      responses:
+        200:
+          description: Relation map
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/Relation'
+    post:
+      summary: Create relation
+      operationId: createRelation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Relation'
+      responses:
+        200:
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: string
+
+  /config/relations/{relation_id}:
+    get:
+      summary: Get relation
+      operationId: getRelation
+      parameters:
+        - name: relation_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Relation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Relation'
+    put:
+      summary: Update relation
+      operationId: updateRelation
+      parameters:
+        - name: relation_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Relation'
+      responses:
+        200:
+          description: Updated
+          content:
+            application/json:
+              schema:
+                type: string
+    delete:
+      summary: Delete relation
+      operationId: deleteRelation
+      parameters:
+        - name: relation_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                type: string
+
+  /config/scores:
+    get:
+      summary: List scores
+      operationId: listScores
+      responses:
+        200:
+          description: Score map
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/Scores'
+    post:
+      summary: Create scores
+      operationId: createScores
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Scores'
+      responses:
+        200:
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: string
+
+  /config/scores/{score_id}:
+    get:
+      summary: Get scores
+      operationId: getScores
+      parameters:
+        - name: score_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Scores
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Scores'
+    put:
+      summary: Update scores
+      operationId: updateScores
+      parameters:
+        - name: score_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Scores'
+      responses:
+        200:
+          description: Updated
+          content:
+            application/json:
+              schema:
+                type: string
+    delete:
+      summary: Delete scores
+      operationId: deleteScores
+      parameters:
+        - name: score_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                type: string
+
+  /config/canonicaltype:
+    get:
+      summary: List canonical type configurations
+      operationId: listCanonicalTypes
+      responses:
+        200:
+          description: Canonical type map
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+    post:
+      summary: Create canonical type configuration
+      operationId: createCanonicalType
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        200:
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: string
+
+  /config/canonicaltype/{ct_id}:
+    get:
+      summary: Get canonical type configuration
+      operationId: getCanonicalType
+      parameters:
+        - name: ct_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Canonical type
+          content:
+            application/json:
+              schema:
+                type: object
+    put:
+      summary: Update canonical type configuration
+      operationId: updateCanonicalType
+      parameters:
+        - name: ct_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        200:
+          description: Updated
+          content:
+            application/json:
+              schema:
+                type: string
+    delete:
+      summary: Delete canonical type configuration
+      operationId: deleteCanonicalType
+      parameters:
+        - name: ct_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                type: string
+
+  /config/validate/{entry_type}/{entry_id}/{index_id}:
+    get:
+      summary: Validate configuration against an index mapping
+      operationId: validateConfiguration
+      parameters:
+        - name: entry_type
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: entry_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: index_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Validation results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationResult'
+
   /similarity:
     put:
       summary: Get Similar Entities

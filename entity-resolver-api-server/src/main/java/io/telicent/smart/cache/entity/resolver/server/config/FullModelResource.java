@@ -22,12 +22,11 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.glassfish.jersey.media.multipart.FormDataParam;
 
 /**
  * REST Endpoints for handling the full details of Model config
  */
-@Path(FullModel.TYPE)
+@Path("/config/full-models")
 public class FullModelResource extends AbstractConfigurationResource {
     /**
      * Get the configuration
@@ -37,8 +36,8 @@ public class FullModelResource extends AbstractConfigurationResource {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/{FullModel_id}")
-    public Response getFullModelByID(@PathParam("FullModel_id") final String id,
+    @Path("/{model_id}")
+    public Response getFullModelByID(@PathParam("model_id") final String id,
                                  @Context final ServletContext servletContext) {
         return getById(id, FullModel.TYPE, servletContext);
     }
@@ -61,8 +60,8 @@ public class FullModelResource extends AbstractConfigurationResource {
      * @return a string message saying if config was deleted
      */
     @DELETE
-    @Path("/{FullModel_id}")
-    public Response deleteFullModelByID(@PathParam("FullModel_id") @NotBlank final String id,
+    @Path("/{model_id}")
+    public Response deleteFullModelByID(@PathParam("model_id") @NotBlank final String id,
                                     @Context final ServletContext servletContext) {
         return deleteById(id, FullModel.TYPE, servletContext);
     }
@@ -75,11 +74,11 @@ public class FullModelResource extends AbstractConfigurationResource {
      * @return a string message indicating success
      */
     @POST
-    @Path("/{FullModel_id}")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Path("/{model_id}")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createFullModelByID(@PathParam("FullModel_id") @NotBlank final String id,
-                                    @FormDataParam("entry") @DefaultValue("{}") final String entry,
+    public Response createFullModelByID(@PathParam("model_id") @NotBlank final String id,
+                                    final String entry,
                                     @Context final ServletContext servletContext) {
         return createById(id, FullModel.TYPE, entry, servletContext);
     }
@@ -93,11 +92,11 @@ public class FullModelResource extends AbstractConfigurationResource {
      * Note: currently is the same as POST
      */
     @PUT
-    @Path("/{FullModel_id}")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Path("/{model_id}")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateFullModelByID(@PathParam("FullModel_id") @NotBlank final String id,
-                                    @FormDataParam("entry") @DefaultValue("{}") final String entry,
+    public Response updateFullModelByID(@PathParam("model_id") @NotBlank final String id,
+                                    final String entry,
                                     @Context final ServletContext servletContext) {
         return updateById(id, FullModel.TYPE, entry, servletContext);
     }

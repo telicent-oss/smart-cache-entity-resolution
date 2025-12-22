@@ -15,6 +15,9 @@
  */
 package io.telicent.smart.cache.entity.resolver.server.config;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import io.telicent.smart.cache.canonical.utility.Mapper;
 import io.telicent.smart.cache.canonical.exception.IndexException;
 import io.telicent.smart.cache.canonical.exception.ValidationException;
 import io.telicent.smart.cache.entity.resolver.EntityResolver;
@@ -24,6 +27,50 @@ import jakarta.servlet.ServletContext;
 import jakarta.ws.rs.core.Response;
 
 abstract class AbstractConfigurationResource extends AbstractEntityResolutionResource {
+
+    protected Response validateIdMatchesPath(String id, String entry, String... fieldNames) {
+        if (entry == null || entry.isBlank()) {
+            return badRequest("Request body must be valid JSON containing an id that matches the path parameter.");
+        }
+
+        final JsonNode node;
+        try {
+            node = Mapper.getJsonMapper().readTree(entry);
+        } catch (JsonProcessingException e) {
+            return badRequest("Request body must be valid JSON containing an id that matches the path parameter.");
+        }
+
+        if (!node.isObject()) {
+            return badRequest("Request body must be a JSON object containing an id that matches the path parameter.");
+        }
+
+        String bodyId = null;
+        for (String fieldName : fieldNames) {
+            JsonNode idNode = node.get(fieldName);
+            if (idNode == null || idNode.isNull()) {
+                continue;
+            }
+            String candidate = idNode.asText();
+            if (candidate == null || candidate.isBlank()) {
+                continue;
+            }
+            if (bodyId == null) {
+                bodyId = candidate;
+            } else if (!bodyId.equals(candidate)) {
+                return badRequest("Request body contains conflicting id fields.");
+            }
+        }
+
+        if (bodyId == null || bodyId.isBlank()) {
+            return badRequest("Request body must include an id that matches the path parameter.");
+        }
+
+        if (!id.equals(bodyId)) {
+            return badRequest("Request body id does not match the path parameter.");
+        }
+
+        return null;
+    }
 
     /**
      * Gets a JSON representation of all instances of given config, empty if missing
@@ -154,6 +201,14 @@ abstract class AbstractConfigurationResource extends AbstractEntityResolutionRes
                            null,
                            Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
                            e.getMessage(),
+                           null).toResponse();
+    }
+
+    private Response badRequest(String detail) {
+        return new Problem("InvalidRequestParameters",
+                           null,
+                           Response.Status.BAD_REQUEST.getStatusCode(),
+                           detail,
                            null).toResponse();
     }
 }
