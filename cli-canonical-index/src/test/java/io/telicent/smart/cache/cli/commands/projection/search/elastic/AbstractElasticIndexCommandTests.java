@@ -169,7 +169,7 @@ public class AbstractElasticIndexCommandTests extends AbstractCommandTests {
 
     @AfterMethod
     @Override
-    public void testCleanup() throws InterruptedException {
+    public void testCleanup() {
         super.testCleanup();
 
         // Reset Kafka

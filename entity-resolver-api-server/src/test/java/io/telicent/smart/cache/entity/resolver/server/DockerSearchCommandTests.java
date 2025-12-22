@@ -79,7 +79,7 @@ public class DockerSearchCommandTests extends AbstractCommandTests {
 
     @AfterMethod
     @Override
-    public void testCleanup() throws InterruptedException {
+    public void testCleanup() {
         Configurator.reset();
         this.kafka.resetTestTopic();
         super.testCleanup();

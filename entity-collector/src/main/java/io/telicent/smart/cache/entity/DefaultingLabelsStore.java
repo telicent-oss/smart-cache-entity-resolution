@@ -15,14 +15,17 @@
  */
 package io.telicent.smart.cache.entity;
 
+import io.telicent.jena.abac.labels.Label;
 import io.telicent.jena.abac.labels.LabelsStore;
 import lombok.Generated;
 import lombok.experimental.Delegate;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.graph.Triple;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * A decorator for {@link LabelsStore} that returns fallback default labels
@@ -30,7 +33,7 @@ import java.util.Objects;
 @Generated
 public class DefaultingLabelsStore implements LabelsStore {
     private final @Delegate LabelsStore store;
-    private final List<String> defaultLabels;
+    private final List<Label> defaultLabels;
 
     /**
      * Creates a new labels store with fallback default labels
@@ -44,12 +47,17 @@ public class DefaultingLabelsStore implements LabelsStore {
             throw new IllegalArgumentException("Default Labels cannot be blank");
         }
         this.store = labels;
-        this.defaultLabels = List.of(defaultLabels);
+
+        this.defaultLabels = Arrays.stream(defaultLabels.split(","))
+                                   .map(String::trim)
+                                   .filter(s -> !s.isEmpty())
+                                   .map(Label::fromText)
+                                           .collect(Collectors.toList());
     }
 
     @Override
-    public List<String> labelsForTriples(Triple triple) {
-        List<String> ls = this.store.labelsForTriples(triple);
+    public List<Label> labelsForTriples(Triple triple) {
+        List<Label> ls = this.store.labelsForTriples(triple);
         return ls.isEmpty() ? this.defaultLabels : ls;
     }
 }
