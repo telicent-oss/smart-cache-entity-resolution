@@ -15,6 +15,7 @@
  */
 package io.telicent.smart.cache.entity;
 
+import io.telicent.jena.abac.labels.Label;
 import io.telicent.jena.abac.labels.Labels;
 import io.telicent.jena.abac.labels.LabelsStore;
 import io.telicent.smart.cache.entity.vocabulary.Rdf;
@@ -31,7 +32,9 @@ import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TestDefaultingLabelsStore extends AbstractEntityCollectorTests {
 
@@ -68,11 +71,11 @@ public class TestDefaultingLabelsStore extends AbstractEntityCollectorTests {
         Triple t = Triple.create(NodeFactory.createURI(FRED_URI), Rdf.TYPE, PERSON_TYPE);
         verifyLabels(store, t, List.of("default"));
 
-        store.add(t, "foo");
+        store.add(t, Label.fromText("foo"));
 
         verifyLabels(store, t, List.of("foo"));
 
-        store.add(t, List.of("foo", "bar"));
+        store.add(t, List.of(Label.fromText("foo"), Label.fromText("bar")));
         verifyLabels(store, t, List.of("bar", "foo"));
     }
 
@@ -96,10 +99,10 @@ public class TestDefaultingLabelsStore extends AbstractEntityCollectorTests {
         Triple t = Triple.create(NodeFactory.createURI(FRED_URI), Rdf.TYPE, PERSON_TYPE);
         verifyLabels(store, t, List.of("default"));
 
-        store.add(t.getSubject(), t.getPredicate(), t.getObject(), "foo");
+        store.add(t.getSubject(), t.getPredicate(), t.getObject(), Label.fromText("foo"));
         verifyLabels(store, t, List.of("foo"));
 
-        store.add(t.getSubject(), t.getPredicate(), t.getObject(), List.of("foo", "bar"));
+        store.add(t.getSubject(), t.getPredicate(), t.getObject(), List.of(Label.fromText("foo"), Label.fromText("bar")));
         verifyLabels(store, t, List.of("bar", "foo"));
     }
 
@@ -147,10 +150,15 @@ public class TestDefaultingLabelsStore extends AbstractEntityCollectorTests {
     }
 
     private static void verifyLabels(LabelsStore store, Triple t, List<String> expected) {
+        List<Label> expectedLabels = expected.stream().map(Label::fromText).toList();
+        verifyLabelList(store, t, expectedLabels);
+    }
+
+    private static void verifyLabelList(LabelsStore store, Triple t, List<Label> expected) {
         // NB - No guarantee what order the underlying LabelsStore returns the labels in so sort them into lexical order
         //      for reliable comparison
-        List<String> labels = new ArrayList<>(store.labelsForTriples(t));
-        Collections.sort(labels);
+        List<Label> labels = new ArrayList<>(store.labelsForTriples(t));
+        labels.sort(Comparator.comparing(Label::getText));
         Assert.assertFalse(labels.isEmpty());
         Assert.assertEquals(labels, expected);
     }
