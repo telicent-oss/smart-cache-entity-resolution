@@ -15,11 +15,11 @@
  */
 package io.telicent.smart.cache.entity.resolver.server;
 
-import io.telicent.jena.abac.core.AttributesStoreLocal;
+import io.telicent.jena.abac.core.AttributesStoreAuthServer;
 import io.telicent.smart.cache.configuration.Configurator;
 import io.telicent.smart.cache.configuration.sources.NullSource;
-import io.telicent.smart.caches.configuration.auth.AuthConstants;
 import io.telicent.smart.cache.server.jaxrs.model.HealthStatus;
+import io.telicent.smart.caches.configuration.auth.AuthConstants;
 import jakarta.ws.rs.client.Invocation;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
@@ -63,7 +63,7 @@ public class TestAuthNone extends AbstractEntityResolutionApiServerTests {
             Assert.assertFalse(health.isHealthy());
             Assert.assertTrue(StringUtils.isBlank((String) health.getConfig().get("jwtVerifier")));
             Assert.assertEquals(health.getConfig().get("attributesStore"),
-                                AttributesStoreLocal.class.getCanonicalName());
+                                AttributesStoreAuthServer.class.getCanonicalName());
         }
     }
 }
