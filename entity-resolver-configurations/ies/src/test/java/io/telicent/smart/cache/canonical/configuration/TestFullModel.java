@@ -15,8 +15,9 @@
  */
 package io.telicent.smart.cache.canonical.configuration;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import io.telicent.smart.cache.canonical.exception.ValidationException;
-import org.apache.commons.lang3.StringUtils;
+import io.telicent.smart.cache.canonical.utility.Mapper;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -24,11 +25,9 @@ public class TestFullModel {
 
     static final String FULL_MODEL_HAPPY = """
             {
-                "modelId": "testcase",
-                "index": "canonical_index",
                 "relations": [
                     {
-                        "resolverId": "testcase",
+                        "id": "testcase",
                         "fields": [
                             "field_1",
                             "field_2"
@@ -44,13 +43,15 @@ public class TestFullModel {
                             "country": 0.6,
                             "location": 1.0
                         },
-                        "scorerId": "testcase"
-                    }
+                        "id": "testcase"
+                    },
+                "id": "testcase",
+                "index": "canonical_index"
             }""";
     @Test
     public void test_toString_empty() {
         // given
-        String expectedString = "{\"modelId\":null,\"index\":\"\",\"relations\":[],\"scores\":null}";
+        String expectedString = "{\"relations\":[],\"scores\":null,\"id\":null,\"index\":\"\"}";
         FullModel fullModel = new FullModel();
         // when
         String actualString = fullModel.toString();
@@ -69,11 +70,13 @@ public class TestFullModel {
     }
 
     @Test
-    public void test_loadFromString_happyPath() {
+    public void test_loadFromString_happyPath() throws Exception {
         // given
         // when
         FullModel fullModel = FullModel.loadFromString(FULL_MODEL_HAPPY);
         // then
-        Assert.assertEquals(StringUtils.deleteWhitespace(fullModel.toString()), StringUtils.deleteWhitespace(FULL_MODEL_HAPPY));
+        JsonNode expectedNode = Mapper.getJsonMapper().readTree(FULL_MODEL_HAPPY);
+        JsonNode actualNode = Mapper.getJsonMapper().readTree(fullModel.toString());
+        Assert.assertTrue(actualNode.equals(expectedNode));
     }
 }

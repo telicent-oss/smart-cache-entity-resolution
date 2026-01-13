@@ -15,6 +15,15 @@
  */
 package io.telicent.smart.cache.entity.resolver.server;
 
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import java.io.IOException;
+
 public class DockerFullModelResourceTest extends AbstractConfigurationResourceTests {
     @Override
     public String getType() {
@@ -22,23 +31,28 @@ public class DockerFullModelResourceTest extends AbstractConfigurationResourceTe
     }
 
     @Override
+    public String getPathType() {
+        return "full-models";
+    }
+
+    @Override
     public String getEntry() {
-        return "{\"modelId\":\"" + UNIQUE_ID + "\",\"indexes\":[],\"relations\":[],\"scorers\":[]}";
+        return "{\"index\":\"\",\"relations\":[],\"scores\":null}";
     }
 
     @Override
     public String getExpectedResult() {
-            return "{\"modelId\":\"" + UNIQUE_ID + "\",\"indexes\":[],\"relations\":[],\"scorers\":[]}";
+            return "{\"id\":\"" + UNIQUE_ID + "\",\"index\":\"\",\"relations\":[],\"scores\":null}";
     }
 
     @Override
     public String getUpdatedEntry() {
-        return "{\"modelId\":\"" + UNIQUE_ID + "\",\"indexes\":[\"canonical_index\"]}";
+        return "{\"index\":\"canonical_index\"}";
     }
 
     @Override
     public String getExpectedUpdatedResult() {
-        return "";
+        return "{\"id\":\"" + UNIQUE_ID + "\",\"index\":\"canonical_index\",\"relations\":[],\"scores\":null}";
     }
 
     @Override
@@ -54,6 +68,24 @@ public class DockerFullModelResourceTest extends AbstractConfigurationResourceTe
     @Override
     public void test_putCall() {
         // NO-OP
+    }
+
+    @Override
+    public void test_getCall_validate_noEntry() {
+        // NO-OP
+    }
+
+    @Override
+    @Test
+    public void test_postInvalidCall() throws IOException {
+        WebTarget target = forApiServer("/config/" + getPathType() + "/" + UNIQUE_ID);
+        try (Response response = target.request()
+                                       .post(Entity.entity("{\"rubbish\":\"test\"}",
+                                                           MediaType.APPLICATION_JSON_TYPE))) {
+            Assert.assertEquals(response.getStatus(), 200);
+            String results = response.readEntity(String.class);
+            Assert.assertEquals(results, "Created " + UNIQUE_ID);
+        }
     }
 
 }

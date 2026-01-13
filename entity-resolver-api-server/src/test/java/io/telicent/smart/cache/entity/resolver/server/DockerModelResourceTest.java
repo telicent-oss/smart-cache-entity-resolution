@@ -23,21 +23,26 @@ public class DockerModelResourceTest extends AbstractConfigurationResourceTests 
 
     @Override
     public String getEntry() {
-        return "{\"indexes\":[\"canonical_index\"],\"relations\":[\"resolver-1\",\"resolver-2\",\"resolver-3\"],\"scorers\":[\"score-1\",\"score-2\"]}";
+        return "{\"id\":\"" + UNIQUE_ID + "\",\"index\":\"canonical_index\",\"relations\":[\"resolver-1\",\"resolver-2\",\"resolver-3\"],\"scores\":\"score-1\"}";
     }
 
     @Override
     public String getExpectedResult() {
-        return "{\"modelId\":\"" + UNIQUE_ID + "\",\"indexes\":[\"canonical_index\"],\"relations\":[\"resolver-1\",\"resolver-2\",\"resolver-3\"],\"scorers\":[\"score-1\",\"score-2\"]}";
+        return "{\"id\":\"" + UNIQUE_ID + "\",\"index\":\"canonical_index\",\"relations\":[\"resolver-1\",\"resolver-2\",\"resolver-3\"],\"scores\":\"score-1\"}";
     }
 
     @Override
     public String getUpdatedEntry() {
-        return "{\"indexes\":[\"canonical_index_alternative\"]}";
+        return "{\"id\":\"" + UNIQUE_ID + "\",\"index\":\"canonical_index_alternative\"}";
     }
 
     @Override
     public String getExpectedUpdatedResult() {
-        return "{\"modelId\":\"" + UNIQUE_ID + "\",\"indexes\":[\"canonical_index_alternative\"],\"relations\":[\"resolver-1\",\"resolver-2\",\"resolver-3\"],\"scorers\":[\"score-1\",\"score-2\"]}";
+        return "{\"id\":\"" + UNIQUE_ID + "\",\"index\":\"canonical_index_alternative\",\"relations\":[\"resolver-1\",\"resolver-2\",\"resolver-3\"],\"scores\":\"score-1\"}";
+    }
+
+    @Override
+    public int getInvalidStatusCode() {
+        return 400;
     }
 }

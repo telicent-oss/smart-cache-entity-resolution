@@ -23,22 +23,26 @@ public class DockerRelationsResourceTest extends AbstractConfigurationResourceTe
 
     @Override
     public String getEntry() {
-        return "{\"weight\":5, \"fields\" : [\"field_1\", \"field_2\"]}";
+        return "{\"id\":\"" + UNIQUE_ID + "\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5}";
     }
 
     @Override
     public String getExpectedResult() {
-        return "{\"resolverId\":\"" + UNIQUE_ID + "\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5}";
+        return "{\"id\":\"" + UNIQUE_ID + "\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5}";
     }
 
     @Override
     public String getUpdatedEntry() {
-        return "{\"weight\":10}";
+        return "{\"id\":\"" + UNIQUE_ID + "\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":10}";
     }
 
     @Override
     public String getExpectedUpdatedResult() {
-        return "{\"resolverId\":\"" + UNIQUE_ID + "\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":10}";
+        return "{\"id\":\"" + UNIQUE_ID + "\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":10}";
     }
 
+    @Override
+    public int getInvalidStatusCode() {
+        return 400;
+    }
 }

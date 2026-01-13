@@ -17,6 +17,7 @@ package io.telicent.smart.cache.canonical.utility;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
@@ -43,6 +44,7 @@ public final class Mapper {
 
     private static ObjectMapper jsonMapper;
     private static ObjectMapper yamlMapper;
+    private static ObjectMapper lenientYamlMapper;
     private static final Logger LOGGER = LoggerFactory.getLogger(Mapper.class);
 
     /**
@@ -66,8 +68,20 @@ public final class Mapper {
         return yamlMapper;
     }
 
+    public static ObjectMapper getLenientYamlMapper() {
+        if (null == lenientYamlMapper) {
+            lenientYamlMapper = new ObjectMapper(new YAMLFactory()).findAndRegisterModules();
+            lenientYamlMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        }
+        return lenientYamlMapper;
+    }
+
     public static <T> ObjectReader getObjectReader(Class<T> clz) {
         return getYamlMapper().readerFor(clz);
+    }
+
+    public static <T> ObjectReader getLenientObjectReader(Class<T> clz) {
+        return getLenientYamlMapper().readerFor(clz);
     }
 
     /**
@@ -111,6 +125,15 @@ public final class Mapper {
         }
     }
 
+    public static <T> T loadFromStringLenient(Class<T> clz, String representation) {
+        try {
+            return getLenientObjectReader(clz).readValue(representation);
+        } catch (IllegalArgumentException | IOException e) {
+            LOGGER.error("Failed to load configuration from string", e);
+            throw new ValidationException(e);
+        }
+    }
+
     public static <T> T loadFromString(TypeReference<T> typeReference, String representation) {
         try {
             return getJsonMapper().readValue(representation, typeReference);
@@ -129,7 +152,8 @@ public final class Mapper {
      */
     public static <T> T updateFieldsFromJSON(T obj, String jsonString) {
         try {
-            JsonNode jsonNode = getJsonMapper().readTree(jsonString);
+            ObjectMapper mapper = getJsonMapper();
+            JsonNode jsonNode = mapper.readTree(jsonString);
 
             // Iterate over all fields of the object's class
             for (Field field : obj.getClass().getDeclaredFields()) {
@@ -153,7 +177,7 @@ public final class Mapper {
                             // Handle List types
                             Class<?> listType = getListType(field);
                             if (listType != null) {
-                                List<?> list = jsonMapper.convertValue(fieldValue, jsonMapper.getTypeFactory()
+                                List<?> list = mapper.convertValue(fieldValue, mapper.getTypeFactory()
                                                                                              .constructCollectionType(
                                                                                                      List.class,
                                                                                                      listType));
@@ -164,14 +188,14 @@ public final class Mapper {
                             Class<?> keyType = getMapKeyType(field);
                             Class<?> valueType = getMapValueType(field);
                             if (keyType != null && valueType != null) {
-                                Map<?, ?> map = jsonMapper.convertValue(fieldValue,
-                                                                        jsonMapper.getTypeFactory().constructMapType(
+                                Map<?, ?> map = mapper.convertValue(fieldValue,
+                                                                    mapper.getTypeFactory().constructMapType(
                                                                                 Map.class, keyType, valueType));
                                 field.set(obj, map);
                             }
                         } else {
                             // Handle other object types
-                            Object value = jsonMapper.treeToValue(fieldValue, field.getType());
+                            Object value = mapper.treeToValue(fieldValue, field.getType());
                             field.set(obj, value);
                         }
                     } catch (IllegalAccessException e) {

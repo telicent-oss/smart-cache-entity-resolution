@@ -33,6 +33,7 @@ import io.telicent.smart.cache.canonical.configuration.FullModel;
 import io.telicent.smart.cache.canonical.configuration.Model;
 import io.telicent.smart.cache.canonical.exception.IndexException;
 import io.telicent.smart.cache.canonical.exception.ValidationException;
+import io.telicent.smart.cache.canonical.utility.Mapper;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
@@ -69,14 +70,14 @@ public class TestIndexMapper {
     private static final String MODEL_JSON =
             "{\"index\":\"canonical_index\",\"relations\":[\"resolver-1\",\"resolver-2\",\"resolver-3\"],\"scores\":\"score-1\"}";
     private static final String MODEL_JSON_WITH_ID =
-            "{\"modelId\":\"test_id\",\"index\":\"canonical_index\",\"relations\":[\"resolver-1\",\"resolver-2\",\"resolver-3\"],\"scores\":\"score-1\"}";
+            "{\"id\":\"test_id\",\"index\":\"canonical_index\",\"relations\":[\"resolver-1\",\"resolver-2\",\"resolver-3\"],\"scores\":\"score-1\"}";
 
     private static final String RESOLVER_JSON = "{\"weight\":5, \"fields\" : [\"field_1\", \"field_2\"]}";
     private static final String RESOLVER_JSON_WITH_ID =
-            "{\"resolverId\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5}";
+            "{\"id\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5}";
 
-    private static final String SCORER_JSON = "{\"fieldScores\":{\"field_1\":5.0},\"scorerId\":null}";
-    private static final String SCORER_JSON_WITH_ID = "{\"fieldScores\":{\"field_1\":5.0},\"scorerId\":\"other_id\"}";
+    private static final String SCORER_JSON = "{\"fieldScores\":{\"field_1\":5.0},\"id\":null}";
+    private static final String SCORER_JSON_WITH_ID = "{\"fieldScores\":{\"field_1\":5.0},\"id\":\"other_id\"}";
 
     private static final String CANONICAL_JSON_WITH_ID =
             "{\"type\":\"CoreCanonicalTestType\",\"index\":\"\",\"fields\":[{\"name\":\"text-field-fuzzy\",\"type\":\"text\",\"required\":true,\"boost\":1.2,\"exactMatch\":false,\"fuzziness\":{\"enabled\":true,\"min\":0,\"max\":3}}]}";
@@ -243,8 +244,7 @@ public class TestIndexMapper {
         // when
         Object actualObject = IndexMapper.validateEntry(type, id, jsonValue);
         // then
-        String tmp = writeValueAsString(actualObject);
-        Assert.assertEquals(actualObject.toString(), expectedJson);
+        assertJsonEquals(actualObject.toString(), expectedJson);
     }
 
     @Test(expectedExceptions = ValidationException.class)
@@ -342,7 +342,7 @@ public class TestIndexMapper {
         // when
         String actualJson = IndexMapper.getAllIndexEntriesAsString(mockClient, type);
         // then
-        Assert.assertEquals(actualJson, expectedJson);
+        assertJsonEquals(actualJson, expectedJson);
     }
 
     @Test(dataProvider = "incorrectMappings")
@@ -386,7 +386,7 @@ public class TestIndexMapper {
         // when
         String actualJson = IndexMapper.getIndexEntry(mockClient, type, id);
         // then
-        Assert.assertEquals(actualJson, expectedJson);
+        assertJsonEquals(actualJson, expectedJson);
     }
 
     @Test(dataProvider = "correctMappings", expectedExceptions = ValidationException.class)
@@ -506,12 +506,12 @@ public class TestIndexMapper {
     @Test
     public void test_populateFullModel_empty() {
         // given
-        String expectedString = "{\"modelId\":null,\"index\":\"\",\"relations\":[],\"scores\":null}";
+        String expectedString = "{\"id\":null,\"index\":\"\",\"relations\":[],\"scores\":null}";
         Model model = Model.loadFromString(expectedString);
         // when
         FullModel result = IndexMapper.populateFullModelFromModel(mockClient, model);
         // then
-        Assert.assertEquals(expectedString, result.toString());
+        assertJsonEquals(result.toString(), expectedString);
     }
 
     @Test
@@ -533,12 +533,12 @@ public class TestIndexMapper {
                 "{\"index\":\"canonical_index\",\"relations\":[\"resolver-1\",\"resolver-2\",\"resolver-3\"],\"scores\":\"score-1\"}";
         Model model = Model.loadFromString(modelString);
         String expectedString =
-                "{\"modelId\":null,\"index\":\"canonical_index\",\"relations\":[{\"resolverId\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5},{\"resolverId\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5},{\"resolverId\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5}],\"scores\":{\"fieldScores\":{\"field_1\":5.0},\"scorerId\":\"other_id\"}}";
+                "{\"id\":null,\"index\":\"canonical_index\",\"relations\":[{\"id\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5},{\"id\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5},{\"id\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5}],\"scores\":{\"fieldScores\":{\"field_1\":5.0},\"id\":\"other_id\"}}";
 
         // when
         FullModel result = IndexMapper.populateFullModelFromModel(mockClient, model);
         // then
-        Assert.assertEquals(expectedString, result.toString());
+        assertJsonEquals(result.toString(), expectedString);
     }
 
     @Test(expectedExceptions = ValidationException.class)
@@ -601,11 +601,11 @@ public class TestIndexMapper {
 
 
         String expectedJson =
-                "{\"id\":{\"modelId\":\"test_id\",\"index\":\"canonical_index\",\"relations\":[{\"resolverId\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5},{\"resolverId\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5},{\"resolverId\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5}],\"scores\":{\"fieldScores\":{\"field_1\":5.0},\"scorerId\":\"other_id\"}}}";
+                "{\"id\":{\"id\":\"test_id\",\"index\":\"canonical_index\",\"relations\":[{\"id\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5},{\"id\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5},{\"id\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5}],\"scores\":{\"fieldScores\":{\"field_1\":5.0},\"id\":\"other_id\"}}}";
         // when
         String actualJson = IndexMapper.getAllIndexFullModelEntriesAsString(mockClient);
         // then
-        Assert.assertEquals(expectedJson, actualJson);
+        assertJsonEquals(actualJson, expectedJson);
     }
 
     @Test
@@ -652,7 +652,7 @@ public class TestIndexMapper {
         when(mockIndices.exists(any(ExistsRequest.class))).thenReturn(response);
         when(mockClient.index(any(IndexRequest.class))).thenReturn(mockIndexResponse);
         String fullModelJSON =
-                "{\"modelId\":\"test_id\",\"index\":\"canonical_index\",\"relations\":[{\"resolverId\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5}],\"scores\":{\"fieldScores\":{\"field_1\":5.0},\"scorerId\":\"other_id\"}}";
+                "{\"id\":\"test_id\",\"index\":\"canonical_index\",\"relations\":[{\"id\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5}],\"scores\":{\"fieldScores\":{\"field_1\":5.0},\"id\":\"other_id\"}}";
         // when
         Throwable t = null;
         try {
@@ -692,11 +692,22 @@ public class TestIndexMapper {
 
 
         String expectedJson =
-                "{\"modelId\":\"test_id\",\"index\":\"canonical_index\",\"relations\":[{\"resolverId\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5},{\"resolverId\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5},{\"resolverId\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5}],\"scores\":{\"fieldScores\":{\"field_1\":5.0},\"scorerId\":\"other_id\"}}";
+                "{\"id\":\"test_id\",\"index\":\"canonical_index\",\"relations\":[{\"id\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5},{\"id\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5},{\"id\":\"unique_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5}],\"scores\":{\"fieldScores\":{\"field_1\":5.0},\"id\":\"other_id\"}}";
         // when
         String actualJson = IndexMapper.getFullModelIndexEntry(mockClient, "id");
         // then
-        Assert.assertEquals(actualJson, expectedJson);
+        assertJsonEquals(actualJson, expectedJson);
+    }
+
+    private static void assertJsonEquals(String actualJson, String expectedJson) {
+        try {
+            JsonNode actualNode = Mapper.getJsonMapper().readTree(actualJson);
+            JsonNode expectedNode = Mapper.getJsonMapper().readTree(expectedJson);
+            Assert.assertTrue(actualNode.equals(expectedNode),
+                              "Expected JSON " + expectedNode + " but found " + actualNode);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to parse JSON for comparison", e);
+        }
     }
 
 

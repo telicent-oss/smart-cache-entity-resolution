@@ -28,7 +28,7 @@ public class TestRelation {
     public void test_toString_empty() {
         // given
         Relation relation = new Relation();
-        String expected = "{\"resolverId\":null,\"fields\":[],\"weight\":0}";
+        String expected = "{\"fields\":[],\"weight\":0,\"id\":null}";
         // when
         String result = relation.toString();
         // then
@@ -44,7 +44,7 @@ public class TestRelation {
         relation.weight = 5;
         relation.resolverId = "resolver_id";
 
-        String expectedResult = "{\"resolverId\":\"resolver_id\",\"fields\":[\"field_1\",\"field_2\"],\"weight\":5}";
+        String expectedResult = "{\"fields\":[\"field_1\",\"field_2\"],\"weight\":5,\"id\":\"resolver_id\"}";
         // when
         String actualResult = relation.toString();
         // then

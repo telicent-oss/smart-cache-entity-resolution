@@ -361,6 +361,7 @@
                                 <exclude>**/*.trig</exclude>
                                 <exclude>**/*.nq</exclude>
                                 <exclude>**/*.nt</exclude>
+                                <exclude>**/*.ndjson</exclude>
                                 <!-- Config -->
                                 <exclude>**/*.yml</exclude>
                                 <exclude>.gitattributes</exclude>

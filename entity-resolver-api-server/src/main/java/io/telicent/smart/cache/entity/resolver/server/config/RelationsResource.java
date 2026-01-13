@@ -22,12 +22,11 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.glassfish.jersey.media.multipart.FormDataParam;
 
 /**
  * REST Endpoints for handling Relation config
  */
-@Path(Relation.TYPE)
+@Path("/config/" + Relation.TYPE)
 public class RelationsResource extends AbstractConfigurationResource {
 
     /**
@@ -62,8 +61,8 @@ public class RelationsResource extends AbstractConfigurationResource {
      * @return a string message saying if config was deleted
      */
     @DELETE
-    @Path("/{resolver_id}")
-    public Response deleteResolverByID(@PathParam("resolver_id") @NotBlank final String id,
+    @Path("/{relation_id}")
+    public Response deleteResolverByID(@PathParam("relation_id") @NotBlank final String id,
                                        @Context final ServletContext servletContext) {
         return deleteById(id, Relation.TYPE, servletContext);
     }
@@ -76,12 +75,16 @@ public class RelationsResource extends AbstractConfigurationResource {
      * @return a string message indicating success
      */
     @POST
-    @Path("/{resolver_id}")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Path("/{relation_id}")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createResolverByID(@PathParam("resolver_id") @NotBlank final String id,
-                                       @FormDataParam("entry") @DefaultValue("{}") final String entry,
+    public Response createResolverByID(@PathParam("relation_id") @NotBlank final String id,
+                                       final String entry,
                                        @Context final ServletContext servletContext) {
+        Response validation = validateIdMatchesPath(id, entry, "id", "resolverId");
+        if (validation != null) {
+            return validation;
+        }
         return createById(id, Relation.TYPE, entry, servletContext);
     }
 
@@ -94,12 +97,16 @@ public class RelationsResource extends AbstractConfigurationResource {
      * Note: currently is the same as POST
      */
     @PUT
-    @Path("/{resolver_id}")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Path("/{relation_id}")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateResolverByID(@PathParam("resolver_id") @NotBlank final String id,
-                                       @FormDataParam("entry") @DefaultValue("{}") final String entry,
+    public Response updateResolverByID(@PathParam("relation_id") @NotBlank final String id,
+                                       final String entry,
                                        @Context final ServletContext servletContext) {
+        Response validation = validateIdMatchesPath(id, entry, "id", "resolverId");
+        if (validation != null) {
+            return validation;
+        }
         return updateById(id, Relation.TYPE, entry, servletContext);
     }
 }

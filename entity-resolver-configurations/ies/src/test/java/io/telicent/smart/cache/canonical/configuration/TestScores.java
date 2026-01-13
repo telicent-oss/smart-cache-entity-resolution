@@ -22,12 +22,12 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class TestScores {
-    private static final String JSON = "{\"fieldScores\":{\"field_1\":5.0},\"scorerId\":null}";
+    private static final String JSON = "{\"fieldScores\":{\"field_1\":5.0},\"id\":null}";
     @Test
     public void test_toString_empty() {
         // given
         Scores scores = new Scores();
-        String expected = "{\"fieldScores\":{},\"scorerId\":null}";
+        String expected = "{\"fieldScores\":{},\"id\":null}";
         // when
         String result = scores.toString();
         // then
@@ -40,7 +40,7 @@ public class TestScores {
         Scores scores = new Scores();
         scores.fieldScores.put("field_1", 5.0);
 
-        String expected = "{\"fieldScores\":{\"field_1\":5.0},\"scorerId\":null}";
+        String expected = "{\"fieldScores\":{\"field_1\":5.0},\"id\":null}";
         // when
         String result = scores.toString();
         // then

@@ -24,7 +24,7 @@ import jakarta.ws.rs.core.Response;
 /**
  * REST endpoint for validating config
  */
-@Path("/validate")
+@Path("/config/validate")
 public class ValidationResource extends AbstractConfigurationResource {
     /**
      * Get the configuration
@@ -36,7 +36,6 @@ public class ValidationResource extends AbstractConfigurationResource {
      */
     @GET
     @Path("{entry_type}/{entry_id}/{index_id}")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public Response validate(@PathParam("entry_type") final String type,
                                  @PathParam("entry_id") final String id,

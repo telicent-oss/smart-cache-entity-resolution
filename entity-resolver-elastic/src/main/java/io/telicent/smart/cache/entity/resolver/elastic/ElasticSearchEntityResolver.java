@@ -23,9 +23,7 @@ import co.elastic.clients.elasticsearch.core.DeleteByQueryRequest;
 import co.elastic.clients.elasticsearch.core.SearchRequest;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.core.search.Hit;
-import io.telicent.smart.cache.canonical.configuration.CanonicalTypeConfiguration;
-import io.telicent.smart.cache.canonical.configuration.FullModel;
-import io.telicent.smart.cache.canonical.configuration.Model;
+import io.telicent.smart.cache.canonical.configuration.*;
 import io.telicent.smart.cache.canonical.exception.ValidationException;
 import io.telicent.smart.cache.entity.resolver.EntityResolver;
 import io.telicent.smart.cache.entity.resolver.elastic.index.CachedIndexMapper;
@@ -37,15 +35,14 @@ import io.telicent.smart.cache.entity.resolver.model.SimilarityResults;
 import io.telicent.smart.cache.search.SearchException;
 import io.telicent.smart.cache.search.elastic.AbstractClientAdaptor;
 import io.telicent.smart.cache.search.model.Document;
-import io.telicent.smart.cache.search.options.SecurityOptions;
+import io.telicent.smart.cache.search.model.SearchResults;
+import io.telicent.smart.cache.search.options.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * An entity resolver backed by ElasticSearch
@@ -319,7 +316,7 @@ public class ElasticSearchEntityResolver extends AbstractClientAdaptor implement
     @Override
     public void updateConfig(String type, String entry, String id) {
         if (FullModel.TYPE.equalsIgnoreCase(type)) {
-            CachedIndexMapper.updateIndexEntry(getClient(), Model.TYPE, id, entry);
+            IndexMapper.updateIndexFullModelEntry(getClient(), id, entry);
         } else {
             CachedIndexMapper.updateIndexEntry(getClient(), type, id, entry);
         }
@@ -459,6 +456,242 @@ public class ElasticSearchEntityResolver extends AbstractClientAdaptor implement
     public static void flagFutureDeleteForCleanUp() {
         deleteCount = DELETE_ALL_COUNT;
     }
+
+    /**
+     * Load a FullModel (model + relations + scores) from the config index.
+     *
+     * @param modelId id of the model to load
+     * @return reconstructed FullModel
+     */
+    private FullModel loadFullModel(String modelId) {
+        // 1) Load the Model
+        Model model = CachedIndexMapper.getModelEntry(this.getClient(), modelId);
+        if (model == null) {
+            throw new SearchException("Unknown modelId: " + modelId);
+        }
+
+        FullModel fullModel = new FullModel();
+        fullModel.modelId = model.modelId;
+        fullModel.index = model.index;
+
+        // 2) Load Relations
+        for (String relationId : model.relations) {
+            Object obj = CachedIndexMapper.getIndexTypEntryObject(
+                    this.getClient(), Relation.TYPE, relationId);
+            if (obj instanceof Relation relation) {
+                fullModel.relations.add(relation);
+            } else {
+                throw new SearchException("Missing or invalid relation '" + relationId
+                                                  + "' for model '" + modelId + "'");
+            }
+        }
+
+        // 3) Load Scores (optional but strongly recommended)
+        if (model.scores != null && !model.scores.isEmpty()) {
+            Object obj = CachedIndexMapper.getIndexTypEntryObject(
+                    this.getClient(), Scores.TYPE, model.scores);
+            if (obj instanceof Scores scores) {
+                fullModel.scores = scores;
+            } else {
+                throw new SearchException("Missing or invalid scores '" + model.scores
+                                                  + "' for model '" + modelId + "'");
+            }
+        }
+
+        return fullModel;
+    }
+
+    @Override
+    public SimilarityResult findSimilarV2(Document doc,
+                                          int maxResults,
+                                          float minScore,
+                                          SecurityOptions securityOptions,
+                                          String modelId) {
+
+        // Load the full model (index + relations + scores)
+        FullModel fullModel = loadFullModel(modelId);
+
+        // Sanity: the resolved index must match the model index
+        CanonicalTypeConfiguration overrideConfiguration = null; // v2 uses model, not overrides
+        String indexToUse = getIndexToUse(doc, overrideConfiguration);
+        if (!fullModel.index.equals(indexToUse)) {
+            throw new SearchException("Model '" + modelId + "' is for index '" + fullModel.index
+                                              + "' but similarity search uses '" + indexToUse + "'");
+        }
+
+        // Index this doc temporarily, as v1 does
+        String batchId = indexDocumentsTemporarilyIntoSimilarityIndex(
+                Collections.singletonList(doc), overrideConfiguration);
+
+        try {
+            SimilarityResult result =
+                    findSimilarV2Internal(doc, maxResults, minScore, false,
+                                          securityOptions, overrideConfiguration, fullModel);
+
+            // after successful scoring, delete the temporary docs
+            DeleteByQueryRequest request = generateDeleteRequest(indexToUse, batchId);
+            this.getClient().deleteByQuery(request);
+            return result;
+        } catch (ElasticsearchException e) {
+            throw AbstractClientAdaptor.fromElasticException(e, "Similarity v2 search for doc " + doc);
+        } catch (Exception e) {
+            throw new SearchException("Error during similarity v2 search", e);
+        }
+    }
+
+    private SimilarityResult findSimilarV2Internal(Document doc,
+                                                   int maxResults,
+                                                   float minScore,
+                                                   boolean withinInput,
+                                                   SecurityOptions securityOptions,
+                                                   CanonicalTypeConfiguration overrideConfiguration,
+                                                   FullModel fullModel) throws IOException {
+
+        final String id = (String) doc.getProperty("id");
+        final String originalId = (String) doc.getProperty("originalId");
+        final SimilarityResult sr = new SimilarityResult();
+        sr.setIDSourceEntity(originalId);
+
+        final Query query = QueryGeneratorResolver.generateQuery(doc, overrideConfiguration);
+        if (query == null) {
+            throw new SearchException("Could not generate a query for doc " + doc);
+        }
+
+        final SearchRequest.Builder builder = new SearchRequest.Builder();
+        String indexToUse = getIndexToUse(doc, overrideConfiguration);
+        builder.index(indexToUse).query(query).size(maxResults * 5);
+
+//        SearchOptions withHighlighting = SearchOptions.of(maxResults * 5,SearchResults.FIRST_OFFSET);
+//                  ask for more, we’ll re-rank
+//                new HighlightingOptions(true),
+//                TypeFilterOptions.DISABLED,
+//                SecurityOptions.DISABLED,
+//                SortOptions.NONE,
+//                FieldOptions.DEFAULT);
+
+        LOGGER.info("Starting similarity v2 search for {} in index {}", originalId, indexToUse);
+
+        long start = System.currentTimeMillis();
+        SearchResponse<Document> response =
+                this.getClient().search(builder.build(), Document.class);
+        LOGGER.info("Retrieved {} initial results in {} ms",
+                    response.hits().hits().size(),
+                    System.currentTimeMillis() - start);
+
+        final List<Hit<Document>> hits = response.hits().hits();
+        if (hits.isEmpty()) {
+            sr.setHits(new io.telicent.smart.cache.search.model.Hit[0]);
+            return sr;
+        }
+
+        // 1) Collect matches (candidateId -> matched fields)
+        Map<String, Hit<Document>> hitById = new HashMap<>();
+        List<Map.Entry<String, List<String>>> matchesForModel = new ArrayList<>();
+
+        for (Hit<Document> hit : hits) {
+            String hitId = hit.id();
+            Double esScore = hit.score();
+            Document source = hit.source();
+
+            if (esScore == null || source == null) {
+                LOGGER.warn("Ignoring hit {} missing score or source", hitId);
+                continue;
+            }
+
+            hitById.put(hitId, hit);
+
+            // matchedQueries() returns the queryName we set in queries (the field name)
+            List<String> matchedFields = hit.matchedQueries();
+            matchesForModel.add(Map.entry(hitId, matchedFields));
+        }
+
+        // 2) Score each candidate using FullModel
+        List<Map.Entry<String, Double>> scored =
+                fullModel.calculateScores(matchesForModel);
+
+        // 3) Build final hits ordered by model score
+        List<io.telicent.smart.cache.search.model.Hit> similarHits = new ArrayList<>();
+
+        for (Map.Entry<String, Double> entry : scored) {
+            if (similarHits.size() >= maxResults) {
+                break;
+            }
+
+            String hitId = entry.getKey();
+            double modelScore = entry.getValue();
+
+            if (modelScore < minScore) {
+                continue;
+            }
+
+            Hit<Document> hit = hitById.get(hitId);
+            if (hit == null) {
+                continue;
+            }
+
+            Document source = hit.source();
+            boolean fromTempSet =
+                    source.getProperties().containsKey(TEMP_INDEXING_SIMILARITY_FIELD);
+
+            // Exclude the source doc itself
+            if (hitId.equals(id)) {
+                continue;
+            }
+            // Exclude temporary docs if withinInput = false
+            if (!withinInput && fromTempSet) {
+                continue;
+            }
+
+            similarHits.add(
+                    new io.telicent.smart.cache.search.model.Hit(
+                            hitId, modelScore, source));
+        }
+
+        sr.setHits(similarHits.toArray(new io.telicent.smart.cache.search.model.Hit[0]));
+        return sr;
+    }
+
+
+    @Override
+    public SimilarityResults findSimilarV2(List<Document> docs,
+                                           int maxResults,
+                                           float minScore,
+                                           boolean withinInput,
+                                           SecurityOptions securityOptions,
+                                           String modelId) {
+
+        FullModel fullModel = loadFullModel(modelId);
+        CanonicalTypeConfiguration overrideConfiguration = null;
+
+        // Index the documents for similarity comparison
+        String batchId = indexDocumentsTemporarilyIntoSimilarityIndex(docs, overrideConfiguration);
+        String indexToUse = getIndexToUse(docs.getFirst(), overrideConfiguration);
+
+        final List<SimilarityResult> results = new ArrayList<>();
+
+        try {
+            for (Document d : docs) {
+                SimilarityResult res = findSimilarV2Internal(
+                        d, maxResults, minScore, withinInput,
+                        securityOptions, overrideConfiguration, fullModel);
+                results.add(res);
+            }
+        } catch (Exception e) {
+            throw new SearchException("Error during similarity v2 search", e);
+        } finally {
+            // Clean up temp docs, regardless of errors
+            try {
+                DeleteByQueryRequest request = generateDeleteRequest(indexToUse, batchId);
+                this.getClient().deleteByQuery(request);
+            } catch (Exception e) {
+                LOGGER.error("Exception while deleting batch {}", batchId, e);
+                flagFutureDeleteForCleanUp();
+            }
+        }
+
+        return new SimilarityResults(results);
+    }
+
 
     /**
      * An ElasticSearch entity resolver builder, suitable for extending.

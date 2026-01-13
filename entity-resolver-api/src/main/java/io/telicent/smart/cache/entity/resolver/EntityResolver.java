@@ -56,6 +56,13 @@ public interface EntityResolver extends SearchBackend {
                                   boolean withinInput, SecurityOptions securityOptions, String overrides);
 
 
+    SimilarityResult findSimilarV2(Document doc, int maxResults, float minScore,
+                                   SecurityOptions securityOptions, String modelId);
+
+    SimilarityResults findSimilarV2(List<Document> docs, int maxResults, float minScore,
+                                    boolean withinInput, SecurityOptions securityOptions, String modelId);
+
+
     /**
      * Add config entry
      *

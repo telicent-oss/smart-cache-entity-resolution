@@ -151,6 +151,70 @@ boost: 1.0
 
 No action is done based on whether a hit has been found for an entity, this is left to the client code.
 
+### `PUT /similarity/v2`
+
+This variant uses a configured model (relations + scores) to re-rank candidate matches. It requires the `modelId`
+query parameter, which must refer to a model created via `/config/models/{model_id}`.
+
+```bash
+curl -X PUT "http://localhost:8081/similarity/v2?modelId=people-v2-demo" \
+  -F file='{"first_name": "Miles", "last_name": "Davis", "id": "input-1"}'
+```
+
+Note: v1 similarity uses fuzzy matches on all input fields, which will fail if the underlying index field is not text
+or keyword (e.g. `date`). Use v2 with a model that only references compatible fields in that case.
+
+### Configuration APIs
+
+Configuration endpoints are available under `/config` and accept JSON request bodies. Each create/update takes a
+complete configuration document.
+
+Example walkthrough script (creates config, loads a small demo dataset into ElasticSearch, and runs similarity v1/v2 to
+show v1 preferring a near-match driven by extra fields while v2 selects the model-weighted name match):
+
+```bash
+ELASTIC_ADDRESS=localhost:9200 MODEL_INDEX=canonical \
+  ./docs/demo-config-similarity.sh
+```
+
+For `/config/relations`, `/config/scores`, and `/config/models`, the JSON body must include an `id` (or legacy alias)
+that matches the `{..._id}` path parameter. `full-models` accepts arbitrary JSON; extra fields are ignored.
+
+If the body `id` is missing or does not match the path parameter, the API returns `400` with an
+`InvalidRequestParameters` problem.
+
+Example: create a relation
+
+```bash
+curl -X POST "http://localhost:8081/config/relations/name-only" \
+  -H "Content-Type: application/json" \
+  -d '{"id":"name-only","fields":["first-name","surname"],"weight":1.0}'
+```
+
+Example: create scores
+
+```bash
+curl -X POST "http://localhost:8081/config/scores/people-scores-v2-demo" \
+  -H "Content-Type: application/json" \
+  -d '{"id":"people-scores-v2-demo","fieldScores":{"first-name":0.3,"surname":0.3,"dob":0.8,"passport-number":0.9}}'
+```
+
+Example: create a model (used by `/similarity/v2`)
+
+```bash
+curl -X POST "http://localhost:8081/config/models/people-v2-demo" \
+  -H "Content-Type: application/json" \
+  -d '{"id":"people-v2-demo","index":"people","relations":["name-only","name-dob-passport"],"scores":"people-scores-v2-demo"}'
+```
+
+Example: create a full model (store full relations/scores inline)
+
+```bash
+curl -X POST "http://localhost:8081/config/full-models/people-v2-demo" \
+  -H "Content-Type: application/json" \
+  -d '{"id":"people-v2-demo","index":"people","relations":[{"id":"name-only","fields":["first-name","surname"],"weight":1.0},{"id":"name-dob-passport","fields":["first-name","surname","dob","passport-number"],"weight":10.0}],"scores":{"id":"people-scores-v2-demo","fieldScores":{"first-name":0.3,"surname":0.3,"dob":0.8,"passport-number":0.9}}}'
+```
+
 # Running the API Server
 
 In order to run the API server you need to first export some environment variables, so it knows how to connect to

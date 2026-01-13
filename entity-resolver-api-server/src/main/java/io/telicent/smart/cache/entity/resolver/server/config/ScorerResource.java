@@ -22,12 +22,11 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.glassfish.jersey.media.multipart.FormDataParam;
 
 /**
  * REST Endpoints for handling Scorer config
  */
-@Path(Scores.TYPE)
+@Path("/config/" + Scores.TYPE)
 public class ScorerResource extends AbstractConfigurationResource {
 
     /**
@@ -38,7 +37,6 @@ public class ScorerResource extends AbstractConfigurationResource {
      */
     @GET
     @Path("/{score_id}")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getScoreByID(@PathParam("score_id") final String id,
                                  @Context final ServletContext servletContext) {
@@ -78,11 +76,15 @@ public class ScorerResource extends AbstractConfigurationResource {
      */
     @POST
     @Path("/{score_id}")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createScoreByID(@PathParam("score_id") @NotBlank final String id,
-                                    @FormDataParam("entry") @DefaultValue("{}") final String entry,
+                                    final String entry,
                                     @Context final ServletContext servletContext) {
+        Response validation = validateIdMatchesPath(id, entry, "id", "scorerId");
+        if (validation != null) {
+            return validation;
+        }
         return createById(id, Scores.TYPE, entry, servletContext);
     }
 
@@ -96,11 +98,15 @@ public class ScorerResource extends AbstractConfigurationResource {
      */
     @PUT
     @Path("/{score_id}")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateScoreById(@PathParam("score_id") @NotBlank final String id,
-                                    @FormDataParam("entry") @DefaultValue("{}") final String entry,
+                                    final String entry,
                                     @Context final ServletContext servletContext) {
+        Response validation = validateIdMatchesPath(id, entry, "id", "scorerId");
+        if (validation != null) {
+            return validation;
+        }
         return updateById(id, Scores.TYPE, entry, servletContext);
     }
 }

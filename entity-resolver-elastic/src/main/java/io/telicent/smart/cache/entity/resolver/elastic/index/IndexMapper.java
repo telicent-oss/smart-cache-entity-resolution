@@ -31,6 +31,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.telicent.smart.cache.canonical.configuration.*;
 import io.telicent.smart.cache.canonical.exception.IndexException;
 import io.telicent.smart.cache.canonical.exception.ValidationException;
+import io.telicent.smart.cache.canonical.utility.Mapper;
 import io.telicent.smart.cache.search.model.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -229,19 +230,13 @@ public final class IndexMapper {
     }
 
 
-//    public static void updateIndexFullModelEntry(ElasticsearchClient client, String id, String value) {
-//        Object validatedObject = validateEntry(FullModel.TYPE, id, value);
-//        if (validatedObject instanceof FullModel fullModel) {
-//            Model model = Model.loadFromFullModel(fullModel);
-//            addObjectToIndex(client, model.modelId, CONFIG_INDEX_PREFIX + Model.TYPE, model);
-//            for (Relation relation : fullModel.relations) {
-//                addObjectToIndex(client, relation.resolverId, CONFIG_INDEX_PREFIX + Relation.TYPE, relation);
-//            }
-//            for (Scorer scorer : fullModel.scorers) {
-//                addObjectToIndex(client, scorer.scorerId, CONFIG_INDEX_PREFIX + Scorer.TYPE, scorer);
-//            }
-//        }
-//    }
+    public static void updateIndexFullModelEntry(ElasticsearchClient client, String id, String value) {
+        Object modelObject = getIndexEntryObject(client, Model.TYPE, id);
+        FullModel existingFullModel = populateFullModelFromObject(client, modelObject);
+        FullModel updatedFullModel = Mapper.updateFieldsFromJSON(existingFullModel, value);
+        deleteIndexFullModelEntry(client, id);
+        addIndexFullModelEntry(client, id, updatedFullModel.toString());
+    }
 
 
     /**

@@ -23,6 +23,6 @@ public class DockerModelResourceWithNoBackendTest extends AbstractConfigurationR
 
     @Override
     public String getEntry() {
-        return "{\"indexes\":[\"canonical_index\"],\"relations\":[\"resolver-1\",\"resolver-2\",\"resolver-3\"],\"scorers\":[\"score-1\",\"score-2\"]}";
+        return "{\"index\":\"canonical_index\",\"relations\":[\"resolver-1\",\"resolver-2\",\"resolver-3\"],\"scores\":\"score-1\"}";
     }
 }

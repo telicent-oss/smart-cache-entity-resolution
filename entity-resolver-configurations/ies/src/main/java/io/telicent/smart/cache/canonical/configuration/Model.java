@@ -15,6 +15,8 @@
  */
 package io.telicent.smart.cache.canonical.configuration;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.telicent.smart.cache.canonical.utility.Mapper;
 import lombok.Getter;
@@ -44,11 +46,15 @@ public class Model {
      * Unique ID of model
      */
     @Getter
+    @JsonProperty("id")
+    @JsonAlias("modelId")
     public String modelId;
     /**
      * Index to which the model can be applied to
      */
     @Getter
+    @JsonProperty("index")
+    @JsonAlias("indexes")
     public String index = "";
     /**
      * List of relations that the model can use
@@ -57,6 +63,8 @@ public class Model {
     /**
      * List of scorer that the model can use
      */
+    @JsonProperty("scores")
+    @JsonAlias("scorers")
     public String scores = "";
 
     /**

@@ -23,21 +23,26 @@ public class DockerScoresResourceTest extends AbstractConfigurationResourceTests
 
     @Override
     public String getEntry() {
-        return "{\"fieldScores\":{\"field_1\":5.0,\"field_2\":10.0}}";
+        return "{\"id\":\"" + UNIQUE_ID + "\",\"fieldScores\":{\"field_1\":5.0,\"field_2\":10.0}}";
     }
 
     @Override
     public String getExpectedResult() {
-        return "{\"fieldScores\":{\"field_1\":5.0,\"field_2\":10.0},\"scorerId\":\"" + UNIQUE_ID + "\"}";
+        return "{\"fieldScores\":{\"field_1\":5.0,\"field_2\":10.0},\"id\":\"" + UNIQUE_ID + "\"}";
     }
 
     @Override
     public String getUpdatedEntry() {
-        return "{\"fieldScores\":{\"field_2\":20.0}}";
+        return "{\"id\":\"" + UNIQUE_ID + "\",\"fieldScores\":{\"field_2\":20.0}}";
     }
 
     @Override
     public String getExpectedUpdatedResult() {
-        return "{\"fieldScores\":{\"field_2\":20.0},\"scorerId\":\"" + UNIQUE_ID + "\"}";
+        return "{\"fieldScores\":{\"field_2\":20.0},\"id\":\"" + UNIQUE_ID + "\"}";
+    }
+
+    @Override
+    public int getInvalidStatusCode() {
+        return 400;
     }
 }

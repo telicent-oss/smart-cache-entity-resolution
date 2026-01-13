@@ -126,6 +126,65 @@ public class SimilarityResource extends AbstractEntityResolutionResource {
         return Response.ok().entity(result).build();
     }
 
+    /**
+     * v2 similarity: uses configured model relations/scores for scoring.
+     */
+    @PUT
+    @Path("/v2")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getSimilarV2(@FormDataParam("file") InputStream uploadedInputStream,
+                                 @QueryParam("maxResults") @Min(1) @DefaultValue("1") final Integer maxResults,
+                                 @QueryParam("minScore") @Min(0) @DefaultValue("0") final Float minScore,
+                                 @QueryParam("withinInput") @DefaultValue("false") final Boolean withinInput,
+                                 @QueryParam("modelId") final String modelId,
+                                 @FormDataParam("overrides") @DefaultValue("") final String overrides, // probably unused in v2
+                                 @Context ServletContext servletContext,
+                                 @Context SecurityContext securityContext) {
+
+        if (modelId == null || modelId.isBlank()) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                           .entity("modelId query parameter is required")
+                           .build();
+        }
+
+        final EntityResolver client = getEntityResolver(servletContext);
+        if (client == null) {
+            return serviceUnavailable();
+        }
+
+        SecurityOptions securityOptions = SecurityOptions.DISABLED;
+
+        final List<Document> docs = new ArrayList<>();
+        try (InputStreamReader isr = new InputStreamReader(uploadedInputStream, StandardCharsets.UTF_8);
+             BufferedReader reader = new BufferedReader(isr)) {
+            Iterator<String> iter = reader.lines().iterator();
+            while (iter.hasNext()) {
+                String inputLine = iter.next();
+                Document d = generateDocumentFromString(inputLine);
+                docs.add(d);
+            }
+        } catch (IOException e) {
+            LOGGER.error("Exception while generating documents from input", e);
+            return Response.serverError().build();
+        }
+
+        SimilarityResults result;
+        if (docs.size() == 1) {
+            SimilarityResult single = client.findSimilarV2(
+                    docs.getFirst(), maxResults, minScore,
+                    securityOptions, modelId);
+            result = new SimilarityResults(List.of(single));
+        } else {
+            result = client.findSimilarV2(
+                    docs, maxResults, minScore,
+                    withinInput, securityOptions, modelId);
+        }
+
+        return Response.ok().entity(result).build();
+    }
+
+
     private Document generateDocumentFromString(String json) {
             Map<String, Object> map = Mapper.loadFromString(JSON_MAP_TYPE, json);
             return new Document(map);
