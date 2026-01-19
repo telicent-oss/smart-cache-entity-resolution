@@ -100,7 +100,7 @@
         <dependency.jetbrains>26.0.2-1</dependency.jetbrains>
         <dependency.jetty>12.0.14</dependency.jetty>
         <dependency.jquery>3.7.1</dependency.jquery>
-        <dependency.logback>1.5.24</dependency.logback>
+        <dependency.logback>1.5.25</dependency.logback>
         <dependency.mockserver>5.15.0</dependency.mockserver>
         <dependency.opensearch-test>2.1.4</dependency.opensearch-test>
         <dependency.snappy>1.1.10.8</dependency.snappy>
