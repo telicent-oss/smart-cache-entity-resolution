@@ -17,7 +17,7 @@
 # syntax=docker/dockerfile:1.7
 
 # Application Base Image
-FROM telicent/telicent-java21:1.2.35 AS app-base
+FROM telicent/telicent-java21:1.2.39 AS app-base
 
 USER root
 
