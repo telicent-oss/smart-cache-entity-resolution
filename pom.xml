@@ -99,7 +99,7 @@
         <dependency.httpcore>4.4.16</dependency.httpcore>
         <dependency.jetbrains>26.0.2-1</dependency.jetbrains>
         <dependency.jetty>12.0.14</dependency.jetty>
-        <dependency.jquery>3.7.1</dependency.jquery>
+        <dependency.jquery>4.0.0</dependency.jquery>
         <dependency.logback>1.5.28</dependency.logback>
         <dependency.mockserver>5.15.0</dependency.mockserver>
         <dependency.opensearch-test>2.1.4</dependency.opensearch-test>
