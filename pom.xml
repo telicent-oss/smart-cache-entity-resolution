@@ -82,7 +82,7 @@
         <plugin.gpg>3.2.8</plugin.gpg>
         <plugin.resources>3.4.0</plugin.resources>
         <plugin.source>3.3.0</plugin.source>
-        <plugin.surefire>3.5.4</plugin.surefire>
+        <plugin.surefire>3.5.5</plugin.surefire>
 
         <!-- Dependency Versions -->
         <!-- See Smart Cache Core for Parent dependencies -->
@@ -97,10 +97,10 @@
         <dependency.error_prone>2.47.0</dependency.error_prone>
         <dependency.fa-metadata>6.5.1</dependency.fa-metadata>
         <dependency.httpcore>4.4.16</dependency.httpcore>
-        <dependency.jetbrains>26.0.2-1</dependency.jetbrains>
+        <dependency.jetbrains>26.1.0</dependency.jetbrains>
         <dependency.jetty>12.0.14</dependency.jetty>
         <dependency.jquery>4.0.0</dependency.jquery>
-        <dependency.logback>1.5.28</dependency.logback>
+        <dependency.logback>1.5.32</dependency.logback>
         <dependency.mockserver>5.15.0</dependency.mockserver>
         <dependency.opensearch-test>2.1.4</dependency.opensearch-test>
         <dependency.snappy>1.1.10.8</dependency.snappy>
